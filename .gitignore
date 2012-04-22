@@ -1,0 +1,6 @@
+.DS_Store
+count_log.txt
+log
+inc/config.js
+inc/test/*
+inc/uglifyjs/*
