@@ -18,7 +18,6 @@ function fileNotModified(req,res,position){
 	var ifModifiedSince = "If-Modified-Since".toLowerCase();
 	var lastModified = fs.statSync(position).mtime.toUTCString();
 	var modifiedSince = req.headers[ifModifiedSince];
-	//console.log(modifiedSince,lastModified);
 	res.setHeader("Last-Modified", lastModified);
 	return modifiedSince && lastModified == modifiedSince;
 }
@@ -58,24 +57,24 @@ function isJs(url){
 	return path.extname(url)=='.js';
 }
 
-function addHeaders(req,res,body){
+function addHeaders(req,res,body,type){
 	var expires,
 		pathname = url.parse(req.url).pathname,
 		ext = path.extname(pathname).slice(1) || 'unknown',
-		contentType = mime.getMimeType(ext);
-	
+		contentType = type || mime.getMimeType(ext);
+		
 	body = body || '';
 	
 	if (ext.match(config.expires.fileMatch)){
 	    expires = new Date();
 	    expires.setTime(expires.getTime() + config.expires.maxAge * 1000);
-	    res.setHeader["Expires"] = expires.toUTCString();
-	    res.setHeader["Cache-Control"] = "max-age=" + config.expires.maxAge;
+	    res.setHeader("Expires",expires.toUTCString());
+	    res.setHeader("Cache-Control","max-age=" + config.expires.maxAge);
 	}
-
-	res.setHeader["Content-Length"] = Buffer.byteLength(body,'binary');
-    res.setHeader["Server"] = "NodeJs("+process.version+")";
-    
+	res.setHeader("Content-Type",contentType);
+	res.setHeader("Content-Length",Buffer.byteLength(body,'binary'));
+    res.setHeader("Server","NodeJs("+process.version+")");
+    console.log(contentType);
 }
 
 function write304(req,res){
@@ -87,7 +86,7 @@ function write304(req,res){
 
 function write404(req,res){
     var body= 'can\'t found "' + req.url + '"';
-    addHeaders(req,res,body);
+    addHeaders(req,res,body,'text/plain');
     res.writeHead(404,"Not Found");
     res.write(body,"binary");
     res.end();

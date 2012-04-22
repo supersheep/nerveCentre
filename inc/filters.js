@@ -56,15 +56,23 @@ var filters = {
 			parsed = url.parse(uri,true),
 			pathname = parsed.pathname,
 			query = parsed.query,
-			from = query.from;
+			from = query.from,
+			PATH_NEURON = /\/neuron\.js$/.test(pathname),
+			FROM_NEURON = /\/neuron\.js$/.test(from),
+			USE_PROXY = config.useproxy;
+			
 		
-		if(/\/neuron\.js$/.test(pathname) && /\/neuron\.js$/.test(from)){
-			match = from.match(/(?:\/branch\/[^\/]*|\/trunk)\//);
-			base = match ? match[0] : '';
-			ret = origin.replace(/\/\*branch-base\*\/'([^']*)'/,'/*branch-base*/\''+ base +'\'');
+		if( !USE_PROXY && PATH_NEURON){
+			console.log(pathname);
+			base = pathname.match(/(?:\/branch\/[^\/]*|\/trunk)\//)[0];
+			ret = origin.replace(/\/\*branch-base\*\/'([^']*)'/,'\''+ base +'\'')
+		}else if( USE_PROXY && FROM_NEURON ){
+			base = from.match(/(?:\/branch\/[^\/]*|\/trunk)\//)[0];
+			ret = origin.replace(/\/\*branch-base\*\/'([^']*)'/,'\''+ base +'\'')
 		}else{
 			ret = origin;
 		}
+		
 		return ret;
 	}
 }
