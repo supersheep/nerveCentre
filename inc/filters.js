@@ -34,7 +34,7 @@ var filters = {
 		function fill(s){
 			return s.toString().length<2?("0"+s):s;
 		}
-		return origin.replace(/%buildtime%/, timestr);
+		return origin.replace(/%buildtime%/g, timestr);
 	},
 	// add use strict on top of the script
 	strict:function(origin,url){
@@ -63,7 +63,6 @@ var filters = {
 			
 		
 		if( !USE_PROXY && PATH_NEURON){
-			console.log(pathname);
 			base = pathname.match(/(?:\/branch\/[^\/]*|\/trunk)\//)[0];
 			ret = origin.replace(/\/\*branch-base\*\/'([^']*)'/,'\''+ base +'\'')
 		}else if( USE_PROXY && FROM_NEURON ){

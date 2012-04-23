@@ -4,3 +4,4 @@ log
 inc/config.js
 inc/test/*
 inc/uglifyjs/*
+*.swp

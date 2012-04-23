@@ -74,7 +74,6 @@ function addHeaders(req,res,body,type){
 	res.setHeader("Content-Type",contentType);
 	res.setHeader("Content-Length",Buffer.byteLength(body,'binary'));
     res.setHeader("Server","NodeJs("+process.version+")");
-    console.log(contentType);
 }
 
 function write304(req,res){
