@@ -1,6 +1,8 @@
+var path = require('path');
+
 var rules = [
-	[/^(.*)\.v\d+\.(png|jpg|gif|css|js|swf)$/,'$1.$2'], // remove version for all static files
-	[/^(.*)\.min(.*)\.(js|css)$/,'$1$2.$3'] // remove min for js and css
+	[/\.v\d+\.(png|jpg|gif|css|js|swf)/g,'.$1'], // remove version for all static files
+	[/\.min\.*\.(js|css)/g,'.$1'] // remove min for js and css
 ];
 
 var rewrite = function(req,rules){
@@ -15,7 +17,7 @@ var rewrite = function(req,rules){
 			req.url = req.url.replace(rule,replace);
 			//console.log('match:',i,req.originurl,req.url,replace);
 		}else{		
-			//onsole.log('fail:',i,rule,req.originurl,req.url);
+			//console.log('fail:',i,rule,req.originurl,req.url);
 		}
 	}
 }
