@@ -23,12 +23,13 @@ if(config.useproxy){
 		
 		function parseUrl(url){
 			var REG_NEURON_APP = /^\/branch\/neuron\/s\/j\/app\/(.+)/,
-				REG_APP_LIB = /^\/branch\/\w+\/lib\/(.+)/,
+				REG_BRANCH_LIB = /^\/branch\/\w+\/lib\/(.+)/,
+				REG_NEURON_LIB = /^\/branch\/neuron\/lib\/(.+)/,
 				ret;
 			
 			if(REG_NEURON_APP.test(url)){
 				ret = '/trunk/s/j/app/' + url.match(REG_NEURON_APP)[1];
-			}else if(REG_APP_LIB.test(url)){
+			}else if(REG_BRANCH_LIB.test(url) && !REG_NEURON_LIB.test(url)){
 				ret = '/trunk/lib/' + url.match(REG_APP_LIB)[1];
 			}else{
 				ret = url;
