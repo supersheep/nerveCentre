@@ -1,4 +1,5 @@
 .DS_Store
+nohup.out
 count_log.txt
 log
 inc/config.js
