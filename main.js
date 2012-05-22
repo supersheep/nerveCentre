@@ -21,16 +21,23 @@ if(config.useproxy){
 			path:parseUrl(req.url)
 		}
 		
+		/**
+		 * 1. branch/foo/lib/ -> branch/neuron/lib
+		 * 2. branch/foo/s/j/app/ -> branch/app/s/j/app
+		**/
 		function parseUrl(url){
-			var REG_NEURON_APP = /^\/branch\/neuron\/s\/j\/app\/(.+)/,
-				REG_BRANCH_LIB = /^\/branch\/\w+\/lib\/(.+)/,
-				REG_NEURON_LIB = /^\/branch\/neuron\/lib\/(.+)/,
+			var REG_APP = /^\/branch\/(\w+)\/s\/j\/app\/(\w+)\/(.+)/,
+				REG_LIB = /^\/branch\/(\w+)\/lib\/(.+)/,
+				matches,
 				ret;
 			
-			if(REG_NEURON_APP.test(url)){
-				ret = '/trunk/s/j/app/' + url.match(REG_NEURON_APP)[1];
-			}else if(REG_BRANCH_LIB.test(url) && !REG_NEURON_LIB.test(url)){
-				ret = '/trunk/lib/' + url.match(REG_APP_LIB)[1];
+			
+			
+			if(REG_APP.test(url)){
+				matches = url.match(REG_APP);
+				ret = '/branch/' + matches[2] + '/s/j/app/' + matches[2] + '/' + matches[3];
+			}else if(REG_LIB.test(url)){
+				ret = '/branch/neuron/lib/' + url.match(REG_LIB)[2];
 			}else{
 				ret = url;
 			}
