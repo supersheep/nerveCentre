@@ -8,3 +8,10 @@ exports.write = function(){
 		fs.write(fd,log + '\n');
 	});
 }
+
+exports.error = function(){
+	var log = util.format.apply(null,arguments);
+	fs.open(config.logpath.error,'a+',function(err,fd){
+		fs.write(fd,log + '\n');
+	});
+}

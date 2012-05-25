@@ -84,6 +84,8 @@ function createServer(cfg){
 		CODE = 200,
 		VIA = 'origin';
 		
+		try{
+		
 		if(ICON){
 			return false;
 		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS)){
@@ -105,6 +107,12 @@ function createServer(cfg){
 					pathname,
 					VIA && ('via ' + VIA),
 					CODE);
+		}catch(e){
+			log.error("%s ERROR %s",
+					new Date().toString(),
+					pathname);
+		}
+		
 	});
 	return server;
 }
