@@ -5,6 +5,7 @@ var http = require('http'),
 	
 	
 	util = require('./inc/util'),
+	log = require('./inc/log'),
 	filters = require('./inc/filters').filters,
 	config = require('./inc/config').configs,
 	rewrite = require('./inc/rewrite'),
@@ -99,7 +100,7 @@ function createServer(cfg){
 			VIA = '';
 		}
 		
-		console.log("%s GET %s %s : %s",
+		log.write("%s GET %s %s : %s",
 					new Date().toString(),
 					pathname,
 					VIA && ('via ' + VIA),

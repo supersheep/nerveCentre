@@ -2,7 +2,7 @@
 nohup.out
 count_log.txt
 log
-inc/config.js
+log/
 inc/test/*
 inc/uglifyjs/*
 *.swp

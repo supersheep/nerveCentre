@@ -31,8 +31,6 @@ if(config.useproxy){
 				matches,
 				ret;
 			
-			
-			
 			if(REG_APP.test(url)){
 				matches = url.match(REG_APP);
 				ret = '/branch/' + matches[2] + '/s/j/app/' + matches[2] + '/' + matches[3];
@@ -44,17 +42,13 @@ if(config.useproxy){
 			
 			ret = ret + '?from=' + url;
 			return ret;
-			
 		}
 		
 		var proxy_req = http.request(options,function(proxy_res){
-			
 			var headers = proxy_res.headers;
-			
 			for(var key in headers){
 				res.setHeader(key,headers[key]);
 			}
-			
 			res.statusCode = proxy_res.statusCode;		
 			
 			proxy_res.on('data',function(chunk){
