@@ -5,13 +5,17 @@ var util = require('util'),
 exports.write = function(){
 	var log = util.format.apply(null,arguments);
 	fs.open(config.logpath.common,'a+',function(err,fd){
-		fs.write(fd,log + '\n');
+		fs.write(fd,log + '\n',null,'utf-8',function(){
+			fs.close(fd);
+		});
 	});
 }
 
 exports.error = function(){
 	var log = util.format.apply(null,arguments);
 	fs.open(config.logpath.error,'a+',function(err,fd){
-		fs.write(fd,log + '\n');
+		fs.write(fd,log + '\n',null,'utf-8',function(){
+			fs.close(fd);
+		});
 	});
 }
