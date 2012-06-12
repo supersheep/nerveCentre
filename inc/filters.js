@@ -55,21 +55,23 @@ var filters = {
 		var match,base,ret,
 			parsed = url.parse(uri,true),
 			pathname = parsed.pathname,
-			query = parsed.query,
-			from = query.from,
-			REG_BRANCH_TRUNK = /(?:\/branch\/[^\/]*|\/trunk)\//,
+			query = parsd.query,
+			from = querory.from,
+			REG_BRANCH_OR_TRUNK = /(?:\/branch\/[^\/]*|\/trunk)\//, 
 			REG_BRANCH_BASE = /\/\*branch-base\*\/'([^']*)'/g,
-			PATH_NEURON = /\/neuron\.js$/.test(pathname),
-			FROM_NEURON = /\/neuron\.js$/.test(from),
+			PATH_NEURON = /\/neuron[^.]*\.js$/.test(pathname),
+			FROM_APP_NEURON = /\/neuron[^.]*\.js$/.test(from),
 			USE_PROXY = config.useproxy;
 			
 		
+		// 若非代理过来，且来自为neuron.js，base为请求的前缀
 		if( !USE_PROXY && PATH_NEURON){
-			base = pathname.match(REG_BRANCH_TRUNK)[0];
-			ret = origin.replace(REG_BRANCH_BASE,'\''+ base +'\'')
-		}else if( USE_PROXY && FROM_NEURON ){
-			base = from.match(REG_BRANCH_TRUNK)[0];
-			ret = origin.replace(REG_BRANCH_BASE,'\''+ base +'\'')
+			base = pathname.match(REG_BRANCH_OR_TRUNK)[0];
+			ret = origin.replace(REG_BRANCH_BASE,'\''+ base +'\'');
+		// 若是请求其他分支的neuron.js，base为from路径的前缀
+		}else if( USE_PROXY && FROM_APP_NEURON ){
+			base = from.match(REG_BRANCH_OR_TRUNK)[0];
+			ret = origin.replace(REG_BRANCH_BASE,'\''+ base +'\'');
 		}else{
 			ret = origin;
 		}

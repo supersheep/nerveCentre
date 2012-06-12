@@ -9,9 +9,33 @@ var PORT_STATIC = config.useproxy?config.staticport:config.port,
 statics.createServer().listen(PORT_STATIC);
 
 
+var CONFIG_PROXY_RULES;
+
+function setConfigProxyRules(){
+	var rules = config.custom_proxy_rules,
+		content,rules_list;
+		
+	CONFIG_PROXY_RULES = {};
+		
+	content = fs.readFileSync(rules,'binary');
+	if(!content){
+		content = "";
+	}
+	
+	rules_list = content.split('\n');
+	
+	rules_list.forEach(function(e){
+		var splited = e.split('|');
+		if(splited.length == 2){
+			CONFIG_PROXY_RULES[splited[0]] = splited[1];
+		}
+	});
+}
+
 // now the proxy
 if(config.useproxy){
 	
+	setConfigProxyRules();
 	http.createServer(function(req,res){
 		var options = {
 			host:'127.0.0.1',
@@ -31,7 +55,10 @@ if(config.useproxy){
 				matches,
 				ret;
 			
-			if(REG_APP.test(url)){
+			// 配置规则
+			if(CONFIG_PROXY_RULES[req.url]){
+				ret = CONFIG_PROXY_RULES[req.url];
+			}else if(REG_APP.test(url)){
 				matches = url.match(REG_APP);
 				ret = '/branch/' + matches[2] + '/s/j/app/' + matches[2] + '/' + matches[3];
 			}else if(REG_LIB.test(url)){
@@ -71,4 +98,13 @@ if(config.useproxy){
 	console.log('proxy started at %d',PORT_CONFIG);
 }
 
+
+fs.watchFile(config.custom_proxy_rules, {},function (curr, prev) {
+	if(curr.mtime - prev.mtime){
+		setConfigProxyRules();
+		console.log(new Date(),'CONFIG_PROXY_RULES set to be',CONFIG_PROXY_RULES);
+	}
+});
+
 console.log('nerveCentre started at %d, ;)',PORT_CONFIG);
+

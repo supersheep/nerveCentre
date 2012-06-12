@@ -1,6 +1,7 @@
 
 var config = {
 //	root : __dirname + '/www',
+	custom_proxy_rules:'proxy_config.txt',
 	origin : '/Users/spud/Neuron',
 	libpath : ['/lib','/s/j/app'],
 	port : '3001',
