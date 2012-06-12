@@ -1,6 +1,7 @@
 var path = require('path'),
 	fs = require('fs'),
 	url = require('url'),
+	log = require('./log'),
 	mime = require('./mime').mime,
 	filters = require('./filters').filters,
 	config = require('./config').configs;
@@ -118,11 +119,15 @@ function concatFiles(arr,fn){
 	var sum = '';
 	var dataTemp;
 	arr.forEach(function(path){
+		try{
 		dataTemp = fs.readFileSync(path,'binary');
 		if(fn){
 			dataTemp = fn(dataTemp,path);
 		}
 		sum += dataTemp + '\n';
+		}catch(e){
+			log.error('concating files',e);
+		}
 	});
 	return sum;
 }

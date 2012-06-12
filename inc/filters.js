@@ -1,6 +1,6 @@
 var uglifyjs = require('./uglifyjs/uglify-js');
 var config = require('./config').configs;
-var log = require('./log').configs;
+var log = require('./log');
 var url = require('url');
 
 var filters = {
@@ -20,7 +20,7 @@ var filters = {
 			return origin;
 		}
 	}catch(e){
-		log.error(e);
+		log.error('uglify',e);
 		return origin;	
 	}
 	},
