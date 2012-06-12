@@ -3,7 +3,7 @@ var config = {
 //	root : __dirname + '/www',
 	custom_proxy_rules:'proxy_config.txt',
 	origin : '/Users/spud/Neuron',
-	libpath : ['/lib','/s/j/app'],
+	libpath : ['/lib/1.0','/lib','/s/j/app'],
 	port : '3001',
 	staticport : '3002',
 	useproxy : true,

@@ -28,18 +28,16 @@ config.full_libpath = (function(lib){
 })(config.libpath);
 
 
-
 var buildconcats = config.full_libpath.map(function(libpath){
 	var buildpath = config.origin + libpath + '/build.json';
 	if(path.existsSync(buildpath)){	
 		var json = fs.readFileSync(buildpath,'binary');
+		
 		return JSON.parse(json).concat;
 	}else{
 		return [];
 	}
 });
-
-
 
 
 
@@ -84,6 +82,7 @@ function createServer(cfg){
 		CODE = 200,
 		VIA = 'origin';
 		
+		
 		if(ICON){
 			return false;
 		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS)){
@@ -92,7 +91,7 @@ function createServer(cfg){
 		}else if(!CONFIG_CONCAT && IS_JS){
 			CODE = via.dir(req,res);
 			VIA = 'dir';
-		}else if(CONFIG_CONCAT){
+		}else if(CONFIG_CONCAT){	
 			CODE = via.config(LIB_PATH,CONFIG_CONCAT,req,res);
 			VIA = 'config';
 		}else{

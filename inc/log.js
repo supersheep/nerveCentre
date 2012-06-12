@@ -10,6 +10,7 @@ function makelog(){
 	
 exports.write = function(){	
 	var log = makelog.apply(null,arguments);
+	console.log(log);
 	fs.open(config.logpath.common,'a+',function(err,fd){
 		fs.write(fd,log + '\n',null,'utf-8',function(){
 			fs.close(fd);
@@ -19,8 +20,8 @@ exports.write = function(){
 
 exports.error = function(){
 	var log = makelog.apply(null,arguments);	
+	console.log(log);
 	fs.open(config.logpath.error,'a+',function(err,fd){
-		console.log(log);
 		fs.write(fd,log + '\n',null,'utf-8',function(){
 			fs.close(fd);
 		});
