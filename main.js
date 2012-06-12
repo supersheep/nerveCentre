@@ -99,7 +99,7 @@ if(config.useproxy){
 }
 
 
-fs.watchFile(config.custom_proxy_rules, {},function (curr, prev) {
+fs.watch(config.custom_proxy_rules, {},function (curr, prev) {
 	if(curr.mtime - prev.mtime){
 		setConfigProxyRules();
 		console.log(new Date(),'CONFIG_PROXY_RULES set to be',CONFIG_PROXY_RULES);

@@ -102,14 +102,12 @@ function createServer(cfg){
 			VIA = '';
 		}
 		
-		log.write("%s GET %s %s : %s",
-					new Date().toString(),
+		log.write("GET %s %s : %s",
 					pathname,
 					VIA && ('via ' + VIA),
 					CODE);
 		}catch(e){
-			log.error("%s ERROR %s",
-					new Date().toString(),
+			log.error("ERROR %s",
 					pathname);
 		}
 		
