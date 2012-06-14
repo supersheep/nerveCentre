@@ -72,7 +72,8 @@ var filters = {
 			ret = origin.replace(REG_BRANCH_BASE,'\''+ base +'\'');
 		// 若是请求其他分支的neuron.js，base为from路径的前缀
 		}else if( USE_PROXY && FROM_APP_NEURON ){
-			base = from.match(REG_BRANCH_OR_TRUNK)[0];
+			match = from.match(REG_BRANCH_OR_TRUNK); 
+			base = match && match[0] || "";
 			ret = origin.replace(REG_BRANCH_BASE,'\''+ base +'\'');
 		}else{
 			ret = origin;

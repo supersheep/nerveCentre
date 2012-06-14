@@ -52,22 +52,29 @@ if(config.useproxy){
 		function parseUrl(url){
 			var REG_APP = /^\/branch\/(\w+)\/s\/j\/app\/(\w+)\/(.+)/,
 				REG_LIB = /^\/branch\/(\w+)\/lib\/(.+)/,
+				REG_ROOT_LIB = /^\/lib\/(.+)/,
+				BRANCH_NEURON_LIB_BASE = '/branch/neuron/lib/',
 				matches,
 				ret;
 			
 			// 配置规则
+			
 			if(CONFIG_PROXY_RULES[req.url]){
 				ret = CONFIG_PROXY_RULES[req.url];
+			}else if(REG_ROOT_LIB.test(url)){
+				matches = url.match(REG_ROOT_LIB);
+				ret = BRANCH_NEURON_LIB_BASE + matches[1];
 			}else if(REG_APP.test(url)){
 				matches = url.match(REG_APP);
 				ret = '/branch/' + matches[2] + '/s/j/app/' + matches[2] + '/' + matches[3];
 			}else if(REG_LIB.test(url)){
-				ret = '/branch/neuron/lib/' + url.match(REG_LIB)[2];
+				ret = BRANCH_NEURON_LIB_BASE + url.match(REG_LIB)[2];
 			}else{
 				ret = url;
 			}
 			
 			ret = ret + '?from=' + url;
+			console.log(ret);
 			return ret;
 		}
 		
