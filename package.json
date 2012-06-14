@@ -1,0 +1,14 @@
+{
+	"name":"nervecentre",
+	"description":"the proxy and static server for neuron framwork on alpha",
+	"version":"0.0.1",
+	"keywords":["neuron"],
+	"maintainers":[],
+	"contributors":[],
+	"bugs":"jiayi.xu@dianping.com",
+	"licenses":[{
+    	"type": "GPLv2",	
+    	"url": "http://www.example.com/licenses/gpl.html"
+	}],
+	"main":"main.js"
+}

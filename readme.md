@@ -20,3 +20,12 @@ the node server for node framework
 	'buildtime', // replace %buldtime%
 	'branch']	// replace branch
 }
+
+
+TODO
+====
+0.0.2版
+1.整理同步操作，改为异步
+2.将配置独立于nervecentre之外
+目标启动时间：6.14
+目标完成日期：6.16
