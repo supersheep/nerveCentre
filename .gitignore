@@ -2,6 +2,7 @@
 nohup.out
 count_log.txt
 log
+node_modules/
 log/
 archive
 inc/test/*
