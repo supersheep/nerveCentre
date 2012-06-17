@@ -21,6 +21,22 @@ the node server for node framework
 	'branch']	// replace branch
 }
 
+STRUCT
+========
+
+-> Proxy
+	-> ProxyRouter
+	
+-> Static
+	-> Static
+	-> Compiler (dir/config/origin)
+	-> Filters (circlize)
+
+-> Workers (circlize)
+
+-> Main
+	
+		
 
 TODO
 ====

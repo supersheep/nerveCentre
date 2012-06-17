@@ -4,7 +4,7 @@ var path = require('path'),
 	log = require('./log'),
 	mime = require('./mime').mime,
 	filters = require('./filters').filters,
-	config = require('./config').configs;
+	config = require('../config').configs;
 
 	
 function inLibPath(url){
@@ -12,8 +12,6 @@ function inLibPath(url){
 		return url.indexOf(e+'/') == 0
 	});
 }
-
-
 
 function fileNotModified(req,res,position){
 	var ifModifiedSince = "If-Modified-Since".toLowerCase();

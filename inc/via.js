@@ -1,7 +1,7 @@
 var fs = require('fs'),
 	path = require('path'),
 	url = require('url'),
-	config = require('./config').configs,
+	config = require('../config').configs,
 	util = require('./util');
 
 

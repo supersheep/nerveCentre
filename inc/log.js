@@ -1,6 +1,6 @@
 var util = require('util'),
 	fs = require('fs'),
-	config = require('./config').configs;
+	config = require('../config').configs;
 
 function makelog(){
 	var log;

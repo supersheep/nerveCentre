@@ -2,18 +2,19 @@ var http = require('http'),
 	url = require('url'),
 	fs = require('fs'),
 	path = require('path'),
-	
+	config = require('./config').configs,
 	
 	util = require('./inc/util'),
 	log = require('./inc/log'),
 	filters = require('./inc/filters').filters,
-	config = require('./inc/config').configs,
 	rewrite = require('./inc/rewrite'),
 	via = require("./inc/via"),
 	dirwatcher = require('./inc/dirwatcher');
 
 
 // 初始化所有lib目录
+
+
 config.full_libpath = (function(lib){
 	var branchdirs = fs.readdirSync(config.origin + '/branch');;
 	var l = [];
