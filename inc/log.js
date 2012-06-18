@@ -14,6 +14,7 @@ function logto(path,log){
 	
 	path = path.indexOf('/') == 0 ? path : appbase + '/' + path;
 	
+	console.log(log);
 	fs.open(path,'a+',function(err,fd){
 		if(err){
 			console.log(err);
