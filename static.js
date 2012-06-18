@@ -2,19 +2,19 @@ var http = require('http'),
 	url = require('url'),
 	fs = require('fs'),
 	path = require('path'),
-	config = require('./config').configs,
+	default_config = require('./config').configs,
+	
+	worker = require('./worker'),
 	
 	util = require('./inc/util'),
 	log = require('./inc/log'),
 	filters = require('./inc/filters').filters,
 	rewrite = require('./inc/rewrite'),
-	via = require("./inc/via"),
-	dirwatcher = require('./inc/dirwatcher');
+	via = require("./inc/via");
 
 
 // 初始化所有lib目录
-
-
+/*
 config.full_libpath = (function(lib){
 	var branchdirs = fs.readdirSync(config.origin + '/branch');;
 	var l = [];
@@ -27,8 +27,10 @@ config.full_libpath = (function(lib){
 	});
 	return l;
 })(config.libpath);
+*/
 
 
+/*
 var buildconcats = config.full_libpath.map(function(libpath){
 	var buildpath = config.origin + libpath + '/build.json';
 	if(path.existsSync(buildpath)){	
@@ -39,12 +41,10 @@ var buildconcats = config.full_libpath.map(function(libpath){
 		return [];
 	}
 });
+*/
 
-
-
-
-// 检测是否有新增branch，刷新配置变量
-dirwatcher.watch(config.origin + '/branch',function(a){
+/*
+config.origin + '/branch',function(a){
 	var p = config.full_libpath;
 	switch(a.type){		
 		case 'add':config.libpath.forEach(function(e){
@@ -54,33 +54,46 @@ dirwatcher.watch(config.origin + '/branch',function(a){
 		case 'modify':p = p.map(function(e){return e.replace('branch/'+a.change[1],'branch/'+a.change[0])});break;
 	}
 });
+*/
+
+
 
 function createServer(cfg){
-	cfg = cfg || config;
+	// 检测是否有新增branch，刷新配置变量
+	worker.start("lib_path");
+	var config = cfg || default_config;
 	var server = http.createServer(function(req,res){	
 		
 		var pathname,
 			position,
+			
 			FILE_EXIST,
 			IS_JS,
 			DIR_EXIST,
 			LIB_PATH,
 			IN_LIB_PATH,
+			CODE,
+			VIA,
 			CONFIG_CONCAT;
 		
 		rewrite.handle(req,rewrite.rules);	
 		
 		pathname = url.parse(req.url).pathname;
-		position = config.origin + pathname;
+		position = config.origin + pathname; // 文件位置
 		
 		FILE_EXIST = util.isFile(position),
 		IS_JS = util.isJs(position),
-		DIR_EXIST = util.hasDirectoryWithName(position),
-		LIB_PATH = util.getLibPath(pathname),
-		IN_LIB_PATH = util.inLibPath(pathname),
-		CONFIG_CONCAT = util.getConcatFromLibPath(LIB_PATH,req.url),
-		ICON = req.url == "/favicon.ico",
-		CODE = 200,
+		
+		DIR_EXIST = util.hasDirectoryWithPath(position);
+		
+		IN_LIB_PATH = util.inLibPath(pathname);
+		
+		LIB_PATH = util.getLibPath(pathname);
+		
+		CONFIG_CONCAT = util.getConcatFromLibPath(LIB_PATH,req.url);
+		
+		ICON = req.url == "/favicon.ico";
+		CODE = 200;
 		VIA = 'origin';
 		
 		
@@ -89,12 +102,12 @@ function createServer(cfg){
 		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS)){
 			CODE = via.origin(req,res);
 			VIA = 'origin';
-		}else if(!CONFIG_CONCAT && IS_JS){
-			CODE = via.dir(req,res);
-			VIA = 'dir';
 		}else if(CONFIG_CONCAT){	
 			CODE = via.config(LIB_PATH,CONFIG_CONCAT,req,res);
 			VIA = 'config';
+		}else if(!CONFIG_CONCAT && IS_JS){
+			CODE = via.dir(req,res);
+			VIA = 'dir';
 		}else{
 			CODE = util.write404(req,res);
 			VIA = '';

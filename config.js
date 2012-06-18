@@ -21,3 +21,4 @@ var config = {
 }
 
 exports.configs = config;
+exports.base = __dirname;

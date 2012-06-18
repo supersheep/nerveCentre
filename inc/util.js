@@ -2,15 +2,23 @@ var path = require('path'),
 	fs = require('fs'),
 	url = require('url'),
 	log = require('./log'),
+	worker = require('../worker'),
 	mime = require('./mime').mime,
 	filters = require('./filters').filters,
 	config = require('../config').configs;
 
 	
 function inLibPath(url){
-	return config.full_libpath.some(function(e){
-		return url.indexOf(e+'/') == 0
+	return worker.get("lib_path").some(function(e){
+		// such as /Users/spud/Neuron/node
+		return url.indexOf( e + '/') == 0;
 	});
+}
+
+function getLibPath(url){
+	return worker.get('lib_path').filter(function(e){
+		return url.indexOf(e) == 0;
+	})[0];
 }
 
 function fileNotModified(req,res,position){
@@ -25,15 +33,10 @@ function isFile(position){
 	return path.existsSync(position) && !fs.statSync(position).isDirectory();
 }
 
-function hasDirectoryWithName(position){
+function hasDirectoryWithPath(position){
 	return path.existsSync(position.split('.')[0]);
 }
 
-function getLibPath(url){
-	return config.full_libpath.filter(function(e){
-		return url.indexOf(e) == 0;
-	})[0]; 
-}
 
 function getConcatFromLibPath(libpath,url){
 	var json,concats,concat;
@@ -43,7 +46,6 @@ function getConcatFromLibPath(libpath,url){
 	}else{
 		concats = [];
 	}
-	
 	//找到要打包的那一个
 	concat = concats.filter(function(e){
 		return e.output == path.basename(url)
@@ -130,15 +132,17 @@ function concatFiles(arr,fn){
 	return sum;
 }
 
-exports.fileNotModified = fileNotModified;
-exports.getLibPath = getLibPath;
-exports.hasDirectoryWithName = hasDirectoryWithName;
-exports.isFile = isFile;
-exports.getConcatFromLibPath = getConcatFromLibPath;
-exports.inLibPath = inLibPath;
-exports.isJs = isJs;
-exports.write404 = write404;
-exports.write304 = write304;
-exports.write200 = write200;
-exports.filterData = filterData;
-exports.concatFiles = concatFiles;
+module.exports = {
+	isJs:isJs,
+	isFile:isFile,
+	inLibPath:inLibPath,
+	getLibPath:getLibPath,
+	fileNotModified:fileNotModified,
+	hasDirectoryWithPath:hasDirectoryWithPath,
+	getConcatFromLibPath:getConcatFromLibPath,
+	write200:write200,
+	write304:write304,
+	write404:write404,
+	filterData:filterData,
+	concatFiles:concatFiles
+}

@@ -1,5 +1,6 @@
 var Event = require('events').EventEmitter,
 	fs = require('fs'),
+	dirwatcher = require('./inc/dirwatcher'),
 	config = require('./config').configs;
 
 var cache = {};
@@ -9,8 +10,14 @@ var workers = {
 		var rulesFile = __dirname + "/proxy_config.txt";
 		fs.watchFile(rulesFile,function(curr,prev){
 			if(curr.mtime == prev.mtime){ // 无修改也会不断触发，原因尚不明
-				set("proxy_rules");
+				worker.set("proxy_rules");
 			}
+		});
+	},
+	"lib_path":function(){
+		var watcher = new dirwatcher.Watcher(config.origin + '/branch');
+		watcher.on('change',function(dirs){
+			worker.set("lib_path",dirs);
 		});
 	}
 }
@@ -38,25 +45,52 @@ var setters = {
 			});
 			cache["proxy_rules"] = rules;
 		});
+	},
+	"lib_path":function(dirs){
+		var branches = [];
+		var lib_path = [];
+		
+		if(dirs){
+			branches = dirs.filter(function(dir){
+				// 不带点，视为目录
+				return dir.indexOf(".") < 0;
+			}).map(function(dir){
+				return '/branch/' + dir;
+			});
+			
+		}
+		
+		// for dev tests
+		branches.unshift('');
+		branches.unshift('/trunk');
+		
+		branches.map(function(branch){
+			return config.libpath.map(function(path){
+				return branch + path;
+			});
+		}).forEach(function(branch_libs){
+			lib_path = lib_path.concat(branch_libs);
+		});
+		
+		cache["lib_path"] = lib_path;
 	}
 }
 
 worker = {
-	set:function(key){
-		setters[key] && setters[key]();
+	set:function(key,value){
+		setters[key] && setters[key](value);
 	},
 	get:function get(key){
 		return cache[key];
 	},
 	start:function(key){
+		console.log("Worker " + key + " start ");
 		if(workers[key]){
 			workers[key]();
 			this.set(key);
 		}
 	}
 }
-
-worker.prototype = Event;
 
 
 module.exports = worker;

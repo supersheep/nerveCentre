@@ -1,5 +1,10 @@
-var workers = require('../workers');
+var worker = require('../worker');
 
-workers.add("proxy_rules");
 
-workers.set("proxy_rules");
+// workers.set("proxy_rules");
+
+
+worker.start("lib_path");
+setTimeout(function(){
+	var lib_paths = worker.get("lib_path");
+},20);

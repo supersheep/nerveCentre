@@ -1,23 +1,39 @@
 var http = require('http'),
-	fs = require('fs'),
-	
-	config = require('./config').configs,
-	
+	fs = require('fs'),	
+	default_config = require('./config').configs,
 	staticServer = require('./static'),
 	
 	proxyServer = require('./proxy'),
 	proxyRouter = require('./proxyRoutes').routes;
 
 
+function deepExtend(destination, source) {
+  for (var property in source) {
+    if (typeof source[property] === "object") {
+      destination[property] = destination[property] || {};
+      arguments.callee(destination[property], source[property]);
+    } else {
+      destination[property] = source[property];
+    }
+  }
+  return destination;
+}
 
-var PORT_STATIC = config.useproxy?config.staticport:config.port,
-	PORT_CONFIG = config.port;
+function getConfig(key){
+	var config =  deepExtend({},default_config);
+	if(key){
+		return config[key];
+	}else{
+		return config;
+	}
+}
 
-var CONFIG_PROXY_RULES;
+function startServer(cfg){
+	var config = deepExtend(default_config,cfg);
+	var PORT_STATIC = config.useproxy?config.staticport:config.port,
+		PORT_CONFIG = config.port;
 
-function startServer(){
-	
-	staticServer.createServer().listen(PORT_STATIC);
+	staticServer.createServer(cfg).listen(PORT_STATIC);
 	console.log("static started at %d ",PORT_STATIC);
 	
 	// now the proxy
@@ -26,9 +42,13 @@ function startServer(){
 		console.log("proxy started at %d ",PORT_CONFIG);
 	}
 	
-	console.log('nerveCentre started at %d. ;)',PORT_CONFIG);
+	console.log('nerveCentre started at %d , %s ;)',PORT_CONFIG,config.origin);
 }
 
-exports = {
+
+
+
+module.exports = {
+	getConfig:getConfig,
 	start:startServer
 }

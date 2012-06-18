@@ -44,7 +44,9 @@ function dir(req,res){
 		filedata = "DP.define.on();\n";
 				
 		// /branch/coupon | /trunk
-		var modulebase = dir.match(/(?:\/branch\/[^\/]*|\/trunk)\//)[0];
+		var modulebase = dir.match(/(?:\/branch\/[^\/]*|\/trunk)\//);
+		
+		modulebase = modulebase ? modulebase[0] : "";
 			
 		// 修改DP.define语句，以文件名定义模块
 		filedata += util.concatFiles(toconcat,function(file,p){

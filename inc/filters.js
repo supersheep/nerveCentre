@@ -6,23 +6,25 @@ var url = require('url');
 var filters = {
 	// use uglify to compress .min files
 	uglify:function(origin,url){			
-	try{	
-		var jsp = uglifyjs.parser;
-		var pro = uglifyjs.uglify;
-		var ast = jsp.parse(origin);
-		var finalcode;
-		if(url.match(/\.min.*\.(js|css)$/)){		
-			ast = pro.ast_mangle(ast);
-			ast = pro.ast_squeeze(ast);
-			final_code = pro.gen_code(ast);
-			return final_code;
+	
+		if(url.match(/\.min.*\.(js|css)$/)){
+			try{	
+				var jsp = uglifyjs.parser;
+				var pro = uglifyjs.uglify;
+				var ast = jsp.parse(origin);
+				var finalcode;
+					
+				ast = pro.ast_mangle(ast);
+				ast = pro.ast_squeeze(ast);
+				final_code = pro.gen_code(ast);
+				return final_code;
+			}catch(e){
+				log.error('uglify',e);
+				return origin;	
+			}
 		}else{
 			return origin;
 		}
-	}catch(e){
-		log.error('uglify',e);
-		return origin;	
-	}
 	},
 	// replace the fake %buidtime%
 	buildtime:function(origin,url){
@@ -68,7 +70,8 @@ var filters = {
 		
 		// 若非代理过来，且来自为neuron.js，base为请求的前缀
 		if( !USE_PROXY && PATH_NEURON){
-			base = pathname.match(REG_BRANCH_OR_TRUNK)[0];
+			base = pathname.match(REG_BRANCH_OR_TRUNK);
+			base = base ? base[0] : "";
 			ret = origin.replace(REG_BRANCH_BASE,'\''+ base +'\'');
 		// 若是请求其他分支的neuron.js，base为from路径的前缀
 		}else if( USE_PROXY && FROM_APP_NEURON ){

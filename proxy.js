@@ -1,5 +1,5 @@
-var http = require('http');
-
+var worker = require('./worker'),
+	http = require('http');
 
 
 function routeParser(routes,url){
@@ -45,6 +45,7 @@ function routeParser(routes,url){
 	
 
 var proxy = function(host,port,routes){
+	worker.start("proxy_rules");
 	return http.createServer(function(req,res){
 		var pathto = routeParser(routes,req.url);
 		console.log("Proxy %s to %s",req.url,pathto);
@@ -78,8 +79,6 @@ var proxy = function(host,port,routes){
 		
 		proxy_req.end();
 	});
-	
-	console.log('proxy started at %d',PORT_CONFIG);
 }
 
 
