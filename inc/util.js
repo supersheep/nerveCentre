@@ -34,7 +34,10 @@ function isFile(position){
 }
 
 function hasDirectoryWithPath(position){
-	return path.existsSync(position.split('.')[0]);
+	var jsIndex = position.lastIndexOf(".js"),
+		dirpath = position.slice(0,jsIndex);
+		
+	return path.existsSync(dirpath);
 }
 
 
