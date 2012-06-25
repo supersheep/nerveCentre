@@ -1,7 +1,9 @@
 #! /usr/bin/env node
 
+var base = require('../config').base;
 var server = require('../main');
-var utl = require('../inc/util');
+var util = require('../inc/util');
+
 
 
 var args = process.argv.slice(2);
@@ -11,7 +13,6 @@ var command = args[0];
 
 switch(command){
 	case "start":start();break;
-	case "test":test();break;
 	case "config":config();break;
 }
 
@@ -31,10 +32,6 @@ function start(){
 	}else{
 		server.start();
 	}
-}
-
-function test(){
-	process.exit();
 }
 
 function config(){

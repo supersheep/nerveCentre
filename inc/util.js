@@ -7,7 +7,14 @@ var path = require('path'),
 	filters = require('./filters').filters,
 	config = require('../config').configs;
 
-	
+function substitute(str,obj){
+	for(var i in obj){
+		str = str.replace(new RegExp("{" + i + "}","g"),obj[i]);
+	}
+	return str;
+}
+
+
 function inLibPath(url){
 	return worker.get("lib_path").some(function(e){
 		// such as /Users/spud/Neuron/node
@@ -31,6 +38,29 @@ function fileNotModified(req,res,position){
 
 function isFile(position){
 	return path.existsSync(position) && !fs.statSync(position).isDirectory();
+}
+
+function isTest(pathname,position){
+	
+	var matches = pathname.match(/^\/(trunk\/|branch\/\w+\/).*\.html$/),
+		nakejs = position.replace(/\.html$/,'.js'),
+		env;
+	
+	if(!matches){
+		return false;
+	}else{
+		env = matches[1];
+	}
+	
+	if(isFile(nakejs)){
+		return {
+			env:env
+		};
+	}else{
+		return false;
+	}
+	
+		
 }
 
 function hasDirectoryWithPath(position){
@@ -137,6 +167,7 @@ function concatFiles(arr,fn){
 
 module.exports = {
 	isJs:isJs,
+	isTest:isTest,
 	isFile:isFile,
 	inLibPath:inLibPath,
 	getLibPath:getLibPath,
@@ -147,5 +178,6 @@ module.exports = {
 	write304:write304,
 	write404:write404,
 	filterData:filterData,
-	concatFiles:concatFiles
+	concatFiles:concatFiles,
+	substitute:substitute
 }

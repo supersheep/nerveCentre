@@ -11,6 +11,7 @@ var http = require('http'),
 	filters = require('./inc/filters').filters,
 	rewrite = require('./inc/rewrite'),
 	via = require("./inc/via");
+	
 
 
 // 初始化所有lib目录
@@ -84,6 +85,8 @@ function createServer(cfg){
 		FILE_EXIST = util.isFile(position),
 		IS_JS = util.isJs(position),
 		
+		TEST = util.isTest(pathname,position),
+				
 		DIR_EXIST = util.hasDirectoryWithPath(position);
 		
 		IN_LIB_PATH = util.inLibPath(pathname);
@@ -99,15 +102,18 @@ function createServer(cfg){
 		
 		if(ICON){
 			return false;
-		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS)){
+		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS && !TEST)){
 			CODE = via.origin(req,res);
 			VIA = 'origin';
 		}else if(CONFIG_CONCAT){	
-			CODE = via.config(LIB_PATH,CONFIG_CONCAT,req,res);
+			CODE = via.config(req,res,LIB_PATH,CONFIG_CONCAT);
 			VIA = 'config';
 		}else if(!CONFIG_CONCAT && IS_JS){
 			CODE = via.dir(req,res);
 			VIA = 'dir';
+		}else if(TEST){
+			CODE = via.test(req,res,TEST.env);
+			VIA = 'test';
 		}else{
 			CODE = util.write404(req,res);
 			VIA = '';

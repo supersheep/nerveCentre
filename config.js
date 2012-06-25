@@ -1,6 +1,7 @@
 
 var config = {
 	origin : '/Users/spud/Neuron',
+	libbase: 'lib/1.0/',
 	libpath : ['/lib/1.0','/lib','/s/j/app'],
 	port : '3001',
 	staticport : '3002',

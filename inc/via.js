@@ -2,8 +2,10 @@ var fs = require('fs'),
 	path = require('path'),
 	url = require('url'),
 	config = require('../config').configs,
-	util = require('./util');
-
+	util = require('./util'),
+	
+	qunit = require('./qunit-adapter'),
+	jasmine = require('./jasmine-adapter');
 
 	
 function origin(req,res){
@@ -67,7 +69,7 @@ function dir(req,res){
 }
 
 
-function cfg(libpath,concat,req,res){
+function cfg(req,res,libpath,concat){
 	var toconcat,filedata,code;
 	
 	toconcat = concat.path.map(function(e){
@@ -80,6 +82,28 @@ function cfg(libpath,concat,req,res){
 	return code;
 }
 
+function testCompile(origin,adapter,args){
+	var content = util.substitute(adapter.before + origin + adapter.after,args);
+	
+	return content;
+}
+
+function test(req,res,env){
+	var pathname = url.parse(req.url).pathname.replace(/\.html$/,'.js'),
+		position = config.origin + pathname,
+		content = fs.readFileSync(position),
+		args = {
+			libbase:config.libbase,
+			server:config.server ? config.server : ('localhost:' + config.port),
+			env:env,
+			title:"Unit Test " + pathname
+		};
+	
+	code = util.write200(req,res,testCompile(content,jasmine,args));
+	return code;
+}
+
+exports.test = test;
 exports.origin = origin;
 exports.dir = dir;
 exports.config = cfg;
