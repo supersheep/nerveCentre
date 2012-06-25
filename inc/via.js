@@ -2,10 +2,10 @@ var fs = require('fs'),
 	path = require('path'),
 	url = require('url'),
 	config = require('../config').configs,
+	base = require('../config').base,
 	util = require('./util'),
-	
-	qunit = require('./qunit-adapter'),
-	jasmine = require('./jasmine-adapter');
+	qunit = fs.readFileSync(base+'/inc/qunit.tpl','utf8'),
+	jasmine = fs.readFileSync(base+'/inc/jasmine.tpl','utf8');
 
 	
 function origin(req,res){
@@ -82,24 +82,56 @@ function cfg(req,res,libpath,concat){
 	return code;
 }
 
-function testCompile(origin,adapter,args){
-	var content = util.substitute(adapter.before + origin + adapter.after,args);
+function parseContent(content){
+	var ret = {},
+		nomatch = 0;
+		
+	['html','js','css'].forEach(function(type){
+		var regstr = util.substitute('{{t}}((?:.|\\n)*){\\\/{t}}',{t:type}),
+			REG = new RegExp(regstr);
+			matches = content.match(REG);
+		
+		if(!matches){
+			nomatch += 1;
+			ret[type] = '';
+		}else{
+			ret[type] = matches[1];
+		}
+	});
 	
-	return content;
+	if(nomatch === 3){
+		ret = {
+			js:content,
+			html:'',
+			css:''
+		}
+	}
+	
+	return ret;
+	
+}
+
+function compileTestCase(origin,tpl,args){
+
+	var pieces = parseContent(origin);
+	util.mix(args,pieces);
+	
+	return util.substitute(tpl,args);
 }
 
 function test(req,res,env){
 	var pathname = url.parse(req.url).pathname.replace(/\.html$/,'.js'),
 		position = config.origin + pathname,
-		content = fs.readFileSync(position),
+		content = fs.readFileSync(position,'utf8'),
 		args = {
 			libbase:config.libbase,
 			server:config.server ? config.server : ('localhost:' + config.port),
 			env:env,
 			title:"Unit Test " + pathname
-		};
+		},
+		compiled = compileTestCase(content,jasmine,args);
 	
-	code = util.write200(req,res,testCompile(content,jasmine,args));
+	code = util.write200(req,res,compiled);
 	return code;
 }
 

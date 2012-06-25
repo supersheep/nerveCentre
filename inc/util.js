@@ -165,6 +165,12 @@ function concatFiles(arr,fn){
 	return sum;
 }
 
+function mix(a,b){
+	for(var i in b){
+		a[i] = b[i]
+	}
+}
+
 module.exports = {
 	isJs:isJs,
 	isTest:isTest,
@@ -179,5 +185,6 @@ module.exports = {
 	write404:write404,
 	filterData:filterData,
 	concatFiles:concatFiles,
-	substitute:substitute
+	substitute:substitute,
+	mix:mix
 }
