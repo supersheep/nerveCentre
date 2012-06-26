@@ -82,60 +82,47 @@ function cfg(req,res,libpath,concat){
 	return code;
 }
 
-function parseContent(content){
-	var ret = {},
-		nomatch = 0;
-		
-	['html','js','css'].forEach(function(type){
-		var regstr = util.substitute('{{t}}((?:.|\\n)*){\\\/{t}}',{t:type}),
-			REG = new RegExp(regstr);
-			matches = content.match(REG);
-		
-		if(!matches){
-			nomatch += 1;
-			ret[type] = '';
-		}else{
-			ret[type] = matches[1];
-		}
-	});
-	
-	if(nomatch === 3){
-		ret = {
-			js:content,
-			html:'',
-			css:''
-		}
-	}
-	
-	return ret;
-	
-}
 
 function compileTestCase(origin,tpl,args){
 
-	var pieces = parseContent(origin);
+	var pieces = {
+		html:origin
+	};
+	
 	util.mix(args,pieces);
 	
 	return util.substitute(tpl,args);
 }
 
-function test(req,res,env){
-	var pathname = url.parse(req.url).pathname.replace(/\.html$/,'.js'),
-		position = config.origin + pathname,
-		content = fs.readFileSync(position,'utf8'),
+function ut(req,res,env){
+	var htmlpath = url.parse(req.url).pathname,
+		jspath = htmlpath.replace(/\.html$/,'.js'),
+		htmlpos = config.origin + htmlpath,
+		jspos = config.origin + jspath,
+		args,content;
+		
+		if(util.isFile(htmlpos)){
+			content = fs.readFileSync(htmlpos,'utf8');
+		}else{
+			content = util.substitute('<script type="text/javascript">{js}</script>',{
+				js:fs.readFileSync(jspos,'utf8')
+			});
+		}
+		
 		args = {
 			libbase:config.libbase,
 			server:config.server ? config.server : ('localhost:' + config.port),
 			env:env,
-			title:"Unit Test " + pathname
-		},
+			title:"Unit Test " + htmlpath
+		};
+		
 		compiled = compileTestCase(content,jasmine,args);
 	
-	code = util.write200(req,res,compiled);
+	code = util.write200(req,res,compiled,'utf-8');
 	return code;
 }
 
-exports.test = test;
+exports.ut = ut;
 exports.origin = origin;
 exports.dir = dir;
 exports.config = cfg;

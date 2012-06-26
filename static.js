@@ -85,7 +85,7 @@ function createServer(cfg){
 		FILE_EXIST = util.isFile(position),
 		IS_JS = util.isJs(position),
 		
-		TEST = util.isTest(pathname,position),
+		UNIT_TEST = util.isUnitTest(pathname,position),
 				
 		DIR_EXIST = util.hasDirectoryWithPath(position);
 		
@@ -102,18 +102,18 @@ function createServer(cfg){
 		
 		if(ICON){
 			return false;
-		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS && !TEST)){
+		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS && !UNIT_TEST)){
 			CODE = via.origin(req,res);
 			VIA = 'origin';
-		}else if(CONFIG_CONCAT){	
+		}else if(CONFIG_CONCAT){
 			CODE = via.config(req,res,LIB_PATH,CONFIG_CONCAT);
 			VIA = 'config';
 		}else if(!CONFIG_CONCAT && IS_JS){
 			CODE = via.dir(req,res);
 			VIA = 'dir';
-		}else if(TEST){
-			CODE = via.test(req,res,TEST.env);
-			VIA = 'test';
+		}else if(UNIT_TEST){
+			CODE = via.ut(req,res,UNIT_TEST.env);
+			VIA = 'ut';
 		}else{
 			CODE = util.write404(req,res);
 			VIA = '';

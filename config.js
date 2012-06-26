@@ -1,11 +1,11 @@
 
 var config = {
 	origin : '/Users/spud/Neuron',
-	libbase: 'lib/1.0/',
-	libpath : ['/lib/1.0','/lib','/s/j/app'],
+	libbase: 'build/',
+	libpath : ['/build','/s/j/app'],
 	port : '3001',
 	staticport : '3002',
-	useproxy : true,
+	useproxy : false,
 	logpath: {
 		common:'log/common.log',
 		error:'log/error.log'

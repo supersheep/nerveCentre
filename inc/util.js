@@ -40,9 +40,11 @@ function isFile(position){
 	return path.existsSync(position) && !fs.statSync(position).isDirectory();
 }
 
-function isTest(pathname,position){
+function isUnitTest(pathname,position){
 	
-	var matches = pathname.match(/^\/(trunk\/|branch\/\w+\/).*\.html$/),
+	// start with / trunk/   branch/ 
+	var matches = pathname.match(/^\/(trunk\/|branch\/\w+\/|)test\/unit\/.*\.html$/),
+		nakehtml = position,
 		nakejs = position.replace(/\.html$/,'.js'),
 		env;
 	
@@ -52,15 +54,13 @@ function isTest(pathname,position){
 		env = matches[1];
 	}
 	
-	if(isFile(nakejs)){
+	if(isFile(nakehtml) || isFile(nakejs)){
 		return {
 			env:env
-		};
+		}
 	}else{
 		return false;
-	}
-	
-		
+	}	
 }
 
 function hasDirectoryWithPath(position){
@@ -126,10 +126,10 @@ function write404(req,res){
     return 404;
 }
 
-function write200(req,res,body){
+function write200(req,res,body,encoding){
 	addHeaders(req,res,body);
 	res.writeHead(200,"OK");	
-	res.write(body,"binary");
+	res.write(body,encoding||"binary");
 	res.end();
 	return 200;
 }
@@ -173,7 +173,7 @@ function mix(a,b){
 
 module.exports = {
 	isJs:isJs,
-	isTest:isTest,
+	isUnitTest:isUnitTest,
 	isFile:isFile,
 	inLibPath:inLibPath,
 	getLibPath:getLibPath,
