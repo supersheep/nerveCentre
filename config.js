@@ -5,7 +5,7 @@ var config = {
 	libpath : ['/build','/s/j/app'],
 	port : '3001',
 	staticport : '3002',
-	useproxy : false,
+	useproxy : true,
 	logpath: {
 		common:'log/common.log',
 		error:'log/error.log'
