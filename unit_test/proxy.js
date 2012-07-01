@@ -22,9 +22,17 @@ describe("RouteParser",function(){
 		.equal("/branch/neuron/lib/fx/core.js?from=/branch/pic/lib/fx/core.js");
 	});
 	
-	it("branch to app branch",function(){
-		routeParser(routes,"da").should
-		.equal("bas?from=da");
+	it("custom proxy rules",function(){
+		routeParser(routes,"/branch/shop/s/js/g.dp.js").should
+		.equal("/branch/main/s/js/g.dp.js?from=/branch/shop/s/js/g.dp.js");
+		
+		routeParser(routes,"/branch/index/s/js/g.dp.js").should
+		.equal("/branch/main/s/js/g.dp.js?from=/branch/index/s/js/g.dp.js");
+	
+		
+		routeParser(routes,"/branch/index/s/css/g.base.css").should
+		.equal("/branch/main/s/css/g.base.css?from=/branch/index/s/css/g.base.css");
+		
 	});
 	
 	

@@ -1,6 +1,6 @@
 var worker = require('./worker'),
 	http = require('http');
-
+	log = require('./inc/log');
 
 function routeParser(routes,url){
 	
@@ -48,7 +48,7 @@ var proxy = function(host,port,routes){
 	worker.start("proxy_rules");
 	return http.createServer(function(req,res){
 		var pathto = routeParser(routes,req.url);
-		console.log("Proxy %s to %s",req.url,pathto);
+		log.write("Proxy to %s",pathto);
 		var options = {
 			host:host,
 			port:port,

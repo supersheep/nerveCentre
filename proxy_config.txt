@@ -1,2 +1,3 @@
-da|bas
-as|fvad
+/s/js/g.dp.js|/branch/main/s/js/g.dp.js
+g.dp.js|/branch/main/s/js/g.dp.js
+/s/css/g.base.css|/branch/main/s/css/g.base.css
