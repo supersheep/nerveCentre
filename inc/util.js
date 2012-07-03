@@ -106,7 +106,7 @@ function addHeaders(req,res,body,type){
 	    res.setHeader("Cache-Control","max-age=" + config.expires.maxAge);
 	}
 	res.setHeader("Content-Type",contentType);
-	res.setHeader("Content-Length",Buffer.byteLength(body,'binary'));
+	// res.setHeader("Content-Length",Buffer.byteLength(body,'binary'));
     res.setHeader("Server","NodeJs("+process.version+")");
 }
 
@@ -128,8 +128,8 @@ function write404(req,res){
 
 function write200(req,res,body,encoding){
 	addHeaders(req,res,body);
-	res.writeHead(200,"OK");	
-	res.write(body,encoding||"binary");
+	res.writeHead(200,"OK");
+	res.write(body,"binary");
 	res.end();
 	return 200;
 }

@@ -100,7 +100,7 @@ function ut(req,res,env){
 		htmlpos = config.origin + htmlpath,
 		jspos = config.origin + jspath,
 		args,content;
-		
+			
 		if(util.isFile(htmlpos)){
 			content = fs.readFileSync(htmlpos);
 		}else{
@@ -115,13 +115,11 @@ function ut(req,res,env){
 			env:env,
 			title:"Unit Test " + htmlpath
 		};
-		
-		
-		compiled = compileTestCase(content,jasmine,args);
 	
-	console.log(compiled);
+	compiled = compileTestCase(content,jasmine,args);
+	compiled = new Buffer(compiled,'utf8');
 	
-	code = util.write200(req,res,compiled,'binary');
+	code = util.write200(req,res,compiled);
 	return code;
 }
 
