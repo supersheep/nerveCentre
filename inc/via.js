@@ -4,8 +4,8 @@ var fs = require('fs'),
 	config = require('../config').configs,
 	base = require('../config').base,
 	util = require('./util'),
-	qunit = fs.readFileSync(base+'/inc/qunit.tpl','utf8'),
-	jasmine = fs.readFileSync(base+'/inc/jasmine.tpl','utf8');
+	qunit = fs.readFileSync(base+'/inc/qunit.tpl'),
+	jasmine = fs.readFileSync(base+'/inc/jasmine.tpl');
 
 	
 function origin(req,res){
@@ -102,10 +102,10 @@ function ut(req,res,env){
 		args,content;
 		
 		if(util.isFile(htmlpos)){
-			content = fs.readFileSync(htmlpos,'utf8');
+			content = fs.readFileSync(htmlpos);
 		}else{
 			content = util.substitute('<script type="text/javascript">{js}</script>',{
-				js:fs.readFileSync(jspos,'utf8')
+				js:fs.readFileSync(jspos)
 			});
 		}
 		
@@ -116,9 +116,12 @@ function ut(req,res,env){
 			title:"Unit Test " + htmlpath
 		};
 		
+		
 		compiled = compileTestCase(content,jasmine,args);
 	
-	code = util.write200(req,res,compiled,'utf-8');
+	console.log(compiled);
+	
+	code = util.write200(req,res,compiled,'binary');
 	return code;
 }
 

@@ -9,7 +9,7 @@ var path = require('path'),
 
 function substitute(str,obj){
 	for(var i in obj){
-		str = str.replace(new RegExp("{" + i + "}","g"),obj[i]);
+		str = String(str).replace(new RegExp("{" + i + "}","g"),obj[i]);
 	}
 	return str;
 }

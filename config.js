@@ -1,11 +1,11 @@
 
 var config = {
 	origin : '/Users/spud/Neuron',
-	libbase: 'build/',
-	libpath : ['/build','/s/j/app'],
+	libbase: 'lib/',
+	libpath : ['/lib','/s/j/app'],
 	port : '3001',
 	staticport : '3002',
-	useproxy : true,
+	useproxy : false,
 	expires : {
    		fileMatch: /^(gif|png|jpg|js|css)$/ig,
 	    maxAge: 60*60*24*365
