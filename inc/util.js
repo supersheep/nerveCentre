@@ -93,11 +93,14 @@ function isJs(url){
 
 function addHeaders(req,res,body,type){
 	var expires,
+		contentLength,
 		pathname = url.parse(req.url).pathname,
 		ext = path.extname(pathname).slice(1) || 'unknown',
 		contentType = type || mime.getMimeType(ext);
 		
 	body = body || '';
+	
+	contentLength = body.constructor == Buffer ? body.length : Buffer.byteLength(body,'binary');
 	
 	if (ext.match(config.expires.fileMatch)){
 	    expires = new Date();
@@ -106,7 +109,7 @@ function addHeaders(req,res,body,type){
 	    res.setHeader("Cache-Control","max-age=" + config.expires.maxAge);
 	}
 	res.setHeader("Content-Type",contentType);
-	// res.setHeader("Content-Length",Buffer.byteLength(body,'binary'));
+	res.setHeader("Content-Length",contentLength);
     res.setHeader("Server","NodeJs("+process.version+")");
 }
 
@@ -139,7 +142,9 @@ function write200(req,res,body,encoding){
 // filter data with custom filters
 function filterData(data,url){	
 	config.filters.forEach(function(filter){
-		data = filters[filter](data,url);
+		if(filters[filter]){
+			data = filters[filter](data,url);
+		}
 	});
 
 	return data;	

@@ -26,6 +26,21 @@ var filters = {
 			return origin;
 		}
 	},
+	
+	proxycomment:function(origin,uri){
+		var parsed = url.parse(uri,true),
+			from = parsed.query.from,
+			to = parsed.pathname;
+		
+		var comment = "/**\n"
+		+" * Proxy Info\n"
+		+" * From: " + from + "\n"
+		+" * To: " + to + "\n"
+		+" */\n";
+		
+		return comment + origin;
+	},
+	
 	// replace the fake %buidtime%
 	buildtime:function(origin,url){
 		var date = new Date();

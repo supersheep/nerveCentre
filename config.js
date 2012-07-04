@@ -13,6 +13,7 @@ var config = {
 	filters : [
 		'strict',
 		'uglify',
+		'proxycomment',
 		'buildtime',
 		'branch'] // ['strict','uglify',...];
 }
