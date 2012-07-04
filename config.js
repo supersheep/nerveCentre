@@ -28,6 +28,7 @@ var product = {
 	filters : [
 		'strict',
 		'uglify',
+		'proxycomment',
 		'buildtime',
 		'branch']
 }
@@ -41,7 +42,6 @@ var develop = {
 	filters : [
 		'strict',
 		'uglify',
-		'proxycomment',
 		'buildtime',
 		'branch']
 }
