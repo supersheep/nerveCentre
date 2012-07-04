@@ -35,7 +35,7 @@ var filters = {
 		var comment = "/**\n"
 		+" * Proxy Info\n"
 		+" * From: " + from + "\n"
-		+" * To: " + to + "\n"
+		+" * To:   " + to + "\n"
 		+" */\n";
 		
 		return comment + origin;
