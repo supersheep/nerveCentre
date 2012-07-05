@@ -12,7 +12,7 @@ function merge(a,b){
 }
 
 var common = {
-	origin : '',
+	origin : '/your/doc/root',
 	expires : {
    		fileMatch: /^(gif|png|jpg|js|css)$/ig,
 	    maxAge: 60*60*24*365

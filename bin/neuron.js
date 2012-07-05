@@ -24,7 +24,7 @@ function getUserHome() {
 
 function start(){
 	var origin,
-		path = args[1],
+		path = args[1] || "",
 		rest = path.slice(1);
 		
 	rest = rest.slice(1)==""?"":rest;
@@ -41,7 +41,6 @@ function start(){
 		}else{
 			origin = pwd + "/" + path;
 		}
-		
 		server.start({
 			origin:origin
 		});
