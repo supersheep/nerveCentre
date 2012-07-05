@@ -109,9 +109,10 @@ function ut(req,res,env){
 			});
 		}
 		
+		
 		args = {
 			libbase:config.libbase,
-			server:config.server ? config.server : ('localhost:' + config.port),
+			server:config.server ? config.server : req.headers.host,
 			env:env,
 			title:"Unit Test " + htmlpath
 		};
