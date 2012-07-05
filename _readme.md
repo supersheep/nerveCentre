@@ -12,7 +12,7 @@ I.如何启动服务
 	
 		git clone git@f2e.dp:nervecentre.git
 
-2. npm link
+2. npm link (windows上npm link是坏的，使用setup.bat简单的替代之)
 
 		cd nerveCentre
 		npm link
