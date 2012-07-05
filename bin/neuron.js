@@ -9,6 +9,7 @@ var util = require('../inc/util');
 var args = process.argv.slice(2);
 var pwd = process.cwd();
 
+
 var command = args[0];
 
 switch(command){
@@ -16,16 +17,31 @@ switch(command){
 	case "config":config();break;
 }
 
+function getUserHome() {
+  return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+}
+
 
 function start(){
-	var origin;
-	var path = args[1];
+	var origin,
+		path = args[1],
+		rest = path.slice(1);
+		
+	rest = rest.slice(1)==""?"":rest;
+		
 	if(path){
-		if(path == '.'){
-			origin = pwd;
+		if(path.indexOf("/") == 0){
+			origin = path;
+		}else if(path.indexOf("~") == 0){
+			console.log("HME");
+			origin = getUserHome() + rest;
+		}else if(path.indexOf(".") == 0){
+			console.log("DOT");
+			origin = pwd  + rest;
 		}else{
-			origin = pwd + '/' + path;
+			origin = pwd + "/" + path;
 		}
+		
 		server.start({
 			origin:origin
 		});
