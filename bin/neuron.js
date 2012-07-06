@@ -33,10 +33,8 @@ function start(){
 		if(path.indexOf("/") == 0){
 			origin = path;
 		}else if(path.indexOf("~") == 0){
-			console.log("HME");
 			origin = getUserHome() + rest;
 		}else if(path.indexOf(".") == 0){
-			console.log("DOT");
 			origin = pwd  + rest;
 		}else{
 			origin = pwd + "/" + path;
