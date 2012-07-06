@@ -33,7 +33,7 @@ var setters = {
 				throw new Error("can\'t read "+ rulesFile);
 			}
 			
-			list = data.split('\n');
+			list = data.split(process.platform == 'win32' ? '\r\n' : '\n');
 			
 			list.forEach(function(e){
 				var splited = e.split('|'),
