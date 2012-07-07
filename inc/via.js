@@ -58,7 +58,7 @@ function dir(req,res){
 		});	
 		
 		filedata += "DP.define.off();";
-		filedata = util.filterData(filedata,req.url);
+		filedata = util.filterData(filedata,req.originurl);
 						
 		code = util.write200(req,res,filedata); //先丢出来	
 					
@@ -76,7 +76,7 @@ function cfg(req,res,libpath,concat){
 		return config.origin + libpath + '/' + concat.folder +  '/' +  e
 	});	
 	filedata = util.concatFiles(toconcat);
-	filedata = util.filterData(filedata,req.url);				
+	filedata = util.filterData(filedata,req.originurl);				
 		
 	code = util.write200(req,res,filedata); 
 	return code;
