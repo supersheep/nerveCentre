@@ -26,6 +26,7 @@ var product = {
 	libbase: 'lib/1.0/',
 	libpath : ['/lib/1.0','/lib','/s/j/app'],
 	useproxy:true,
+	showhome:false,
 	filters : [
 		'strict',
 		'uglify',
@@ -41,6 +42,7 @@ var develop = {
 	libbase: 'lib/',
 	libpath : ['/lib','/s/j/app'],
 	useproxy : false,
+	showhome : true,
 	filters : [
 		'strict',
 		'uglify',

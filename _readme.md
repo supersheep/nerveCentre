@@ -45,9 +45,10 @@ II.配置
 3. port 服务的访问端口。（若useproxy为true，则以此作为静态文件服务访问端口。）
 4. staticport 静态服务的访问端口，
 5. useproxy 是否对branch目录进行代理
-6. libbase 供neuron配置使用的libbase参数
-7. libpath 会进行打包处理的文件夹路径集
-8. filters 响应输出过程中做额外处理的过滤器，在inc/filters.js中定义
+6. showhome 是否在 / 显示主页
+7. libbase 供neuron配置使用的libbase参数
+8. libpath 会进行打包处理的文件夹路径集
+9. filters 响应输出过程中做额外处理的过滤器，在inc/filters.js中定义
 
 默认配置
 -----

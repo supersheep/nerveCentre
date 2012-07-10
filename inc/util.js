@@ -130,7 +130,8 @@ function write404(req,res){
 }
 
 function write200(req,res,body,encoding){
-	addHeaders(req,res,body);
+	var typehtml = (config.showhome && req.url == "/") ? "text/html" : undefined;
+	addHeaders(req,res,body,typehtml);
 	res.writeHead(200,"OK");
 	res.write(body,"binary");
 	res.end();

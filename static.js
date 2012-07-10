@@ -2,6 +2,7 @@ var http = require('http'),
 	url = require('url'),
 	fs = require('fs'),
 	path = require('path'),
+	base = require('./config').base,
 	default_config = require('./config').configs,
 	
 	worker = require('./worker'),
@@ -11,58 +12,21 @@ var http = require('http'),
 	filters = require('./inc/filters').filters,
 	rewrite = require('./inc/rewrite'),
 	via = require("./inc/via");
-	
 
 
-// 初始化所有lib目录
-/*
-config.full_libpath = (function(lib){
-	var branchdirs = fs.readdirSync(config.origin + '/branch');;
-	var l = [];
-
-	lib.forEach(function(e){
-		l.push('/trunk' + e);
-		branchdirs.forEach(function(dir){
-			l.push('/branch/' + dir + e);
-		});
-	});
-	return l;
-})(config.libpath);
-*/
-
-
-/*
-var buildconcats = config.full_libpath.map(function(libpath){
-	var buildpath = config.origin + libpath + '/build.json';
-	if(path.existsSync(buildpath)){	
-		var json = fs.readFileSync(buildpath,'binary');
-		
-		return JSON.parse(json).concat;
-	}else{
-		return [];
+function merge(a,b,overwrite){
+	for(var key in b){
+		if(overwrite || !a[key]){
+			a[key] = b[key];
+		}
 	}
-});
-*/
-
-/*
-config.origin + '/branch',function(a){
-	var p = config.full_libpath;
-	switch(a.type){		
-		case 'add':config.libpath.forEach(function(e){
-			p.push('/branch/' + a.change[0] + e)
-		});break;
-		case 'remove':p = p.filter(function(e){return !e.match('branch/'+a.change[0])});break;
-		case 'modify':p = p.map(function(e){return e.replace('branch/'+a.change[1],'branch/'+a.change[0])});break;
-	}
-});
-*/
-
-
+	return a;
+}
 
 function createServer(cfg){
 	// 检测是否有新增branch，刷新配置变量
 	worker.start("lib_path");
-	var config = cfg || default_config;
+	var config = merge(merge({},default_config),cfg,true);
 	var server = http.createServer(function(req,res){	
 		
 		var pathname,
@@ -99,8 +63,14 @@ function createServer(cfg){
 		CODE = 200;
 		VIA = 'origin';
 		
-		
-		if(ICON){
+		if(config.showhome && req.url === "/"){
+			fs.readFile(base + '/index.html',function(err,data){
+				if(err){return;}
+				res.setHeader("Content-Type","text/html");
+				util.write200(req,res,data);	
+			});
+			return;
+		}else if(ICON){
 			return false;
 		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS && !UNIT_TEST)){
 			CODE = via.origin(req,res);
