@@ -2,9 +2,9 @@
 const DEV = process.argv.indexOf("-d") > 0
 
 
-function merge(a,b){
+function merge(a,b,overwrite){
 	for(var key in b){
-		if(!a[key]){
+		if(overwrite || !a[key]){
 			a[key] = b[key];
 		}
 	}
@@ -12,7 +12,7 @@ function merge(a,b){
 }
 
 var common = {
-	origin : '',
+	origin : '/your/doc/root',
 	expires : {
    		fileMatch: /^(gif|png|jpg|js|css)$/ig,
 	    maxAge: 60*60*24*365
@@ -20,6 +20,7 @@ var common = {
 }
 
 var product = {
+	origin:'D:\\StaticFiles',
 	port:'1337',
 	staticport:'1339',
 	libbase: 'lib/1.0/',
@@ -34,6 +35,7 @@ var product = {
 }
 
 var develop = {
+	origin:'/your/doc/root',
 	port : '1337',
 	staticport : '1339',
 	libbase: 'lib/',
@@ -51,5 +53,5 @@ var current = DEV?develop:product;
 
 console.log("ENV",DEV?"DEV":"PRODUCT");
 
-exports.configs = merge(merge({},common),current);
+exports.configs = merge(merge({},common),current,true);
 exports.base = __dirname;

@@ -8,7 +8,8 @@ var cache = {};
 var workers = {
 	"proxy_rules":function(){
 		var rulesFile = __dirname + "/proxy_config.txt";
-		fs.watchFile(rulesFile,function(curr,prev){
+		var watch = fs.watch || fs.watchFile;
+		watch(rulesFile,function(curr,prev){
 			if(curr.mtime == prev.mtime){ // 无修改也会不断触发，原因尚不明
 				worker.set("proxy_rules");
 			}
@@ -32,7 +33,7 @@ var setters = {
 				throw new Error("can\'t read "+ rulesFile);
 			}
 			
-			list = data.split('\n');
+			list = data.split(process.platform == 'win32' ? '\r\n' : '\n');
 			
 			list.forEach(function(e){
 				var splited = e.split('|'),

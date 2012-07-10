@@ -1,4 +1,5 @@
 .DS_Store
+npm-debug.log
 nohup.out
 count_log.txt
 log
