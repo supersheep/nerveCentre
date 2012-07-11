@@ -10,7 +10,8 @@
 		"neuron":"bin/neuron.js"
 	},
 	"dependencies":{
-		"uglify-js":"0.x.x"
+		"uglify-js":"0.x.x",
+		"node-markdown":"0.x.x"
 	},
 	"licenses":[{
     	"type": "GPLv2",	

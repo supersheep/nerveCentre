@@ -91,12 +91,12 @@ function isJs(url){
 	return path.extname(url)=='.js';
 }
 
-function addHeaders(req,res,body,type){
+function addHeaders(req,res,body){
 	var expires,
 		contentLength,
 		pathname = url.parse(req.url).pathname,
 		ext = path.extname(pathname).slice(1) || 'unknown',
-		contentType = type || mime.getMimeType(ext);
+		contentType = mime.getMimeType(ext);
 		
 	body = body || '';
 	
@@ -108,9 +108,9 @@ function addHeaders(req,res,body,type){
 	    res.setHeader("Expires",expires.toUTCString());
 	    res.setHeader("Cache-Control","max-age=" + config.expires.maxAge);
 	}
-	res.setHeader("Content-Type",contentType);
+	res.setHeader("Content-Type",res.getHeader('Content-Type') || contentType);
 	res.setHeader("Content-Length",contentLength);
-    res.setHeader("Server","NodeJs("+process.version+")");
+	res.setHeader("Server","NodeJs("+process.version+")");
 }
 
 function write304(req,res){
@@ -122,16 +122,16 @@ function write304(req,res){
 
 function write404(req,res){
     var body= 'can\'t found "' + req.url + '"';
-    addHeaders(req,res,body,'text/plain');
+    res.setHeader('Content-Type','text/plain');
+    addHeaders(req,res,body);
     res.writeHead(404,"Not Found");
     res.write(body,"binary");
     res.end();
     return 404;
 }
 
-function write200(req,res,body,encoding){
-	var typehtml = (config.showhome && req.url == "/") ? "text/html" : undefined;
-	addHeaders(req,res,body,typehtml);
+function write200(req,res,body){
+	addHeaders(req,res,body);
 	res.writeHead(200,"OK");
 	res.write(body,"binary");
 	res.end();

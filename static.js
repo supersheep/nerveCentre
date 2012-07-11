@@ -33,11 +33,13 @@ function createServer(cfg){
 			position,
 			
 			FILE_EXIST,
+			INDEX,
 			IS_JS,
 			DIR_EXIST,
 			LIB_PATH,
 			IN_LIB_PATH,
 			CODE,
+			DOC,
 			VIA,
 			CONFIG_CONCAT;
 		
@@ -45,6 +47,10 @@ function createServer(cfg){
 		
 		pathname = url.parse(req.url).pathname;
 		position = config.origin + pathname; // 文件位置
+		
+		DOC = req.url.match(/\.md$/);
+		
+		INDEX = config.showhome && req.url === "/";
 		
 		FILE_EXIST = util.isFile(position),
 		IS_JS = util.isJs(position),
@@ -63,27 +69,26 @@ function createServer(cfg){
 		CODE = 200;
 		VIA = 'origin';
 		
-		if(config.showhome && req.url === "/"){
-			fs.readFile(base + '/index.html',function(err,data){
-				if(err){return;}
-				res.setHeader("Content-Type","text/html");
-				util.write200(req,res,data);	
-			});
-			return;
-		}else if(ICON){
+		if(ICON){
 			return false;
+		}else if(INDEX){
+			CODE = via('index')(req,res);
+			VIA = 'index';
+		}else if(DOC){
+			CODE = via('doc')(req,res);
+			VIA = 'doc';
+		}else if(UNIT_TEST){
+			CODE = via('ut')(req,res,UNIT_TEST.env);
+			VIA = 'ut';
 		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS && !UNIT_TEST)){
-			CODE = via.origin(req,res);
+			CODE = via('origin')(req,res);
 			VIA = 'origin';
 		}else if(CONFIG_CONCAT){
-			CODE = via.config(req,res,LIB_PATH,CONFIG_CONCAT);
-			VIA = 'config';
+			CODE = via('cfg')(req,res,LIB_PATH,CONFIG_CONCAT);
+			VIA = 'cfg';
 		}else if(!CONFIG_CONCAT && IS_JS){
-			CODE = via.dir(req,res);
+			CODE = via('dir')(req,res);
 			VIA = 'dir';
-		}else if(UNIT_TEST){
-			CODE = via.ut(req,res,UNIT_TEST.env);
-			VIA = 'ut';
 		}else{
 			CODE = util.write404(req,res);
 			VIA = '';
