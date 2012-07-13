@@ -22,6 +22,7 @@ var common = {
 var product = {
 	origin:'D:\\StaticFiles',
 	port:'1337',
+	env:"pro",
 	staticport:'1339',
 	libbase: 'lib/1.0/',
 	libpath : ['/lib/1.0','/lib','/s/j/app'],
@@ -38,6 +39,7 @@ var product = {
 var develop = {
 	origin:'/your/doc/root',
 	port : '1337',
+	env:"dev",
 	staticport : '1339',
 	libbase: 'lib/',
 	libpath : ['/lib','/s/j/app'],

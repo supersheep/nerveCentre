@@ -11,6 +11,7 @@
 	},
 	"dependencies":{
 		"uglify-js":"0.x.x",
+		"chai":"0.x.x",
 		"node-markdown":"0.x.x"
 	},
 	"licenses":[{

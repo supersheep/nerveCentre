@@ -14,9 +14,12 @@ function doc(req,res){
 	
 	data = md(data);
 	
-	data = util.substitute(mdtpl,{
-		data:data
-	});
+	if(req.headers["x-requested-with"] !== "XMLHttpRequest"){
+		data = util.substitute(mdtpl,{
+			data:data
+		});
+	}
+	
 	res.setHeader('Content-Type','text/html');
 	util.write200(req,res,new Buffer(data));
 	return 200;	
