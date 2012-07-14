@@ -23,29 +23,41 @@ function ut(req,res,env){
 		jspath = htmlpath.replace(/\.html$/,'.js'),
 		htmlpos = config.origin + htmlpath,
 		jspos = config.origin + jspath,
+		htmlexists = util.isFile(htmlpos),
+		jsexists = util.isFile(jspos),
+		pos = htmlexists ? htmlpos : ( jsexists ? jspos : null),
 		args,content;
-			
-		if(util.isFile(htmlpos)){
-			content = fs.readFileSync(htmlpos);
+		
+		
+		if(pos && util.fileNotModified(req,res,pos)){
+			code = util.write304(req,res);
 		}else{
-			content = util.substitute('<script type="text/javascript">{js}</script>',{
-				js:fs.readFileSync(jspos)
-			});
+			if(pos){
+				if(htmlexists){
+					content = fs.readFileSync(htmlpos);
+				}else{
+					content = util.substitute('<script type="text/javascript">{js}</script>',{
+						js:fs.readFileSync(jspos)
+					});
+				}
+		
+				args = {
+					libbase:config.libbase,
+					server:config.server ? config.server : req.headers.host,
+					env:env,
+					title:"Unit Test " + htmlpath
+				};
+			
+				compiled = compileTestCase(content,jasmine,args);
+				compiled = new Buffer(compiled,'utf8');
+				
+				code = util.write200(req,res,compiled);
+			}else{
+				code = util.write404(req,res);
+			}
 		}
-		
-		
-		args = {
-			libbase:config.libbase,
-			server:config.server ? config.server : req.headers.host,
-			env:env,
-			title:"Unit Test " + htmlpath
-		};
 	
-	compiled = compileTestCase(content,jasmine,args);
-	compiled = new Buffer(compiled,'utf8');
-	
-	code = util.write200(req,res,compiled);
-	return code;
+		return code;
 }
 
 module.exports = ut;

@@ -14,18 +14,23 @@ function doc(req,res){
 	
 	if(util.isFile(pos)){
 		
-		data = String(fs.readFileSync(pos));
-	
-		data = md(data);
+		if(util.fileNotModified(req,res,pos)){
+			ret = util.write304(req,res);
+		}else{
+			data = String(fs.readFileSync(pos));
 		
-		if(req.headers["x-requested-with"] !== "XMLHttpRequest"){
-			data = util.substitute(mdtpl,{
-				data:data
-			});
+			data = md(data);
+			
+			/* if(req.headers["x-requested-with"] !== "XMLHttpRequest"){
+				data = util.substitute(mdtpl,{
+					data:data
+				});
+			} */
+			
+			res.setHeader('Content-Type','text/html');
+			ret = util.write200(req,res,new Buffer(data));
 		}
 		
-		res.setHeader('Content-Type','text/html');
-		ret = util.write200(req,res,new Buffer(data));
 	}else{
 		ret = util.write404(req,res);
 	}

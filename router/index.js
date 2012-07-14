@@ -56,27 +56,39 @@ function parseTree(tree,ext,filters,sort){
 
 function dev(req,res){
 
-var tpl = fs.readFileSync(base+'/tpl/index.tpl');
+var pos = base+'/tpl/index.tpl',
+	tpl,
+	doctree,dochtml,
+	uttree,uthtml,
+	args,content,ret;
 
-
-var doctree = dirTree(config.origin + "/docs/neuron");
-var dochtml = parseTree(doctree,".md",[".md"],["intro","dom","lang","oop"]);
-
-var uttree = dirTree(config.origin + "/test/unit");
-var uthtml = parseTree(uttree,".html",[".js",".html"]);
-var args = {
-	libbase:config.libbase,
-	server:config.server ? config.server : req.headers.host,
-	title:"Neuron",
-	tests: uthtml,
-	docs:dochtml
-};
+if(util.fileNotModified(req,res,pos)){
+	ret = util.write304(req,res);
+}else{
+	tpl = fs.readFileSync(pos);
 	
-var content = new Buffer(util.substitute(tpl,args),'utf8');
-
-res.setHeader("Content-Type","text/html");
-util.write200(req,res,content);
-return 200;	
+	doctree = dirTree(config.origin + "/docs/neuron");
+	dochtml = parseTree(doctree,".md",[".md"],["intro","dom","lang","oop"]);
+	
+	uttree = dirTree(config.origin + "/test/unit");
+	uthtml = parseTree(uttree,".html",[".js",".html"]);
+	args = {
+		libbase:config.libbase,
+		server:config.server ? config.server : req.headers.host,
+		title:"Neuron",
+		tests: uthtml,
+		docs:dochtml
+	};
+		
+	content = new Buffer(util.substitute(tpl,args),'utf8');
+	
+	res.setHeader("Content-Type","text/html");
+	ret = util.write200(req,res,content);
 }
+
+return ret;	
+
+}
+
 
 module.exports = (config.env=="dev")?dev:pro;
