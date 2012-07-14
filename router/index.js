@@ -8,24 +8,39 @@ function pro(req,res){
 	return util.write404(req,res);
 }
 
-function parseDoc(tree){
+function parseTree(tree,ext,filters,sort){
 	var ret = "<ul>";
 	
+	// 排序
+	sort && tree.children.sort(function(a,b){
+		return sort.indexOf(a.name) - sort.indexOf(b.name);	
+	});
+	
+	
 	tree.children.forEach(function(child,i){
-		if(child.type == "folder"){
-			ret += util.substitute('<li class="module{on}" style="height:{h}px" data-height="{h}" >',{
-				on:(i==0?" on":""),
-				h:33+(29*child.children.length)
+		
+		if(child.children){
+			// 过滤不符合后缀的文件
+			child.children = child.children.filter(function(item){
+				return filters.some(function(e){
+					return item.name.indexOf(e) >= 0
+				});
 			});
-			ret += '<h3 class="title">' + child.name + '</h3>';
+		}
+	
+		if(child.type == "folder"){
+			ret += util.substitute('<li class="module">');
+			ret += util.substitute('<h3 class="title" data-link="{link}">' + child.name + '</h3>',{
+				link:child.path.split(config.origin)[1] + ext
+			});
 			
 			if(child.children){
 				ret += '<ul>';
 				
 				child.children.forEach(function(c,j){
-					ret+=util.substitute('<li class="item"><a href="{link}">{name}</a></li>',{
-						link:c.path.split(config.origin)[1],
-						name:c.name.split(".md")[0]
+					ret+=util.substitute('<li class="item" data-link="{link}">{name}</a></li>',{
+						link:c.path.split(config.origin)[1].split(".")[0] + ext,
+						name:c.name.split(".")[0]
 					});
 				});
 				
@@ -39,18 +54,21 @@ function parseDoc(tree){
 	return ret;
 }
 
-
 function dev(req,res){
 
 var tpl = fs.readFileSync(base+'/tpl/index.tpl');
 
 
-var tree = dirTree(config.origin + "/docs/neuron");
-var dochtml = parseDoc(tree);
+var doctree = dirTree(config.origin + "/docs/neuron");
+var dochtml = parseTree(doctree,".md",[".md"],["intro","dom","lang","oop"]);
+
+var uttree = dirTree(config.origin + "/test/unit");
+var uthtml = parseTree(uttree,".html",[".js",".html"]);
 var args = {
 	libbase:config.libbase,
 	server:config.server ? config.server : req.headers.host,
 	title:"Neuron",
+	tests: uthtml,
 	docs:dochtml
 };
 	
