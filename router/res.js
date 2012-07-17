@@ -2,14 +2,16 @@ var fs = require('fs'),
 	url = require('url'),
 	path = require('path'),
 	util = require('../inc/util'),	
-	config = require('../config').configs;
+	config = require('../config').configs,
+	base = require('../config').base;
 
 function origin(req,res){
-	var pathname = url.parse(req.url).pathname,
-		position = config.origin + pathname,
+	var pathname = url.parse(req.url).pathname.split("/nc_res")[1],
+		position = base + "/res" + pathname,
 		code,
 		filedata;
 	
+	console.log(position);
 	
 	if(!util.isFile(position)){
 		return util.write404(req,res);

@@ -109,7 +109,7 @@
 				"frame":function(){
 					var el = $(this),
 						iframe = $.create('iframe').attr('src',el.attr('data-link'));
-						loading = $.create('img').attr('src','/res/loading.gif');
+						loading = $.create('img').attr('src','/nc_res/loading.gif');
 						
 					iframe.on('load',function(){
 						var frm = this;

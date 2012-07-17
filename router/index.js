@@ -54,7 +54,8 @@ function parseTree(tree,ext,filters,sort){
 	return ret;
 }
 
-function dev(req,res){
+function dev(req,res,env){
+
 
 var pos = base+'/tpl/index.tpl',
 	tpl,
@@ -73,6 +74,7 @@ if(util.fileNotModified(req,res,pos)){
 	uttree = dirTree(config.origin + "/test/unit");
 	uthtml = parseTree(uttree,".html",[".js",".html"]);
 	args = {
+		env:env,
 		libbase:config.libbase,
 		server:config.server ? config.server : req.headers.host,
 		title:"Neuron",
@@ -80,7 +82,8 @@ if(util.fileNotModified(req,res,pos)){
 		docs:dochtml
 	};
 		
-	content = new Buffer(util.substitute(tpl,args),'utf8');
+	content = util.substitute(tpl,args);
+	content = new Buffer(content,'utf8');
 	
 	res.setHeader("Content-Type","text/html");
 	ret = util.write200(req,res,content);

@@ -41,6 +41,8 @@ function createServer(cfg){
 			CODE,
 			DOC,
 			VIA,
+			ENV,
+			RESOURCE,
 			CONFIG_CONCAT;
 		
 		rewrite.handle(req,rewrite.rules);	
@@ -49,38 +51,38 @@ function createServer(cfg){
 		position = config.origin + pathname; // 文件位置
 		
 		DOC = req.url.match(/\.md$/);
+		ICON = req.url.match(/^\/favicon.ico$/);
+		RESOURCE = req.url.match(/^\/nc_res\//);
+		UNIT_TEST = req.url.match(/^\/(trunk\/|branch\/\w+\/|)test\/unit\/.*\.html$/);
+		INDEX = req.url.match(/^\/$/);
 		
-		INDEX = config.showhome && req.url === "/";
 		
-		FILE_EXIST = util.isFile(position),
-		IS_JS = util.isJs(position),
 		
-		UNIT_TEST = util.isUnitTest(pathname,position),
-				
+		FILE_EXIST = util.isFile(position);
+		IS_JS = util.isJs(position);
 		DIR_EXIST = util.hasDirectoryWithPath(position);
-		
 		IN_LIB_PATH = util.inLibPath(pathname);
-		
 		LIB_PATH = util.getLibPath(pathname);
-		
 		CONFIG_CONCAT = util.getConcatFromLibPath(LIB_PATH,req.url);
 		
-		ICON = req.url == "/favicon.ico";
-		CODE = 200;
-		VIA = 'origin';
+		ENV = config.env === "dev" ? "" : "/branch/neuron"; 
+		
 		
 		if(ICON){
 			return false;
 		}else if(INDEX){
-			CODE = via('index')(req,res);
+			CODE = via('index')(req,res,ENV);
 			VIA = 'index';
+		}else if(RESOURCE){
+			CODE = via('res')(req,res);
+			VIA = 'res';
 		}else if(DOC){
 			CODE = via('doc')(req,res);
 			VIA = 'doc';
 		}else if(UNIT_TEST){
-			CODE = via('ut')(req,res,UNIT_TEST.env);
+			CODE = via('ut')(req,res,ENV);
 			VIA = 'ut';
-		}else if( (FILE_EXIST && IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS && !UNIT_TEST)){
+		}else if( (IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS)){
 			CODE = via('origin')(req,res);
 			VIA = 'origin';
 		}else if(CONFIG_CONCAT){
@@ -90,8 +92,7 @@ function createServer(cfg){
 			CODE = via('dir')(req,res);
 			VIA = 'dir';
 		}else{
-			CODE = util.write404(req,res);
-			VIA = '';
+			throw ("no match " + pathname);
 		}
 		
 		log.write("GET %s %s : %s",
