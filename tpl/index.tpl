@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Neuron</title>
 	<script type="text/javascript">var __loaderConfig={appBase:"s/j/app/",libBase:"{libbase}",server:"{server}"};</script>
-	<script type="text/javascript" src="http://i1.dpfile.com/lib/1.0/neuron-active.min.v2.js"></script>
+	<script src="http://{server}/{env}{libbase}neuron-active.js"></script>
 	<script>DP.__loader.init();</script>
 	<style type="text/css">
 		body,h1,h2,h3,img,ul,li{padding:0;margin:0;}
