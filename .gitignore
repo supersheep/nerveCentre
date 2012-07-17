@@ -4,8 +4,9 @@ nohup.out
 count_log.txt
 log
 node_modules/
+node_modules/chai/
 log/
-archive
-inc/test/*
-inc/uglifyjs/*
+archive/
+inc/test/
+inc/uglifyjs/
 *.swp
