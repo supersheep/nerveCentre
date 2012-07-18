@@ -45,7 +45,7 @@ hr{
 
 /* .markdown-article */
 .markdown-article{
-    font-family: Helvetica, Arial, freesans, 'Hiragino Sans GB', 'STHeiti', Letter Gothic Std, sans-serif;
+    font-family: Monaco, Helvetica, Arial, freesans, 'Hiragino Sans GB', 'STHeiti', Letter Gothic Std, sans-serif;
     background:#f5f5f5;
 }
 
