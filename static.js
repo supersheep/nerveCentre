@@ -55,7 +55,7 @@ function createServer(cfg){
 		RESOURCE = req.url.match(/^\/nc_res\//);
 		UNIT_TEST = req.url.match(/^\/(trunk\/|branch\/\w+\/|)test\/unit\/.*\.html$/);
 		INDEX = req.url.match(/^\/$/);
-		
+		TESTJSON = req.url.match(/^\/testcases.json$/);
 		
 		
 		FILE_EXIST = util.isFile(position);
@@ -79,6 +79,9 @@ function createServer(cfg){
 		}else if(DOC){
 			CODE = via('doc')(req,res);
 			VIA = 'doc';
+		}else if(TESTJSON){
+			CODE = via('utcases')(req,res);
+			VIA = "utcases";
 		}else if(UNIT_TEST){
 			CODE = via('ut')(req,res,ENV);
 			VIA = 'ut';
@@ -92,7 +95,8 @@ function createServer(cfg){
 			CODE = via('dir')(req,res);
 			VIA = 'dir';
 		}else{
-			throw ("no match " + pathname);
+			CODE = util.write404(req,res);
+			VIA = "unmatch";
 		}
 		
 		log.write("GET %s %s : %s",

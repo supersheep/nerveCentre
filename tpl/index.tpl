@@ -16,7 +16,7 @@
 		
 		.body{margin:0 auto;height:100%;overflow: hidden;}
 		
-		.aside{position:fixed;height:100%;background-color: #5D7691;width:200px;text-align: center;z-index: 10;}
+		.aside{position:fixed;height:100%;background-color: #5D7691;width:200px;text-align: center;z-index: 10;overflow:auto;}
 		
 		.aside .logo{background-color: #1a2731;padding:40px 20px;}
 		.aside .logo h1{font-size: 36px;color: #ffe86f;}
