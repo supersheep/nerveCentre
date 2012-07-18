@@ -5,7 +5,7 @@ var fs = require('fs'),
 	config = require('../config').configs;
 
 function dir(req,res){
-	var pathname = url.parse(req.url).pathname,
+	var pathname = req.pathname,
 		dir,toconcat,code;
 		
 	dir = (config.origin + pathname).split('.js')[0];

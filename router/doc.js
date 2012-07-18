@@ -8,7 +8,7 @@ var util = require('../inc/util'),
 var mdtpl = fs.readFileSync(base + '/tpl/markdown.tpl');
 
 function doc(req,res){
-	var path = url.parse(req.url).pathname,
+	var path = req.pathname,
 		pos = config.origin + path,
 		data;
 	

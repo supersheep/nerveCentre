@@ -55,7 +55,6 @@ var pos = base+'/tpl/index.tpl',
 	doctree = linkTree(config.origin + "/docs/neuron",".md",[".md"],[],["intro","dom","lang","oop"]);
 	dochtml = renderTree(doctree); 
 	
-	
 	// root,ext,filter,ignore
 	uttree = linkTree(config.origin + "/test/unit",".html",[".js",".html"],['ajax']);
 	uthtml = renderTree(uttree);

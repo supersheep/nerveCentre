@@ -47,8 +47,9 @@ function createServer(cfg){
 		
 		rewrite.handle(req,rewrite.rules);	
 		
-		pathname = url.parse(req.url).pathname;
+		pathname = req.pathname = decodeURI(url.parse(req.url).pathname);
 		position = config.origin + pathname; // 文件位置
+		
 		
 		DOC = req.url.match(/\.md$/);
 		ICON = req.url.match(/^\/favicon.ico$/);

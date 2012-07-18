@@ -19,7 +19,7 @@ function compileTestCase(origin,tpl,args){
 
 
 function ut(req,res,env){
-	var htmlpath = url.parse(req.url).pathname,
+	var htmlpath = req.pathname,
 		jspath = htmlpath.replace(/\.html$/,'.js'),
 		htmlpos = config.origin + htmlpath,
 		jspos = config.origin + jspath,

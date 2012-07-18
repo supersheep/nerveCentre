@@ -1,4 +1,5 @@
 var dirTree = require('./dirtree'),
+	path = require('path'),
 	config = require('../config').configs;
 
 
@@ -6,9 +7,16 @@ function parseTree(tree,ext,filters,ignores,sort){
 	
 	ignores = ignores || [];
 	
-	tree.link = tree.path.split(config.origin)[1].split(".")[0] + ext;
-	tree.name = tree.name.split(".")[0];
-
+	tree.link = tree.path.split(config.origin)[1];
+	tree.link = plainName(tree.link) + ext;
+	tree.name = plainName(tree.name);
+	
+	
+	function plainName(name){
+		var ext = path.extname(name);
+		return ext ? name.split(ext)[0] : name;
+	}
+	
 	if(tree.children){
 	
 		// 排序子项

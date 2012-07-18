@@ -6,7 +6,7 @@ var fs = require('fs'),
 	base = require('../config').base;
 
 function origin(req,res){
-	var pathname = url.parse(req.url).pathname.split("/nc_res")[1],
+	var pathname = req.pathname.split("/nc_res")[1],
 		position = base + "/res" + pathname,
 		code,
 		filedata;

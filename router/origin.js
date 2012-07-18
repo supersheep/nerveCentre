@@ -5,7 +5,7 @@ var fs = require('fs'),
 	config = require('../config').configs;
 
 function origin(req,res){
-	var pathname = url.parse(req.url).pathname,
+	var pathname = req.pathname,
 		position = config.origin + pathname,
 		code,
 		filedata;
