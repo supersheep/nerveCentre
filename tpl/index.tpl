@@ -21,7 +21,7 @@ table{border-collapse:collapse;border-spacing:0}
 fieldset,img{border:0}
 address,button,caption,cite,code,dfn,em,input,optgroup,option,select,strong,textarea,th,var{font:inherit}
 del,ins{text-decoration:none}
-li{list-style:none}
+// li{list-style:none}
 caption,th{text-align:left}
 
 /* h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal} */
@@ -44,6 +44,11 @@ hr{
 
 
 /* .markdown-article */
+.markdown-article{
+    font-family: Helvetica, Arial, freesans, 'Hiragino Sans GB', 'STHeiti', Letter Gothic Std, sans-serif;
+    background:#f5f5f5;
+}
+
 .markdown-article h1{
     color:#000;
     font-size: 2em;
@@ -84,10 +89,9 @@ hr{
 
 .markdown-article p{margin-bottom:5px;}
 
-
-.markdown-article{
-    font-family: Helvetica, Arial, freesans, 'Hiragino Sans GB', 'STHeiti', Letter Gothic Std, sans-serif;
-    background:#f5f5f5;
+.markdown-article ul, .markdown-article ol{
+    padding: 10px 40px;
+    color: #555;
 }
 
 .markdown-article pre {
