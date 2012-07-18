@@ -6,7 +6,6 @@ var util = require('../inc/util'),
 
 function renderTree(tree){
 	
-	console.log(tree);
 	var ret = "<ul>";
 	
 	
