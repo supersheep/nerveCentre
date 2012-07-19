@@ -1,16 +1,35 @@
 var util = require('../inc/util'),
 	linkTree = require('../inc/linktree'),
 	fs = require('fs'),
+	url = require('url'),
 	base = require('../config').base,
 	config = require('../config').configs;
+	
 function utcases(req,res){
 
 	var linktree = linkTree(config.origin + "/test/unit",".html",[".js",".html"],['ajax']);
-	var flatterned = [];
+	var flatterned;
+	var type = url.parse(req.url,true).query.type || "concats";
 	
+	function concats(tree,ignore){
+		var ret = [],
+			ignore = ignore || [];
 		
-	function flattern(tree,arr,ignore){
-		var ret = arr || [];
+		tree.children.forEach(function(child){
+			if(ignore.indexOf(tree.name)===-1){
+				ret.push({
+					name:child.name,
+					link:"http://" + req.headers.host  + child.link
+				});
+			}
+			
+		});		
+		return ret;	
+	}	
+	
+	function all(tree,ignore,flattened){
+		var ret = flattened ||　[],
+			ignore = ignore || [];
 		
 		if(ignore.indexOf(tree.name)===-1){
 			ret.push({
@@ -21,21 +40,26 @@ function utcases(req,res){
 		
 		if(tree.children){
 			tree.children.forEach(function(child){
-				flattern(child,ret,ignore);
+				all(child,ret,ignore);
 			});
 		}
 		
 		return ret;	
 	}
 	
-
+	
+	if(type == "all"){
+		flatterned = all(linktree,['unit','form'])
+	}else if(type == "concats"){
+		flatterned = concats(linktree);
+	}
 	
 	
-	flattern(linktree,flatterned,['unit','form']);
+	
 	content = JSON.stringify(flatterned);
 	ret = util.write200(req,res,content);
 
-
+	return ret;
 }
 
 
