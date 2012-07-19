@@ -20,17 +20,14 @@ function dir(req,res){
 		});
 			
 		filedata = "DP.define.on();\n";
-				
-		// /branch/coupon | /trunk
-		var modulebase = dir.match(/(?:\/branch\/[^\/]*|\/trunk)\//);
 		
-		modulebase = modulebase ? modulebase[0] : "";
-			
 		// 修改DP.define语句，以文件名定义模块
 		filedata += util.concatFiles(toconcat,function(file,p){
 			// /switch | /io
-			var moduleName =  p.split(modulebase)[1];
-			return file.replace(/(KM|DP)\.define\(/,"DP.define('" + moduleName + "',");
+			var moduleBase = p.split(config.libbase)[0], // /Users/spud/Neuron/branch/neuron/
+				moduleName = p.split(moduleBase)[1]; // /lib/1.0/switch/core.js
+				
+			return file.replace(/(KM|DP)\.define\(/,"DP.define('" + moduleName + "',") + "\n";
 		});	
 		
 		filedata += "DP.define.off();";

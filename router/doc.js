@@ -21,12 +21,6 @@ function doc(req,res){
 		
 			data = md(data);
 			
-			/* if(req.headers["x-requested-with"] !== "XMLHttpRequest"){
-				data = util.substitute(mdtpl,{
-					data:data
-				});
-			} */
-			
 			res.setHeader('Content-Type','text/html');
 			ret = util.write200(req,res,new Buffer(data));
 		}
