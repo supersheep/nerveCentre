@@ -19,7 +19,9 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input
 table{border-collapse:collapse;border-spacing:0}
 
 fieldset,img{border:0}
-address,button,caption,cite,code,dfn,em,input,optgroup,option,select,strong,textarea,th,var{font:inherit}
+address,/* button, */caption,cite,code,dfn,em,input,optgroup,option,select,/* strong, */textarea,th,var
+{font-style:normal; font-weight:normal; }
+
 /* del, */ ins{text-decoration:none}
 // li{list-style:none}
 caption,th{text-align:left}
