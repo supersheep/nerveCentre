@@ -20,7 +20,7 @@ table{border-collapse:collapse;border-spacing:0}
 
 fieldset,img{border:0}
 address,button,caption,cite,code,dfn,em,input,optgroup,option,select,strong,textarea,th,var{font:inherit}
-del,ins{text-decoration:none}
+/* del, */ ins{text-decoration:none}
 // li{list-style:none}
 caption,th{text-align:left}
 
