@@ -96,11 +96,24 @@ hr{
     color: #555;
 }
 
+.markdown-article code{
+    margin: 0px 2px;
+    padding: 0px 3px 2px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    position: relative;
+    top: -2px;
+}
+
+.markdown-article pre > code{
+    border: none;
+}
+
 .markdown-article pre {
     margin:10px 0;
     border: 1px solid #CCC;
     overflow: auto;
-    padding: 6px 10px;
+    padding: 8px 10px 6px;
     border-radius: 3px;
     background:#f0f0f0;
     box-shadow: 0 1px 0 rgba(0,0,0,.02)
