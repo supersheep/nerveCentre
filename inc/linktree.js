@@ -7,7 +7,7 @@ function parseTree(tree,ext,filters,ignores,sort){
 	
 	ignores = ignores || [];
 	
-	tree.link = tree.path.split(config.origin)[1];
+	tree.link = tree.path && tree.path.split(config.origin)[1];
 	tree.link = plainName(tree.link) + ext;
 	tree.name = plainName(tree.name);
 	

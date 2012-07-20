@@ -50,13 +50,12 @@ function createServer(cfg){
 		pathname = req.pathname = decodeURI(url.parse(req.url).pathname);
 		position = config.origin + pathname; // 文件位置
 		
-		
-		DOC = req.url.match(/\.md$/);
-		ICON = req.url.match(/^\/favicon.ico$/);
-		RESOURCE = req.url.match(/^\/nc_res\//);
-		UNIT_TEST = req.url.match(/^\/(trunk\/|branch\/\w+\/|)test\/unit\/.*\.html$/);
-		INDEX = req.url.match(/^\/$/);
-		TESTJSON = req.url.match(/^\/testcases.json$/);
+		DOC = pathname.match(/\.md$/);
+		ICON = pathname.match(/^\/favicon.ico$/);
+		RESOURCE = pathname.match(/^\/nc_res\//);
+		UNIT_TEST = pathname.match(/^\/(trunk\/|branch\/\w+\/|)test\/unit\/.*\.html$/);
+		INDEX = pathname.match(/^\/$/);
+		TESTJSON = pathname.match(/^\/testcases.json$/);
 		
 		
 		FILE_EXIST = util.isFile(position);
@@ -66,13 +65,13 @@ function createServer(cfg){
 		LIB_PATH = util.getLibPath(pathname);
 		CONFIG_CONCAT = util.getConcatFromLibPath(LIB_PATH,req.url);
 		
-		ENV = config.env === "dev" ? "" : "/branch/neuron"; 
+		ENV = req.env = (config.env === "dev" ? "" : "branch/neuron/"); 
 		
 		
 		if(ICON){
 			return false;
 		}else if(INDEX){
-			CODE = via('index')(req,res,ENV);
+			CODE = via('index')(req,res);
 			VIA = 'index';
 		}else if(RESOURCE){
 			CODE = via('res')(req,res);
@@ -84,7 +83,7 @@ function createServer(cfg){
 			CODE = via('utcases')(req,res);
 			VIA = "utcases";
 		}else if(UNIT_TEST){
-			CODE = via('ut')(req,res,ENV);
+			CODE = via('ut')(req,res);
 			VIA = 'ut';
 		}else if( (IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS)){
 			CODE = via('origin')(req,res);

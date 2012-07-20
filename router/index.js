@@ -6,10 +6,11 @@ var util = require('../inc/util'),
 
 function renderTree(tree){
 	
+	
 	var ret = "<ul>";
 	
 	
-	tree.children.forEach(function(child,i){
+	tree.children && tree.children.forEach(function(child,i){
 		if(child.type == "folder"){
 			ret += util.substitute('<li class="module">');
 			ret += util.substitute('<h3 class="title" data-link="{link}">{name}</h3>',{
@@ -37,7 +38,7 @@ function renderTree(tree){
 }
 
 
-function index(req,res,env){
+function index(req,res){
 
 
 var pos = base+'/tpl/index.tpl',
@@ -60,7 +61,7 @@ var pos = base+'/tpl/index.tpl',
 	uthtml = renderTree(uttree);
 	
 	args = {
-		env:env,
+		env:req.env,
 		libbase:config.libbase,
 		server:req.headers.host,
 		title:"Neuron",

@@ -2,11 +2,19 @@ var fs = require('fs'),
     path = require('path')
 
 function dirTree(filename) {
-    var stats = fs.lstatSync(filename),
-        info = {
-            path: filename,
-            name: path.basename(filename)
-        };
+	
+	
+    var stats,info
+    
+    if(!path.existsSync(filename)){
+	    return {};
+    }
+    
+    stats = fs.lstatSync(filename),
+    info = {
+        path: filename,
+        name: path.basename(filename)
+    };
 
     if (stats.isDirectory()) {
         info.type = "folder";

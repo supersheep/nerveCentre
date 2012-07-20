@@ -36,16 +36,23 @@ function fileNotModified(req,res,position){
 	return modifiedSince && lastModified == modifiedSince;
 }
 
-function isFile(position){
-	return path.existsSync(position) && !fs.statSync(position).isDirectory();
+function isFile(pos){
+	return path.existsSync(pos) && !fs.statSync(pos).isDirectory();
 }
 
+function isDir(pos){
+	return path.existsSync(pos) && fs.statSync(pos).isDirectory();
+}
+
+function isJs(url){
+	return path.extname(url)=='.js';
+}
 
 function hasDirectoryWithPath(position){
 	var jsIndex = position.lastIndexOf(".js"),
 		dirpath = position.slice(0,jsIndex);
 		
-	return path.existsSync(dirpath);
+	return isDir(dirpath);
 }
 
 
@@ -65,9 +72,6 @@ function getConcatFromLibPath(libpath,url){
 }
 
 
-function isJs(url){
-	return path.extname(url)=='.js';
-}
 
 function addHeaders(req,res,body){
 	var expires,
@@ -125,19 +129,18 @@ function filterData(data,url){
 			data = filters[filter](data,url);
 		}
 	});
-
 	return data;	
 
 }
 
 
 // 合并文件
-function concatFiles(arr,fn){
+function concatFiles(arr,fn,encode){
 	var sum = '';
 	var dataTemp;
 	arr.forEach(function(path){
 		try{
-		dataTemp = fs.readFileSync(path,'binary');
+		dataTemp = fs.readFileSync(path,encode||'binary');
 		if(fn){
 			dataTemp = fn(dataTemp,path);
 		}
@@ -157,6 +160,7 @@ function mix(a,b){
 
 module.exports = {
 	isJs:isJs,
+	isDir:isDir,
 	isFile:isFile,
 	inLibPath:inLibPath,
 	getLibPath:getLibPath,
