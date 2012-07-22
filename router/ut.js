@@ -10,7 +10,7 @@ function compileTestCase(origin,req){
 	
 	var tpl = jasmine,
 		args = {
-			libbase:config.libbase,
+			libbase:config.utlibbase,
 			server:config.server ? config.server : req.headers.host,
 			env:req.env,
 			title:"Unit Test " + req.pathname

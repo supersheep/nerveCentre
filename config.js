@@ -41,7 +41,8 @@ var develop = {
 	env:"dev",
 	staticport : '1339',
 	libbase: 'lib/',
-	libpath : ['/lib','/s/j/app'],
+	utlibbase:'jscoverage_lib/',
+	libpath : ['/lib','/s/j/app','/jscoverage_lib'],
 	useproxy : false,
 	filters : [
 		'strict',

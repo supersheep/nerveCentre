@@ -133,7 +133,9 @@ iframe{border:0;width:100%;display:none;height:500px;}
 .aside .channel .module .on,
 .aside .channel .item:hover{background-color: #24334D; }
 
-.aside .channel .item a:after{content:" ⋙";}
+
+.aside .channel .title a,.aside .channel .item a{color:#fff;margin-left:5px;border-bottom:1px dashed #fff;}
+.aside .channel .item:after{content:" ⋙";}
 
 .docbg{position: fixed;height: 100%;width:100%;background-color:#24334D; }
 .docbg .board{margin:0 40px 0 240px;height:100%;background-color: #eee;}

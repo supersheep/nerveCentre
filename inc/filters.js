@@ -57,13 +57,21 @@ var filters = {
 	},
 	// add use strict on top of the script
 	strict:function(origin,url){
-		function need_strict(url){
+		function inlibpath(url){
 			for(var i = 0,l=config.libpath.length;i<l;i++){			
 				if(url.match(config.libpath[i])){
 					return true;
 				}
 			}
 			return false;
+		}
+		
+		function incoverage(url){
+			return url.match("/jscoverage_lib/");
+		}
+		
+		function need_strict(url){
+			return inlibpath(url) && !incoverage(url);
 		}
 		
 		return need_strict(url) ? ("\"use strict\";\r\n"+origin) : origin;

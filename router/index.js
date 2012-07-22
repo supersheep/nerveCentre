@@ -4,7 +4,7 @@ var util = require('../inc/util'),
 	base = require('../config').base,
 	config = require('../config').configs;
 
-function renderTree(tree){
+function renderDocTree(tree){
 	
 	
 	var ret = "<ul>";
@@ -37,6 +37,39 @@ function renderTree(tree){
 	return ret;
 }
 
+function renderTestTree(tree){
+	var ret = "<ul>";
+	
+	
+	tree.children && tree.children.forEach(function(child,i){
+		if(child.type == "folder"){
+			ret += util.substitute('<li class="module">');
+			ret += util.substitute('<h3 class="title" data-link="{link}">{name}<a class="jscov" href="{clib}jscoverage.html?{link}" target="_blank">c</a></h3>',{
+				clib:config.utlibbase,
+				name:child.name,
+				link:child.link
+			});
+			
+			if(child.children){
+				ret += '<ul>';
+				
+				child.children.forEach(function(c,j){
+					ret+=util.substitute('<li class="item" data-link="{link}">{name}<a href="{clib}jscoverage.html?{link}" target="_blank">c</a></li>',{
+						clib:config.utlibbase,
+						link:c.link,
+						name:c.name
+					});
+				});
+				
+				ret += '</ul>';
+			}			
+		}
+	});
+	
+	ret += "</ul>";
+	return ret;
+}
+
 
 function index(req,res){
 
@@ -54,11 +87,11 @@ var pos = base+'/tpl/index.tpl',
 	
 	// root,ext,filter,ignore,order
 	doctree = linkTree(config.origin + "/docs/neuron",".md",[".md"],[],["intro","dom","lang","oop"]);
-	dochtml = renderTree(doctree); 
+	dochtml = renderDocTree(doctree); 
 	
 	// root,ext,filter,ignore
 	uttree = linkTree(config.origin + "/test/unit",".html",[".js",".html"],['ajax']);
-	uthtml = renderTree(uttree);
+	uthtml = renderTestTree(uttree);
 	
 	args = {
 		env:req.env,
