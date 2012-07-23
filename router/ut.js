@@ -1,4 +1,5 @@
 var fs = require('fs'),
+	exec = require('child_process'),
 	url = require('url'),
 	util = require('../inc/util'),	
 	base = require('../config').base,
@@ -57,6 +58,7 @@ function ut(req,res,env){
 		pos = htmlexists ? htmlpos : ( jsexists ? jspos : null),
 		args,content;
 		
+		exec("jscoverage --encoding=utf-8 lib/ jscoverage_lib/");
 		
 		if(pos && util.fileNotModified(req,res,pos)){
 			code = util.write304(req,res);
