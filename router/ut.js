@@ -1,5 +1,5 @@
 var fs = require('fs'),
-	exec = require('child_process'),
+	exec = require('child_process').exec,
 	url = require('url'),
 	util = require('../inc/util'),	
 	base = require('../config').base,
