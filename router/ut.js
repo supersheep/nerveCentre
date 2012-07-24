@@ -8,10 +8,10 @@ var fs = require('fs'),
 var jasmine = fs.readFileSync(base+'/tpl/jasmine.tpl');
 
 function compileTestCase(origin,req){
-	
+	var debug = req.debug;
 	var tpl = jasmine,
 		args = {
-			libbase:config.utlibbase,
+			libbase:debug?config.libbase:config.utlibbase,
 			server:config.server ? config.server : req.headers.host,
 			env:req.env,
 			title:"Unit Test " + req.pathname
@@ -60,7 +60,7 @@ function ut(req,res,env){
 		
 		exec("jscoverage --encoding=utf-8 lib/ jscoverage_lib/");
 		
-		if(pos && util.fileNotModified(req,res,pos)){
+		if(pos && util.fileNotModified(req,res,pos) && !req.debug){
 			code = util.write304(req,res);
 		}else{
 			

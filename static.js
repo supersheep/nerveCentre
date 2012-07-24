@@ -47,6 +47,8 @@ function createServer(cfg){
 		
 		rewrite.handle(req,rewrite.rules);	
 		
+		
+		req.debug = url.parse(req.url,true).query.debug !== undefined;
 		pathname = req.pathname = decodeURI(url.parse(req.url).pathname);
 		position = config.origin + pathname; // 文件位置
 		
