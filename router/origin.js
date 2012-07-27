@@ -15,7 +15,14 @@ function origin(req,res){
 		return util.write404(req,res);
 	}
 	
-	if(util.fileNotModified(req,res,position)){
+	function fromut(req){
+		var referer = req.headers.referer;
+		var ret = !!(referer && referer.match("/test/unit/"));
+		return ret;
+	}
+	
+	
+	if(util.fileNotModified(req,res,position) && !fromut(req)){
 		code = util.write304(req,res);
 	}else{
 		filedata = fs.readFileSync(position,'binary');
