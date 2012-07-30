@@ -17,7 +17,7 @@ function compileTestCase(origin,req){
 			title:"Unit Test " + req.pathname
 		},
 		pieces = {
-			html:origin
+			html:origin.toString().replace(/\$/g,"$$$$")
 		};
 	
 	util.mix(args,pieces);
