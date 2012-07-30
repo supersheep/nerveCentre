@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <title>Neuron</title>
 <script type="text/javascript">var __loaderConfig={appBase:"s/j/app/",libBase:"{libbase}",server:"{server}"};</script>
-<script src="http://{server}/{env}{libbase}neuron-jquerify.js"></script>
+<script src="http://{server}/{env}{libbase}neuron-active.js"></script>
 <script>var NR = window.DP || window.KM; NR.__loader.init();</script>
 
 <style type="text/css">
@@ -201,9 +201,9 @@ iframe{border:0;width:100%;display:none;height:500px;}
 	<script type="text/javascript">
 		NR.provide(['io/ajax','dom/dimension'],function(D,Ajax,Dim){
 			var main = $('#main article');
-			var modules = $('.apidocs .module');
+			var modules = $.all('.apidocs .module');
 			var pre = null;
-			var current_module = $.one('.apidocs .module');
+			var current_module = $('.apidocs .module');
 			
 			var Actions = {
 				"toggle":function(){
@@ -254,17 +254,17 @@ iframe{border:0;width:100%;display:none;height:500px;}
 			}
 			
 			// 展开/收起	
-			$('.channel .module').on('click', Actions.toggle);
+			$.all('.channel .module').on('click', Actions.toggle);
 			
 			
 			// 载入文档
-			$('.apidocs .item,.apidocs .module .title').on('click',function(){
+			$.all('.apidocs .item,.apidocs .module .title').on('click',function(){
 				Actions.paint.call(this);
 				Actions.load.call(this);
 			});
 			
 			// 载入ut
-			$('.unittests .item,.unittests .module .title').on('click',function(){
+			$.all('.unittests .item,.unittests .module .title').on('click',function(){
 				Actions.paint.call(this);
 				Actions.frame.call(this);
 			});
@@ -272,7 +272,7 @@ iframe{border:0;width:100%;display:none;height:500px;}
 			
 			
 			// 初始化
-			$('.module').forEach(function(mod){
+			$.all('.module').forEach(function(mod){
 				mod = $(mod);
 				mod.data('height',Dim.size(mod).height);
 				mod.css('height',33);
