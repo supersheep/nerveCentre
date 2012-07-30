@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <title>Neuron</title>
 <script type="text/javascript">var __loaderConfig={appBase:"s/j/app/",libBase:"{libbase}",server:"{server}"};</script>
-<script src="http://{server}/{env}{libbase}neuron-active.js"></script>
+<script src="http://{server}/{env}{libbase}neuron-jquerify.js"></script>
 <script>var NR = window.DP || window.KM; NR.__loader.init();</script>
 
 <style type="text/css">
