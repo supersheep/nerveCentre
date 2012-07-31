@@ -1,4 +1,5 @@
 var fs = require('fs'),
+	dirTree = require('../inc/dirtree'),
 	exec = require('child_process').exec,
 	url = require('url'),
 	util = require('../inc/util'),	
@@ -79,11 +80,24 @@ function ut(req,res,env){
 				code = util.write200(req,res,compiled);
 			}else if(direxists){
 				
-				filesToConcat = fs.readdirSync( dirpos ).filter(function(e){
-					return e.indexOf('.js') > 0 || e.indexOf(".html") > 0;
-				}).map(function(e){
-					return dirpos + '/' + e;
-				});
+				function getAllChildFilesToConcat(obj,arr){
+					arr = arr || [];
+					var _path = obj.path
+					if(_path.indexOf('.js') > 0 || _path.indexOf(".html")>0){
+						arr.push(_path);
+					}
+					
+					if(obj.children){
+						obj.children.forEach(function(child){
+							getAllChildFilesToConcat(child,arr);	
+						});
+					}
+					return arr;
+				}
+								
+				filesToConcat = getAllChildFilesToConcat(
+					dirTree(dirpos)
+				);
 				
 				content = util.concatFiles(filesToConcat,function(data,path){
 					if(path.indexOf(".js") > 0){
