@@ -4,36 +4,33 @@ var util = require('../inc/util'),
 	base = require('../config').base,
 	config = require('../config').configs;
 
-function renderDocTree(tree){
+function renderDocTree(tree,depth){
+	var ret = "";
 	
+	depth = depth || 0;
 	
-	var ret = "<ul>";
-	
-	
-	tree.children && tree.children.forEach(function(child,i){
-		if(child.type == "folder"){
-			ret += util.substitute('<li class="module">');
-			ret += util.substitute('<h3 class="title" data-link="{link}">{name}</h3>',{
-				name:child.name,
-				link:child.link
+	if(tree.children){
+		ret += depth===0?"":util.substitute("<h3 class=\"title\" data-link=\"{link}\">{name}</h3>",{
+			name:tree.name,
+			link:tree.link
+		});
+		ret += "<ul>";
+		
+		ret += tree.children.map(function(child){
+			return util.substitute("<li class=\"{type}\" data-link=\"{link}\" >" + renderDocTree(child,depth+1) + "</li>",{
+				link:child.link,
+				type:(child.children?"module":"item") + (depth==0?" root":"")
 			});
-			
-			if(child.children){
-				ret += '<ul>';
-				
-				child.children.forEach(function(c,j){
-					ret+=util.substitute('<li class="item" data-link="{link}">{name}</a></li>',{
-						link:c.link,
-						name:c.name
-					});
-				});
-				
-				ret += '</ul>';
-			}			
-		}
-	});
+		}).join("");
+		ret += "</ul>";
+	}else{
+		ret = util.substitute('<a data-link="{link}">{name}</a>',{
+			link:tree.link,
+			name:tree.name
+		});
+	}
 	
-	ret += "</ul>";
+	
 	return ret;
 }
 
@@ -42,8 +39,8 @@ function renderTestTree(tree){
 	
 	
 	tree.children && tree.children.forEach(function(child,i){
-		if(child.type == "folder"){
-			ret += util.substitute('<li class="module">');
+		if(child.type == "folder"){	
+			ret += '<li class="module root">';
 			ret += util.substitute('<h3 class="title" data-link="{link}">{name}<a class="jscov" href="{clib}jscoverage.html?{link}" target="_blank">c</a></h3>',{
 				clib:config.utlibbase,
 				name:child.name,
@@ -62,7 +59,8 @@ function renderTestTree(tree){
 				});
 				
 				ret += '</ul>';
-			}			
+			}	
+			ret += "</li>";		
 		}
 	});
 	
@@ -86,7 +84,7 @@ var pos = base+'/tpl/index.tpl',
 	
 	
 	// root,ext,filter,ignore,order
-	doctree = linkTree(config.origin + "/docs/neuron",".md",[".md"],[],["intro","dom","lang","oop"]);
+	doctree = linkTree(config.origin + "/docs",".md",[".md"],[],["intro","dom","lang","oop"]);
 	dochtml = renderDocTree(doctree); 
 	
 	// root,ext,filter,ignore
