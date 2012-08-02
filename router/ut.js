@@ -46,7 +46,7 @@ function ut(req,res,env){
 		
 		htmlpos = config.origin + htmlpath,
 		jspos = config.origin + jspath,
-		dirpos = config.origin + dirpath,
+		dirpos = config.origin  + (dirpath==="/test/unit/all" ? "/test/unit" : dirpath),
 		
 		htmlexists = util.isFile(htmlpos),
 		jsexists = util.isFile(jspos),
@@ -58,6 +58,7 @@ function ut(req,res,env){
 		
 		pos = htmlexists ? htmlpos : ( jsexists ? jspos : null),
 		args,content;
+		
 		
 //		exec("jscoverage --encoding=utf-8 lib/ jscoverage_lib/");
 		
