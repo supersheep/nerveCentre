@@ -102,7 +102,7 @@ III.书写测试用例
 			it("name为email，test(\"aaa@163.com\")为true，hint为null",function(){
 				var ready = false;	
 				runs(function(){
-					DP.provide('form/rule',function(D,Rule){
+					NR.provide('form/rule',function(D,Rule){
 						ready = true;
 						
 						var r1 = Rule.produce("email");
