@@ -59,7 +59,7 @@ function ut(req,res,env){
 		pos = htmlexists ? htmlpos : ( jsexists ? jspos : null),
 		args,content;
 		
-		exec("jscoverage --encoding=utf-8 lib/ jscoverage_lib/");
+//		exec("jscoverage --encoding=utf-8 lib/ jscoverage_lib/");
 		
 		if(pos && util.fileNotModified(req,res,pos) && !req.debug){
 			code = util.write304(req,res);
