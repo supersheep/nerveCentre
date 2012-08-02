@@ -26,20 +26,23 @@ function utcases(req,res){
 		return ret;	
 	}	
 	
+	
 	function all(tree,ignore,flattened){
 		var ret = flattened ||　[],
 			ignore = ignore || [];
 		
 		if(ignore.indexOf(tree.name)===-1){
-			ret.push({
-				name:tree.name,
-				link:"http://" + req.headers.host  + tree.link
-			});
+			if(!tree.children){
+				ret.push({
+					name:tree.name,
+					link:"http://" + req.headers.host  + tree.link
+				});
+			}
 		}
 		
 		if(tree.children){
 			tree.children.forEach(function(child){
-				all(child,ret,ignore);
+				all(child,ignore,ret);
 			});
 		}
 		
@@ -48,7 +51,7 @@ function utcases(req,res){
 	
 	
 	if(type == "all"){
-		flatterned = all(linktree,['unit','form'])
+		flatterned = all(linktree);
 	}else if(type == "concats"){
 		flatterned = concats(linktree,["SAMPLE"]);
 	}
