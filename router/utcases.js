@@ -16,13 +16,12 @@ function utcases(req,res){
 			ignore = ignore || [];
 		
 		tree.children.forEach(function(child){
-			if(ignore.indexOf(tree.name)===-1){
+			if(ignore.indexOf(child.name)===-1){
 				ret.push({
 					name:child.name,
 					link:"http://" + req.headers.host  + child.link
 				});
 			}
-			
 		});		
 		return ret;	
 	}	
@@ -51,9 +50,8 @@ function utcases(req,res){
 	if(type == "all"){
 		flatterned = all(linktree,['unit','form'])
 	}else if(type == "concats"){
-		flatterned = concats(linktree);
+		flatterned = concats(linktree,["SAMPLE"]);
 	}
-	
 	
 	
 	content = JSON.stringify(flatterned);
