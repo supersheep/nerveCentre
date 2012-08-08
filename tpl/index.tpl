@@ -100,7 +100,21 @@
 			// 展开/收起	
 			$('.channel .module,.channel .item').on('click', function(e){
 				e.prevent();
-				Actions.toggle.call(this)
+				//Actions.toggle.call(this)
+			});
+			
+			// 标题被点击时
+			$(".title").on("click",function(){
+				var el = $(this);
+				// 收起同级目录的子目录
+				el.parent('ul').children('li').forEach(function(li){
+					var children = $(li).all('li');
+					children.css('display','none');	
+				});	
+				// 展示本目录
+				el.parent('li').css('display','block');
+				// 展示本目录的子目录
+				el.next().children('li').css('display','block');
 			});
 			
 			
