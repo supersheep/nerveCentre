@@ -21,26 +21,46 @@ function getUserHome() {
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 }
 
+function getFullPath(path){
+
+	var origin,
+		rest = path.slice(1);
+		
+	rest = rest.slice(1)==""?"":rest;
+	
+	if(path.indexOf("/") == 0){
+		origin = path;
+	}else if(path.indexOf("~") == 0){
+		origin = getUserHome() + rest;
+	}else if(path.indexOf(".") == 0){
+		origin = pwd  + rest;
+	}else{
+		origin = pwd + "/" + path;
+	}
+		
+	return origin;
+}
 
 function start(){
 	var origin,
 		path = args[1] || "",
-		rest = path.slice(1);
+		port = args[2],
+		staticport;
 		
-	rest = rest.slice(1)==""?"":rest;
+	if(port = parseInt(port)){
+		staticport = port+1;
+	}else{
+		port = null;
+		staticport = null;
+	}
 		
-	if(path){
-		if(path.indexOf("/") == 0){
-			origin = path;
-		}else if(path.indexOf("~") == 0){
-			origin = getUserHome() + rest;
-		}else if(path.indexOf(".") == 0){
-			origin = pwd  + rest;
-		}else{
-			origin = pwd + "/" + path;
-		}
+	if(path){	
+		origin = getFullPath(path);		
+		
 		server.start({
-			origin:origin
+			origin:origin,
+			port:port,
+			staticport:staticport
 		});
 	}else{
 		server.start();
