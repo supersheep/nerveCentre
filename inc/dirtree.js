@@ -6,7 +6,7 @@ function dirTree(filename) {
 	
     var stats,info
     
-    if(!path.existsSync(filename)){
+    if(!fs.existsSync(filename)){
 	    return {};
     }
     

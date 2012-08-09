@@ -37,11 +37,11 @@ function fileNotModified(req,res,position){
 }
 
 function isFile(pos){
-	return path.existsSync(pos) && !fs.statSync(pos).isDirectory();
+	return fs.existsSync(pos) && !fs.statSync(pos).isDirectory();
 }
 
 function isDir(pos){
-	return path.existsSync(pos) && fs.statSync(pos).isDirectory();
+	return fs.existsSync(pos) && fs.statSync(pos).isDirectory();
 }
 
 function isJs(url){
@@ -58,7 +58,7 @@ function hasDirectoryWithPath(position){
 
 function getConcatFromLibPath(libpath,url){
 	var json,concats,concat;
-	if(path.existsSync(config.origin + libpath + '/build.json')){	
+	if(fs.existsSync(config.origin + libpath + '/build.json')){	
 		json = fs.readFileSync(config.origin + libpath + '/build.json','binary');
 		concats = JSON.parse(json).concat;
 	}else{

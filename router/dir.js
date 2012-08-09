@@ -9,7 +9,7 @@ function dir(req,res){
 		dir,toconcat,code;
 		
 	dir = (config.origin + pathname).split('.js')[0];
-	if(path.existsSync(dir)){
+	if(fs.existsSync(dir)){
 			
 		
 		//找出文件夹下的js们			
