@@ -76,7 +76,6 @@ function compile(template){
  	 * all JavaScript template should contains the 'it' parameter,
  	 * if you expect your template function to be able to accept values
  	 */
-	 console.log(compiled);
 	return new Function('page','site', compiled);
 };
 

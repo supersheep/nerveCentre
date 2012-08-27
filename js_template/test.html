@@ -8,14 +8,14 @@
 </head>
 <body>
 	<div id="test1">
-		例子tpl:      <?if(site.name == 'yyx'){?>  HELLY {{page.id}} <?}?>
+		例子tpl:      <&#63 if(site.name == 'yyx'){&#63>  HELLY {{page.id}} <&#63}&#63>
 	<div><br/><br/>调用:		site = {name:"yyx"};page = {id:1990};  parse(tpl)(page,site)</div>
 	<div><br/><br/>结果:</div>
 	<div id="result1"></div>
 	<br/><br/><br/><br/><br/><br/><br/><br/>
 	<div id="test2">
-		例子tpl: <?var who ="太阳"; ?> {{who}}出来了哦,{{page.name}}快起床了哦,<?var i=site.time; for(;i<5;i++){?>啦<?}?>
-	<div><br/><br/>调用:		site = {time:6};page = {name:""};  parse(tpl)(page,site)</div>
+		例子tpl: <&#63var who ="太阳"; &#63> {{who}}出来了哦,{{page.name}}快起床了哦,<&#63var i=site.time; for(;i<5;i++){&#63>啦<&#63}&#63>
+	<div><br/><br/>调用:		site = {time:6};page = {name:"懒猪"};  parse(tpl)(page,site)</div>
 	<div><br/><br/>结果:</div>
 	<div id="result2"></div>
 	<script type="text/javascript">
