@@ -12,6 +12,11 @@ var pwd = process.cwd();
 
 var command = args[0];
 
+
+process.on('uncaughtException',function(e){
+	console.log("Error:",e);
+});
+
 switch(command){
 	case "start":start();break;
 	case "config":config();break;
