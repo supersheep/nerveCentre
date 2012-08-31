@@ -10,3 +10,5 @@ archive/
 inc/test/
 inc/uglifyjs/
 *.swp
+nervecentre.sublime-project
+nervecentre.sublime-workspace
