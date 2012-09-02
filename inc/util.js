@@ -44,10 +44,10 @@ function getLoadType(url){
 				console.log("Error:"+e);
 			}
 		}
-		if(isFile(url)){
-				return "single";
-			}else if(isDir(dir + fileName)){
+		if(isDir(dir + fileName)){
 				return "concat";
+			}else if(isFile(url)){
+				return "single";
 			}
 			
 		return null;
