@@ -4,17 +4,23 @@
 <meta charset="UTF-8">
 <title>{title}</title>
 <script type="text/javascript">var __loaderConfig={appBase:"s/j/app/",libBase:"{libbase}",server:"{server}"};</script>
+<script>
+function $(){
+    return 'blah';
+};
+    
+</script>
 <script src="http://{server}/{libbase}neuron-active.js"></script>
 <script>NR.__loader.init();</script>
 <script type="text/javascript" src="/tools/jasmine/jasmine.js"></script>
 <script type="text/javascript" src="/tools/jasmine/jasmine-html.js"></script>
 <script type="text/javascript" src="http://jstest.dianpingoa.com/js/inject.js"></script>
+
 <link rel="stylesheet" href="/tools/jasmine/jasmine.css" />
 
 <script>
 
 /*
-
 function describe(des, cb){
 	var old_des = _des;
 
@@ -112,6 +118,8 @@ var _des = '',
 	waitsFor = runs,
 	body = document.getElementsByTagName('body')[0];
 */
+
+
 
 </script>
 

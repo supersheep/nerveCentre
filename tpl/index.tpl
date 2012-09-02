@@ -108,7 +108,7 @@
 				var el = $(this);
 				// 收起同级目录的子目录
 				el.parent('ul').children('li').forEach(function(li){
-					var children = $(li).all('li');
+					var children = $(li).find('li');
 					children.css('display','none');	
 				});	
 				// 展示本目录

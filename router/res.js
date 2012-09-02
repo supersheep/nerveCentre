@@ -11,7 +11,6 @@ function origin(req,res){
 		code,
 		filedata;
 	
-	console.log(position);
 	
 	if(!util.isFile(position)){
 		return util.write404(req,res);
