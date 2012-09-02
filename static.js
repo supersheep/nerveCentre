@@ -40,71 +40,76 @@ function createServer(cfg){
 			IN_LIB_PATH,
 			CODE,
 			DOC,
+			loadFileType,
 			VIA,
 			ENV,
 			RESOURCE,
 			CONFIG_CONCAT;
 		
 		rewrite.handle(req,rewrite.rules);	
-		
-		
+	
+
 		req.debug = url.parse(req.url,true).query.debug !== undefined;
+		
+		
 		pathname = req.pathname = decodeURI(url.parse(req.url).pathname);
 		position = config.origin + pathname; // 文件位置
-		
 		DOC = pathname.match(/\.md$/);
 		ICON = pathname.match(/^\/favicon.ico$/);
-		RESOURCE = pathname.match(/^\/nc_res\//);
-		UNIT_TEST = pathname.match(/^\/(trunk\/|branch\/\w+\/|)test\/unit\/.*\.html$/);
+		//RESOURCE = pathname.match(/^\/nc_res\//);
+		UNIT_TEST = pathname.match(/^\/(trunk\/|branch\/\w+\/|)test\/unit/);
 		INDEX = pathname.match(/^\/$/);
-		TESTJSON = pathname.match(/^\/testcases.json$/);
-		
-		
-		FILE_EXIST = util.isFile(position);
+		loadFileType = util.getLoadType(position);
+		/* FILE_EXIST = util.isFile(position);
 		IS_JS = util.isJs(position);
+		IS_BULID = util.isBuild(position);
 		DIR_EXIST = util.hasDirectoryWithPath(position);
-		IN_LIB_PATH = util.inLibPath(pathname);
-		LIB_PATH = util.getLibPath(pathname);
-		CONFIG_CONCAT = util.getConcatFromLibPath(LIB_PATH,req.url);
-		
-		ENV = req.env = (config.env === "dev" ? "" : "branch/neuron/"); 
-		
+		ENV = req.env = (config.env === "dev" ? "" : "branch/neuron/");  */
 		
 		if(ICON){
 			return false;
-		}else if(INDEX){
+		}else if(INDEX){  //首页页面模板加载
 			CODE = via('index')(req,res);
 			VIA = 'index';
-		}else if(RESOURCE){
-			CODE = via('res')(req,res);
-			VIA = 'res';
-		}else if(DOC){
+		}else if(DOC){ //md文件加载
 			CODE = via('doc')(req,res);
 			VIA = 'doc';
-		}else if(TESTJSON){
-			CODE = via('utcases')(req,res);
-			VIA = "utcases";
-		}else if(UNIT_TEST){
+		}else if(UNIT_TEST){//单元测试
 			CODE = via('ut')(req,res);
 			VIA = 'ut';
-		}else if( (IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS)){
+		}else if(loadFileType){
+			CODE = via("fload")(req,res,loadFileType);
+			VIA = 'fload';
+		}
+		
+		
+		/* else if(RESOURCE){  //neuroncenter中文件加载
+			CODE = via('res')(req,res);
+			console.log(pathname);
+			VIA = 'res';
+		} */
+		/* else if( (IS_JS && !DIR_EXIST && !CONFIG_CONCAT) || (FILE_EXIST && !IS_JS)){//外部文件加载,非neuroncenter,非配置
 			CODE = via('origin')(req,res);
 			VIA = 'origin';
-		}else if(CONFIG_CONCAT){
+		}else if(CONFIG_CONCAT){  //外部bulid.json配置文件合并
 			CODE = via('cfg')(req,res,LIB_PATH,CONFIG_CONCAT);
 			VIA = 'cfg';
-		}else if(!CONFIG_CONCAT && IS_JS){
+		}else if(!CONFIG_CONCAT && IS_JS){  //外部文件合并
 			CODE = via('dir')(req,res);
 			VIA = 'dir';
-		}else{
+		} */
+		
+		else{
 			CODE = util.write404(req,res);
 			VIA = "unmatch";
 		}
+
 		
-		log.write("GET %s %s : %s",
+		
+		 /* log.write("GET %s %s : %s",
 					pathname,
 					VIA && ('via ' + VIA),
-					CODE);
+					CODE);  */
 		
 		
 		

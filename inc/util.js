@@ -22,6 +22,41 @@ function inLibPath(url){
 	});
 }
 
+function getLoadType(url){
+	var 
+	    extname  = path.extname(url),
+		dir = path.dirname(url)+"/",
+		buildFileUrl = dir+config.build,
+		fileName  = path.basename(url).replace(extname,"");
+
+		if(fs.existsSync(buildFileUrl)){
+			json = fs.readFileSync(buildFileUrl,'binary');
+			concats = JSON.parse(json);
+			try{
+				for(var len = concats.length; len-- ; ){
+					var data = concats[len];
+					if(data.output == fileName){
+						return "build";
+						break;
+					}
+				}
+			}catch(e){
+				console.log("Error:"+e);
+			}
+		}
+		if(isFile(url)){
+				return "single";
+			}else if(isDir(dir + fileName)){
+				return "concat";
+			}
+			
+		return null;
+		
+	
+	
+}
+
+
 function getLibPath(url){
 	return worker.get('lib_path').filter(function(e){
 		return url.indexOf(e) == 0;
@@ -133,6 +168,35 @@ function filterData(data,url){
 
 }
 
+//异步合并
+
+/* function fileConcat(arr,fn,encode){
+	var sum = '',
+		len = arr.length,
+		count = 0,
+		dataTemp;
+		
+	arr.forEach(function(path){
+		try{
+			fs.readFile(path,encode||'binary',function(err,data){
+				dataTemp = data;
+				if(fn){
+					dataTemp = fn(dataTemp,path);
+				}
+				sum += dataTemp + '\n';
+				count++;
+				if(count == len)
+					
+			});
+		}catch(e){
+			log.error('concating files',e);
+		}
+	});
+	return sum;
+
+
+} */
+
 
 // 合并文件
 function concatFiles(arr,fn,encode){
@@ -173,5 +237,7 @@ module.exports = {
 	filterData:filterData,
 	concatFiles:concatFiles,
 	substitute:substitute,
+//	fileConcat:fileConcat,
+	getLoadType:getLoadType,
 	mix:mix
 }

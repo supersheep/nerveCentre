@@ -40,13 +40,14 @@ var develop = {
 	port : '1337',
 	env:"dev",
 	staticport : '1339',
-	libbase: 'lib/',
-	utlibbase:'jscoverage_lib/',
-	libpath : ['/lib','/s/j/app','/jscoverage_lib'],
 	useproxy : false,
+	build:"build.json",
+	libbase: 'lib/1.0/',
+	libpath : ['/lib/1.0','/lib','/s/j/app'],
 	filters : [
 		'strict',
 		'uglify',
+		'proxycomment',
 		'buildtime',
 		'branch']
 }
