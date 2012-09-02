@@ -1,7 +1,7 @@
 {
 	"name":"nervecentre",
 	"description":"the proxy and static server for neuron framwork on alpha",
-	"version":"0.0.1",
+	"version":"0.0.2",
 	"keywords":["neuron"],
 	"maintainers":[],
 	"contributors":[],

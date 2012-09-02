@@ -1,15 +1,9 @@
+var util = require("./util/util");
 
+var merge = util.merge;
 const DEV = process.argv.indexOf("-d") > 0
 
 
-function merge(a,b,overwrite){
-	for(var key in b){
-		if(overwrite || !a[key]){
-			a[key] = b[key];
-		}
-	}
-	return a;
-}
 
 var common = {
 	origin : '/your/doc/root',
