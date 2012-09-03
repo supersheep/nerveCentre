@@ -2,7 +2,7 @@ var fs = require('fs'),
 	url = require('url'),
 	path = require('path'),
 	util = require('../inc/util'),	
-	config = ncrequire('~/config/config').configs;
+	config = require('../config/config').configs;
 
 function origin(req,res){
 	var pathname = req.pathname,

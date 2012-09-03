@@ -1,9 +1,9 @@
 var mod_path = require("path"),
 	fs = require("fs"),
-	config = require("~/config/config"),
-	ActionFactory = require("~/actions/action_factory"),
-	merge = require("~/util/funcs").merge,
-	staticServer = require("~/static");
+	config = require("../config/config"),
+	ActionFactory = require("../actions/action_factory"),
+	merge = require("../util/funcs").merge,
+	staticServer = require("../static");
 
 var Start = ActionFactory.create("Start");
 

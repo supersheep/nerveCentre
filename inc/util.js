@@ -5,7 +5,7 @@ var path = require('path'),
 	worker = require('../worker'),
 	mime = require('./mime').mime,
 	filters = require('./filters').filters,
-	config = ncrequire('~/config/config').configs;
+	config = require('../config/config').configs;
 
 function substitute(str,obj){
 	for(var i in obj){

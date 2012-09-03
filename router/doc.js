@@ -1,6 +1,6 @@
 var util = require('../inc/util'),
-	config = ncrequire('~/config/config').configs,
-	base = ncrequire('~/config/config').base,
+	config = ncrequire('../config/config').configs,
+	base = ncrequire('../config/config').base,
 	fs = require('fs'),
 	url = require('url'),
 	md = require('node-markdown').Markdown;

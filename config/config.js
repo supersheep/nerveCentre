@@ -1,6 +1,6 @@
 require("../inc/base");
 var mod_path = require("path"),
-		util = require("~/util/funcs"),
+		util = require("../util/funcs"),
 		merge = util.merge;
 
 var common = {

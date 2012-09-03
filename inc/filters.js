@@ -1,6 +1,5 @@
 var uglifyjs = require('uglify-js');
-var config = ncrequire('~/config/config').configs;
-var log = require('./log');
+var config = require('../config/config').configs;
 var url = require('url');
 
 var filters = {

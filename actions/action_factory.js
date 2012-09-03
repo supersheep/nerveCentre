@@ -1,5 +1,5 @@
 var util = require("util");
-var Action = require("~/actions/action");
+var Action = require("./action");
 
 ActionFactory = {
 	create:function(name){
