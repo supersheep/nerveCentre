@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
-var base = ncncrequire('~/config/config').base;
-var server = ncrequire('../main');
-var util = ncrequire('../inc/util');
+var base = ncrequire('~/config/config').base;
+var server = require('../main');
+var util = require('../inc/util');
 
 
 

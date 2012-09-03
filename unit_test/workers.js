@@ -1,4 +1,4 @@
-var worker = ncrequire('../worker');
+var worker = require('../worker');
 
 
 // workers.set("proxy_rules");

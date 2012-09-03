@@ -1,6 +1,7 @@
 #! /usr/bin/env node
-ncrequire("../inc/base");
-var ActionFactory = ncrequire("../actions/action_factory");
+require("../inc/base");
+
+var ActionFactory = require("../actions/action_factory");
 
 var cli = {};
 /**
@@ -8,7 +9,7 @@ var cli = {};
  */
 cli.NAME = "neuron";
 
-var AVAILIABLE_ACTIONS = ncrequire("../actions.json");
+var AVAILIABLE_ACTIONS = require("../actions.json");
 
 /*
 process.on('uncaughtException', function (err) {
@@ -23,7 +24,7 @@ process.on('uncaughtException', function (err) {
  * prepare actions
  */
 AVAILIABLE_ACTIONS.forEach(function(actionName){
-	cli[actionName] = ncrequire("../actions/"+actionName);
+	cli[actionName] = require("../actions/"+actionName);
 });
 
 module.exports = cli;
@@ -31,8 +32,8 @@ module.exports = cli;
 /**
  * run from command line
  */
-if(ncrequire.main){
-	var PROJECT_CONFIG = ncrequire("../package.json");
+if(require.main){
+	var PROJECT_CONFIG = require("../package.json");
 
 	var args = process.argv;
 	var command = args[2];

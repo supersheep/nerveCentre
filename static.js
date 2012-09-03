@@ -1,10 +1,10 @@
-var http = ncrequire('http'),
-	fs = ncrequire('fs'),
-	mod_url = ncrequire('url'),
-	mod_path = ncrequire('path'),
+var http = require('http'),
+	fs = require('fs'),
+	mod_url = require('url'),
+	mod_path = require('path'),
 	
-	filters = ncrequire('./inc/filters').filters,
-	rewrite = ncrequire('./inc/rewrite');
+	filters = require('./inc/filters').filters,
+	rewrite = require('./inc/rewrite');
 
 
 function createServer(cfg){

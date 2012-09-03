@@ -1,8 +1,8 @@
-var util = ncrequire('../inc/util'),
-	linkTree = ncrequire('../inc/linktree'),
-	fs = ncrequire('fs'),
-	base = ncncrequire('~/config/config').base,
-	config = ncncrequire('~/config/config').configs;
+var util = require('../inc/util'),
+	linkTree = require('../inc/linktree'),
+	fs = require('fs'),
+	base = ncrequire('~/config/config').base,
+	config = ncrequire('~/config/config').configs;
 
 function renderDocTree(tree,depth){
 	var ret = "";

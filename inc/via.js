@@ -1,5 +1,5 @@
 function via(router){
-	return ncrequire('../router/'+router);	
+	return require('../router/'+router);	
 }
 
 module.exports = via;

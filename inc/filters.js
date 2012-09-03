@@ -1,7 +1,7 @@
-var uglifyjs = ncrequire('uglify-js');
-var config = ncncrequire('~/config/config').configs;
-var log = ncrequire('./log');
-var url = ncrequire('url');
+var uglifyjs = require('uglify-js');
+var config = ncrequire('~/config/config').configs;
+var log = require('./log');
+var url = require('url');
 
 var filters = {
 	// use uglify to compress .min files

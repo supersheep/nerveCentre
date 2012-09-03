@@ -1,4 +1,4 @@
-var util = ncrequire("util");
+var util = require("util");
 /**
  * Action基类
  */

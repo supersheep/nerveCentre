@@ -1,6 +1,6 @@
-var dirTree = ncrequire('./dirtree'),
-	path = ncrequire('path'),
-	config = ncncrequire('~/config/config').configs;
+var dirTree = require('./dirtree'),
+	path = require('path'),
+	config = ncrequire('~/config/config').configs;
 
 
 function parseTree(tree,ext,filters,ignores,sort){

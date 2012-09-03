@@ -1,5 +1,5 @@
-var event = ncrequire('events').EventEmitter;
-var fs = ncrequire('fs');
+var event = require('events').EventEmitter;
+var fs = require('fs');
 
 //比较文件夹
 function Watcher(dirname,interval){	

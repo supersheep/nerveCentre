@@ -1,4 +1,4 @@
-var worker = ncrequire('./worker');
+var worker = require('./worker');
 
 function endwith(str,sub){
 	var last = str.lastIndexOf(sub),

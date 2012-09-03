@@ -1,6 +1,6 @@
-var util = ncrequire('util'),
-	fs = ncrequire('fs'),
-	configs = ncncrequire('~/config/config'),
+var util = require('util'),
+	fs = require('fs'),
+	configs = ncrequire('~/config/config'),
 	config = configs.configs,
 	appbase = configs.base;
 

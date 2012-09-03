@@ -1,7 +1,7 @@
-var Event = ncrequire('events').EventEmitter,
-	fs = ncrequire('fs'),
-	dirwatcher = ncrequire('./inc/dirwatcher'),
-	config = ncrequire('./config').configs;
+var Event = require('events').EventEmitter,
+	fs = require('fs'),
+	dirwatcher = require('./inc/dirwatcher'),
+	config = require('./config').configs;
 
 var cache = {};
 // proxyRules

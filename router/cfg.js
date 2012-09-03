@@ -1,5 +1,5 @@
-var util = ncrequire('../inc/util'),	
-	config = ncncrequire('~/config/config').configs;
+var util = require('../inc/util'),	
+	config = ncrequire('~/config/config').configs;
 
 function cfg(req,res,libpath,concat){
 	var toconcat,filedata,code;

@@ -1,11 +1,11 @@
-var fs = ncrequire('fs'),
-	dirTree = ncrequire('../inc/dirtree'),
-	exec = ncrequire('child_process').exec,
-	url = ncrequire('url'),
-	linkTree = ncrequire('../inc/linktree'),
-	util = ncrequire('../inc/util'),	
-	base = ncncrequire('~/config/config').base,
-	config = ncncrequire('~/config/config').configs;
+var fs = require('fs'),
+	dirTree = require('../inc/dirtree'),
+	exec = require('child_process').exec,
+	url = require('url'),
+	linkTree = require('../inc/linktree'),
+	util = require('../inc/util'),	
+	base = ncrequire('~/config/config').base,
+	config = ncrequire('~/config/config').configs;
 
 var jasmine = fs.readFileSync(base+'/tpl/jasmine.tpl');
 

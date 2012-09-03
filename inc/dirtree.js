@@ -1,5 +1,5 @@
-var fs = ncrequire('fs'),
-    path = ncrequire('path')
+var fs = require('fs'),
+    path = require('path')
 
 function dirTree(filename) {
 	

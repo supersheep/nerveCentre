@@ -1,4 +1,4 @@
-var ActionFactory = ncrequire("./action_factory");
+var ActionFactory = require("./action_factory");
 
 var Build = ActionFactory.create("Build");
 

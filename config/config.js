@@ -1,6 +1,6 @@
 require("../inc/base");
-var mod_path = ncrequire("path"),
-		util = ncrequire("~/util/funcs"),
+var mod_path = require("path"),
+		util = require("~/util/funcs"),
 		merge = util.merge;
 
 var common = {
