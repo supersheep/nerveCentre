@@ -1,18 +1,23 @@
 #! /usr/bin/env node
+require("../inc/base");
 var ActionFactory = require("../actions/action_factory");
 
 var cli = {};
 /**
  * command line
  */
+cli.NAME = "neuron";
 
 var AVAILIABLE_ACTIONS = require("../actions.json");
 
-
+/*
 process.on('uncaughtException', function (err) {
-	tracer.error('捕获异常: ' + err);
+	console.dir(err);
 	process.exit(1);
 });
+ */
+
+
 
 /**
  * prepare actions

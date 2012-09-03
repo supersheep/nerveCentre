@@ -2,8 +2,8 @@ var util = require('../inc/util'),
 	linkTree = require('../inc/linktree'),
 	fs = require('fs'),
 	url = require('url'),
-	base = require('../config').base,
-	config = require('../config').configs;
+	base = ncrequire('~/config/config').base,
+	config = ncrequire('~/config/config').configs;
 	
 function utcases(req,res){
 

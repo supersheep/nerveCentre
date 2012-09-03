@@ -2,7 +2,7 @@ var fs = require('fs'),
 	url = require('url'),
 	path = require('path'),
 	util = require('../inc/util'),	
-	config = require('../config').configs;
+	config = ncrequire('~/config/config').configs;
 
 function fload(req,res,type){
 	var pathname = req.pathname,

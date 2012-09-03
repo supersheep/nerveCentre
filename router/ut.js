@@ -4,8 +4,8 @@ var fs = require('fs'),
 	url = require('url'),
 	linkTree = require('../inc/linktree'),
 	util = require('../inc/util'),	
-	base = require('../config').base,
-	config = require('../config').configs;
+	base = ncrequire('~/config/config').base,
+	config = ncrequire('~/config/config').configs;
 
 var jasmine = fs.readFileSync(base+'/tpl/jasmine.tpl');
 

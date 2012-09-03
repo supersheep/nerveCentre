@@ -1,5 +1,5 @@
 var uglifyjs = require('uglify-js');
-var config = require('../config').configs;
+var config = ncrequire('~/config/config').configs;
 var log = require('./log');
 var url = require('url');
 

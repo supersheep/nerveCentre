@@ -1,11 +1,10 @@
-var util = require("./util/util");
-
-var merge = util.merge;
-const DEV = process.argv.indexOf("-d") > 0
-
-
+require("../inc/base");
+var mod_path = ncrequire("path"),
+		util = ncrequire("~/util/funcs"),
+		merge = util.merge;
 
 var common = {
+	port:1337,
 	origin : '/your/doc/root',
 	expires : {
    		fileMatch: /^(gif|png|jpg|js|css)$/ig,
@@ -13,6 +12,7 @@ var common = {
 	}
 }
 
+/*
 var product = {
 	origin:'D:\\StaticFiles',
 	port:'1337',
@@ -45,11 +45,9 @@ var develop = {
 		'buildtime',
 		'branch']
 }
+*/
 
 
-var current = DEV?develop:product;
-
-console.log("ENV",DEV?"DEV":"PRODUCT");
-
-exports.configs = merge(merge({},common),current,true);
-exports.base = __dirname;
+var configs = merge({},common,true);
+configs.base = mod_path.join(__dirname,"..");
+module.exports = configs;

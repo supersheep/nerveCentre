@@ -7,7 +7,7 @@
 	"contributors":[],
 	"bugs":"jiayi.xu@dianping.com",
 	"bin":{
-		"neuron":"bin/neuron.js"
+		"neuron":"bin/nervecentre.js"
 	},
 	"dependencies":{
 		"uglify-js":"0.x.x",

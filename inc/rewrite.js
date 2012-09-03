@@ -1,12 +1,5 @@
 var path = require('path');
 
-var rules = [
-	[/\.v\d+\.(png|jpg|gif|css|js|swf)/g,'.$1'], // remove version for all static files
-	[/\.min.*\.(js|css)$/g,'.$1'] // remove min for js and css
-	
-];
-
-
 var rewrite = function(req,rules){
 	var rule,replace,reg,test;
 	for( var i = 0,l = rules.length; i < l ; i++ ){
@@ -27,5 +20,4 @@ var rewrite = function(req,rules){
 	}
 }
 
-exports.rules = rules;
 exports.handle = rewrite;
