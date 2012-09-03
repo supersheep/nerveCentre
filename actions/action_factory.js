@@ -1,5 +1,5 @@
-var util = require("util");
-var Action = require("./action");
+var util = ncrequire("util");
+var Action = ncrequire("./action");
 
 ActionFactory = {
 	create:function(name){

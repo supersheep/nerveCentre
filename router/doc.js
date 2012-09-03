@@ -1,9 +1,9 @@
-var util = require('../inc/util'),
-	config = ncrequire('~/config/config').configs,
-	base = ncrequire('~/config/config').base,
-	fs = require('fs'),
-	url = require('url'),
-	md = require('node-markdown').Markdown;
+var util = ncrequire('../inc/util'),
+	config = ncncrequire('~/config/config').configs,
+	base = ncncrequire('~/config/config').base,
+	fs = ncrequire('fs'),
+	url = ncrequire('url'),
+	md = ncrequire('node-markdown').Markdown;
 
 var mdtpl = fs.readFileSync(base + '/tpl/markdown.tpl');
 

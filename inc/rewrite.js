@@ -1,4 +1,4 @@
-var path = require('path');
+var path = ncrequire('path');
 
 var rewrite = function(req,rules){
 	var rule,replace,reg,test;

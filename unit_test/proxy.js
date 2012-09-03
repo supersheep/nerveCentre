@@ -1,8 +1,8 @@
-require("chai").should();
-var worker = require("../worker");
+ncrequire("chai").should();
+var worker = ncrequire("../worker");
 
-var proxy = require("../proxy");
-var proxyRoutes = require("../proxyRoutes");
+var proxy = ncrequire("../proxy");
+var proxyRoutes = ncrequire("../proxyRoutes");
 
 var routeParser = proxy.routeParser;
 var routes = proxyRoutes.routes;

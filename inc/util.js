@@ -1,11 +1,11 @@
-var path = require('path'),
-	fs = require('fs'),
-	url = require('url'),
-	log = require('./log'),
-	worker = require('../worker'),
-	mime = require('./mime').mime,
-	filters = require('./filters').filters,
-	config = ncrequire('~/config/config').configs;
+var path = ncrequire('path'),
+	fs = ncrequire('fs'),
+	url = ncrequire('url'),
+	log = ncrequire('./log'),
+	worker = ncrequire('../worker'),
+	mime = ncrequire('./mime').mime,
+	filters = ncrequire('./filters').filters,
+	config = ncncrequire('~/config/config').configs;
 
 function substitute(str,obj){
 	for(var i in obj){

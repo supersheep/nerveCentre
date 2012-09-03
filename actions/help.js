@@ -1,11 +1,11 @@
-var Actions = require("../actions.json");
-var ActionFactory = require("./action_factory");
-var util = require("util");
+var Actions = ncrequire("../actions.json");
+var ActionFactory = ncrequire("./action_factory");
+var util = ncrequire("util");
 
 Help = ActionFactory.create("Help");
 
 Help.prototype.run = function(){
-	var cli = require("../bin/nervecentre");
+	var cli = ncrequire("../bin/nervecentre");
 
 	var mods = this.modules;
 	var mod;

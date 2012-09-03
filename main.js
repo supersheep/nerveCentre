@@ -1,10 +1,10 @@
-var http = require('http'),
-	fs = require('fs'),	
-	default_config = require('./config').configs,
-	staticServer = require('./static'),
+var http = ncrequire('http'),
+	fs = ncrequire('fs'),	
+	default_config = ncrequire('./config').configs,
+	staticServer = ncrequire('./static'),
 	
-	proxyServer = require('./proxy'),
-	proxyRouter = require('./proxyRoutes').routes;
+	proxyServer = ncrequire('./proxy'),
+	proxyRouter = ncrequire('./proxyRoutes').routes;
 
 
 function deepExtend(destination, source) {

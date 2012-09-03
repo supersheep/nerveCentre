@@ -1,6 +1,6 @@
-var worker = require('./worker'),
-	http = require('http');
-	log = require('./inc/log');
+var worker = ncrequire('./worker'),
+	http = ncrequire('http');
+	log = ncrequire('./inc/log');
 
 function routeParser(routes,url){
 	

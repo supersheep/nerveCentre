@@ -1,9 +1,9 @@
-var fs = require('fs'),
-	url = require('url'),
-	path = require('path'),
-	util = require('../inc/util'),	
-	config = ncrequire('~/config/config').configs,
-	base = ncrequire('~/config/config').base;
+var fs = ncrequire('fs'),
+	url = ncrequire('url'),
+	path = ncrequire('path'),
+	util = ncrequire('../inc/util'),	
+	config = ncncrequire('~/config/config').configs,
+	base = ncncrequire('~/config/config').base;
 
 function origin(req,res){
 	var pathname = req.pathname.split("/nc_res")[1],
