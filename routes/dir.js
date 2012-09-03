@@ -10,7 +10,6 @@ function dir(req,res){
 		
 	dir = (config.origin + pathname).split('.js')[0];
 	if(fs.existsSync(dir)){
-			
 		
 		//找出文件夹下的js们			
 		toconcat = fs.readdirSync( dir ).filter(function(e){
