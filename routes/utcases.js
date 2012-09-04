@@ -1,15 +1,26 @@
 var util = require('../inc/util'),
 	linkTree = require('../inc/linktree'),
+	mod_path = require('path'),
 	fs = require('fs'),
+	fsutil = require('../inc/fs'),
+	util = require('../inc/util'),
 	url = require('url');
 	
 function utcases(req,res){
 	var config = req.config;
+	var dir = mod_path.join(config.origin,"test","unit");
 
-	var linktree = linkTree(config.origin + "/test/unit",".html",[".js",".html"],['ajax']);
-	var flatterned;
-	var type = url.parse(req.url,true).query.type || "concats";
-	
+
+	var linktree,flatterned,type;
+	if(!fsutil.isDir(dir)){
+		util.write404(req,res);
+		return false;
+	}
+
+	linktree = linkTree(dir,".html",[".js",".html"],['ajax']);
+	type = url.parse(req.url,true).query.type || "concats";
+
+
 	function concats(tree,ignore){
 		var ret = [],
 			ignore = ignore || [];
@@ -55,11 +66,8 @@ function utcases(req,res){
 		flatterned = concats(linktree,["SAMPLE"]);
 	}
 	
-	
 	content = JSON.stringify(flatterned);
-	ret = util.write200(req,res,content);
-
-	return ret;
+	util.write200(req,res,content);
 }
 
 

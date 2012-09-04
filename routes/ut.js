@@ -4,14 +4,12 @@ var fs = require('fs'),
 	url = require('url'),
 	linkTree = require('../inc/linktree'),
 	util = require('../inc/util'),	
-	base = require('../config/config').base,
-	config = require('../config/config').configs;
-
-var jasmine = fs.readFileSync(base+'/tpl/jasmine.tpl');
+	funcs = require('../inc/funcs');
 
 function compileTestCase(origin,req){
-	var debug = req.debug;
-	var tpl = jasmine,
+	var config = req.config,
+		debug = req.debug,
+		tpl = jasmine,
 		args = {
 			libbase:debug?config.libbase:config.utlibbase,
 			server:config.server ? config.server : req.headers.host,
@@ -40,7 +38,7 @@ function wrap_codes(path){
 		
 }
 
-function _ut(req,res){
+function ut(req,res){
 	var dirpath = req.pathname.replace(/\.html$/,''),
 		htmlpath = dirpath + ".html",
 		jspath = dirpath + ".js",
@@ -100,7 +98,6 @@ function _ut(req,res){
 				);
 			
 				content = util.concatFiles(filesToConcat,function(data,path){
-					
 					if(path.indexOf(".js") > 0){
 						data = util.substitute('<script type="text/javascript">{js}</script>',{
 							js:data
@@ -119,76 +116,5 @@ function _ut(req,res){
 		return code;
 }
 
-
-function utcases(req,res){
-
-	var linktree = linkTree(config.origin + "/test/unit",".html",[".js",".html"],['ajax']);
-	var flatterned;
-	var type = url.parse(req.url,true).query.type || "concats";
-	
-
-		
-	function concats(tree,ignore){
-		var ret = [],
-			ignore = ignore || [];
-		
-		tree.children.forEach(function(child){
-			if(ignore.indexOf(child.name)===-1){
-				ret.push({
-					name:child.name,
-					link:"http://" + req.headers.host  + child.link
-				});
-			}
-		});		
-		return ret;	
-	}	
-	
-	
-	function all(tree,ignore,flattened){
-		var ret = flattened || [],
-			ignore = ignore || [];
-		
-		if(ignore.indexOf(tree.name)===-1){
-			if(!tree.children){
-				ret.push({
-					name:tree.name,
-					link:"http://" + req.headers.host  + tree.link
-				});
-			}
-		}
-		
-		if(tree.children){
-			tree.children.forEach(function(child){
-				all(child,ignore,ret);
-			});
-		}
-		
-		return ret;	
-	}
-	
-	
-	if(type == "all"){
-		flatterned = all(linktree);
-	}else if(type == "concats"){
-		flatterned = concats(linktree,["SAMPLE"]);
-	}
-	
-	
-	content = JSON.stringify(flatterned);
-
-	ret = util.write200(req,res,content);
-
-	return ret;
-}
-
-
-function ut(req,res){
-	var isConfig = /\/config$/;
-	if(isConfig.test(req.pathname)){
-		utcases(req,res);
-	}else{
-		_ut(req,res);
-	}
-}
 
 module.exports = ut;
