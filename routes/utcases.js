@@ -1,11 +1,10 @@
 var util = require('../inc/util'),
 	linkTree = require('../inc/linktree'),
 	fs = require('fs'),
-	url = require('url'),
-	base = require('../config/config').base,
-	config = require('../config/config').configs;
+	url = require('url');
 	
 function utcases(req,res){
+	var config = req.config;
 
 	var linktree = linkTree(config.origin + "/test/unit",".html",[".js",".html"],['ajax']);
 	var flatterned;

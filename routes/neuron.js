@@ -19,14 +19,12 @@ function neuron_static(req,res){
 			basename = mod_path.basename(position);
 
 		if(!fs.existsSync(build_file_path)){
-			console.log("build not found");
 			return false;
 		}
 
 		try{
 			var concats = JSON.parse(fs.readFileSync(build_file_path)).concat;
 		}catch(e){
-			console.log("error parsing "+build_file_path);
 			return false;
 		}
 
@@ -35,7 +33,6 @@ function neuron_static(req,res){
 		})[0];
 
 		if(!concat){
-			console.log("no concat");
 			return false;
 		}
 
