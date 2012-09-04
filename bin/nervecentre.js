@@ -1,5 +1,8 @@
 #! /usr/bin/env node
-require("../inc/base");
+
+var mod_path = require("path");
+
+var base = global.BASE = mod_path.join(__dirname,"..");
 
 var ActionFactory = require("../actions/action_factory");
 
@@ -14,11 +17,10 @@ var AVAILIABLE_ACTIONS = require("../actions.json");
 /*
 process.on('uncaughtException', function (err) {
 	console.dir(err);
-	process.exit(1);
+	// process.exit(1);
 });
+
  */
-
-
 
 /**
  * prepare actions

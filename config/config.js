@@ -1,7 +1,6 @@
-require("../inc/base");
 var mod_path = require("path"),
-		util = require("../util/funcs"),
-		merge = util.merge;
+	util = require("../inc/funcs"),
+	merge = util.merge;
 
 var common = {
 	port:1337,
@@ -9,7 +8,8 @@ var common = {
 	expires : {
    		fileMatch: /^(gif|png|jpg|js|css)$/ig,
 	    maxAge: 60*60*24*365
-	}
+	},
+	filters : ['strict','buildtime']
 }
 
 /*

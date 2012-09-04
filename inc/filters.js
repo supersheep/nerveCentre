@@ -1,5 +1,4 @@
 var uglifyjs = require('uglify-js');
-var config = require('../config/config').configs;
 var url = require('url');
 
 var filters = {
@@ -57,11 +56,11 @@ var filters = {
 	// add use strict on top of the script
 	strict:function(origin,url){
 		function inlibpath(url){
-			for(var i = 0,l=config.libpath.length;i<l;i++){			
+			/* for(var i = 0,l=config.libpath.length;i<l;i++){			
 				if(url.match(config.libpath[i])){
 					return true;
 				}
-			}
+			}*/
 			return false;
 		}
 		
@@ -87,7 +86,7 @@ var filters = {
 			REG_BRANCH_BASE = /\/\*branch-base\*\/'([^']*)'/g,
 			PATH_NEURON = /\/neuron[^.]*\.js$/.test(pathname),
 			FROM_APP_NEURON = /\/neuron[^.]*\.js$/.test(from),
-			USE_PROXY = config.useproxy;
+			USE_PROXY = false; //config.useproxy;
 			
 		
 		// 若非代理过来，且来自为neuron.js，base为请求的前缀
@@ -108,4 +107,4 @@ var filters = {
 	}
 }
 
-exports.filters = filters;
+module.exports = filters;

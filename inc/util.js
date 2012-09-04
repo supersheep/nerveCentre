@@ -1,69 +1,11 @@
 var path = require('path'),
 	fs = require('fs'),
 	url = require('url'),
-	log = require('./log'),
-	worker = require('../worker'),
 	mime = require('./mime').mime,
-	filters = require('./filters').filters,
-	config = require('../config/config').configs;
+	filters = require('./filters');
+ 
 
-function substitute(str,obj){
-	for(var i in obj){
-		str = String(str).replace(new RegExp("{" + i + "}","g"),obj[i]);
-	}
-	return str;
-}
-
-
-function inLibPath(url){
-	return worker.get("lib_path").some(function(e){
-		// such as /Users/spud/Neuron/node
-		return url.indexOf( e + '/') == 0;
-	});
-}
-
-function getLoadType(url){
-	var 
-	    extname  = path.extname(url),
-		dir = path.dirname(url)+"/",
-		buildFileUrl = dir+config.build,
-		fileName  = path.basename(url).replace(extname,"");
-
-		if(fs.existsSync(buildFileUrl)){
-			json = fs.readFileSync(buildFileUrl,'binary');
-			concats = JSON.parse(json);
-			try{
-				for(var len = concats.length; len-- ; ){
-					var data = concats[len];
-					if(data.output == fileName){
-						return "build";
-						break;
-					}
-				}
-			}catch(e){
-				console.log("Error:"+e);
-			}
-		}
-		if(isDir(dir + fileName)){
-				return "concat";
-			}else if(isFile(url)){
-				return "single";
-			}
-			
-		return null;
-		
-	
-	
-}
-
-
-function getLibPath(url){
-	return worker.get('lib_path').filter(function(e){
-		return url.indexOf(e) == 0;
-	})[0];
-}
-
-function fileNotModified(req,res,position){
+var fileNotModified = exports.fileNotModified = function (req,res,position){
 	var ifModifiedSince = "If-Modified-Since".toLowerCase();
 	var lastModified = fs.statSync(position).mtime.toUTCString();
 	var modifiedSince = req.headers[ifModifiedSince];
@@ -71,46 +13,10 @@ function fileNotModified(req,res,position){
 	return modifiedSince && lastModified == modifiedSince;
 }
 
-function isFile(pos){
-	return fs.existsSync(pos) && !fs.statSync(pos).isDirectory();
-}
-
-function isDir(pos){
-	return fs.existsSync(pos) && fs.statSync(pos).isDirectory();
-}
-
-function isJs(url){
-	return path.extname(url)=='.js';
-}
-
-function hasDirectoryWithPath(position){
-	var jsIndex = position.lastIndexOf(".js"),
-		dirpath = position.slice(0,jsIndex);
-		
-	return isDir(dirpath);
-}
-
-
-function getConcatFromLibPath(libpath,url){
-	var json,concats,concat;
-	if(fs.existsSync(config.origin + libpath + '/build.json')){	
-		json = fs.readFileSync(config.origin + libpath + '/build.json','binary');
-		concats = JSON.parse(json).concat;
-	}else{
-		concats = [];
-	}
-	//找到要打包的那一个
-	concat = concats.filter(function(e){
-		return e.output == path.basename(url)
-	})[0];
-	return concat;
-}
-
-
-
-function addHeaders(req,res,body){
+var addHeaders = exports.addHeaders = function (req,res,body){
 	var expires,
 		contentLength,
+		config = req.config,
 		pathname = url.parse(req.url).pathname,
 		ext = path.extname(pathname).slice(1) || 'unknown',
 		contentType = mime.getMimeType(ext);
@@ -130,14 +36,14 @@ function addHeaders(req,res,body){
 	res.setHeader("Server","NodeJs("+process.version+")");
 }
 
-function write304(req,res){
+var write304 = exports.write304 = function (req,res){
 	addHeaders(req,res);
     res.writeHead(304,"Not Modified");
     res.end();
     return 304;
 }
 
-function write404(req,res){
+var write404 = exports.write404 = function (req,res){
     var body= 'can\'t found "' + req.url + '"';
     res.setHeader('Content-Type','text/plain');
     addHeaders(req,res,body);
@@ -147,7 +53,7 @@ function write404(req,res){
     return 404;
 }
 
-function write200(req,res,body){
+var write200 = exports.write200 = function (req,res,body){
 	addHeaders(req,res,body);
 	res.writeHead(200,"OK");
 	res.write(body,"binary");
@@ -158,48 +64,22 @@ function write200(req,res,body){
 
 
 // filter data with custom filters
-function filterData(data,url){	
-	config.filters.forEach(function(filter){
+var filterData = exports.filterData = function (req,data){	
+	var filter_arr = req.config.filters || [],
+		url = req.originurl;
+
+	filter_arr.forEach(function(filter){
 		if(filters[filter]){
 			data = filters[filter](data,url);
 		}
 	});
+	
 	return data;	
 
 }
 
-//异步合并
-
-/* function fileConcat(arr,fn,encode){
-	var sum = '',
-		len = arr.length,
-		count = 0,
-		dataTemp;
-		
-	arr.forEach(function(path){
-		try{
-			fs.readFile(path,encode||'binary',function(err,data){
-				dataTemp = data;
-				if(fn){
-					dataTemp = fn(dataTemp,path);
-				}
-				sum += dataTemp + '\n';
-				count++;
-				if(count == len)
-					
-			});
-		}catch(e){
-			log.error('concating files',e);
-		}
-	});
-	return sum;
-
-
-} */
-
-
 // 合并文件
-function concatFiles(arr,fn,encode){
+var concatFiles = exports.concatFiles = function(arr,fn,encode){
 	var sum = '';
 	var dataTemp;
 	arr.forEach(function(path){
@@ -210,34 +90,7 @@ function concatFiles(arr,fn,encode){
 		}
 		sum += dataTemp + '\n';
 		}catch(e){
-			log.error('concating files',e);
 		}
 	});
 	return sum;
-}
-
-function mix(a,b){
-	for(var i in b){
-		a[i] = b[i]
-	}
-}
-
-module.exports = {
-	isJs:isJs,
-	isDir:isDir,
-	isFile:isFile,
-	inLibPath:inLibPath,
-	getLibPath:getLibPath,
-	fileNotModified:fileNotModified,
-	hasDirectoryWithPath:hasDirectoryWithPath,
-	getConcatFromLibPath:getConcatFromLibPath,
-	write200:write200,
-	write304:write304,
-	write404:write404,
-	filterData:filterData,
-	concatFiles:concatFiles,
-	substitute:substitute,
-//	fileConcat:fileConcat,
-	getLoadType:getLoadType,
-	mix:mix
 }

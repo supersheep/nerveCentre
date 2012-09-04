@@ -2,14 +2,14 @@ var mod_path = require("path"),
 	fs = require("fs"),
 	config = require("../config/config"),
 	ActionFactory = require("../actions/action_factory"),
-	merge = require("../util/funcs").merge,
+	merge = require("../inc/funcs").merge,
 	staticServer = require("../static");
 
 var Start = ActionFactory.create("Start");
 
 Start.prototype.run = function() {
 	var opts = this.options,
-			mods = this.modules;
+		mods = this.modules;
 	
 	var env = opts.env || "develop";
 
@@ -18,7 +18,7 @@ Start.prototype.run = function() {
 
 	var final_config = merge(config,merge(pjconfig,cliconfig,true),true);
 	
-
+	staticServer.start(final_config);
 
 };
 

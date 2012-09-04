@@ -2,10 +2,14 @@ var http = require('http'),
 	fs = require('fs'),
 	mod_url = require('url'),
 	mod_path = require('path'),
-	
-	filters = require('./inc/filters').filters,
-	rewrite = require('./inc/rewrite');
 
+	filters = require('./inc/filters').filters,
+
+	rewrite = require('./inc/rewrite'),
+	reweite_rules = require('./config/rewrite_rules'),
+
+	routesHandler = require('./inc/routesHandler'),
+	routes = require('./config/routes');
 
 function createServer(cfg){
 	// 检测是否有新增branch，刷新配置变量
@@ -15,45 +19,28 @@ function createServer(cfg){
 		var pathname,
 			position;
 		
-		rewrite.handle(req,rewrite.rules);	
+
+		// url重写
+		rewrite.handle(req,reweite_rules);	
 	
+		// for sending config to routers
+		req.config = cfg;
 
-		req.debug = url.parse(req.url,true).query.debug !== undefined;
+		// debug with query debug
+		req.debug = mod_url.parse(req.url,true).query.debug !== undefined;
 		
-		
-		pathname = req.pathname = decodeURI(url.parse(req.url).pathname);
-		position = config.origin + pathname; // 文件位置
-		DOC = pathname.match(/\.md$/);
-		ICON = pathname.match(/^\/favicon.ico$/);
+		// assign pathname and position
+		req.pathname = decodeURI(mod_url.parse(req.url).pathname);
+		req.position = cfg.origin + req.pathname;
 
-		UNIT_TEST = pathname.match(/^\/(trunk\/|branch\/\w+\/|)test\/unit/);
-		INDEX = pathname.match(/^\/$/);
-		loadFileType = util.getLoadType(position);
-
-		if(ICON){
-			return false;
-		}else if(INDEX){  //首页页面模板加载
-			CODE = via('index')(req,res);
-			VIA = 'index';
-		}else if(DOC){ //md文件加载
-			CODE = via('doc')(req,res);
-			VIA = 'doc';
-		}else if(UNIT_TEST){//单元测试
-			CODE = via('ut')(req,res);
-			VIA = 'ut';
-		}else if(loadFileType){
-			CODE = via("fload")(req,res,loadFileType);
-			VIA = 'fload';
-		}
-		
-		
-		else{
-			CODE = util.write404(req,res);
-			VIA = "unmatch";
-		}
-		
+		// handler routes with routes handler
+		routesHandler.handle(req)(req,res);
 	});
 	return server;
 }
 
+exports.start = function(cfg){
+	createServer(cfg).listen(cfg.port);
+	console.log("nervecentre static server started at %d",cfg.port);
+}
 exports.createServer = createServer;
