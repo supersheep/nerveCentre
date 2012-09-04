@@ -1,11 +1,11 @@
 var mod_path = require('path'),
 	util = require("./util"),
+	funcs = require("./funcs"),
 	fs = require('fs'),
 	http = require("http"),
-	mu = require("mu2"),
-	mod_util = require("util");
+	mu = require("mu2");
 
-exports.render = function(req,res,name){
+exports.render = function(req,res,name,page_data){
 
 	var config = req.config,
 		tplname = name || req.router_name,
@@ -31,12 +31,13 @@ exports.render = function(req,res,name){
 
 	mu.root = dir;
 
-	var page = {};
+	var page = page_data;
 	var site = req.config;
+
 
 	var stream = mu.compileAndRender(filename,{page:page,site:site});
 
 	mu.clearCache();
 	
-    mod_util.pump(stream,res);
+	util.write200(req,res,stream);
 }

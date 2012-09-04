@@ -10,7 +10,7 @@ function neuron_static(req,res){
 	var config = req.config,
 		pathname = req.pathname, // /a/b/c.js
 		position = req.position, // /home/spud/a/b/c.js
-		libpath = config.libpath, // support multi libpath later
+		libbase = config.libbase, // support multi libbase later
 		dirpath = mod_path.dirname(position), // /home/spud/a/b
 		extname  = mod_path.extname(position); // .js
 
@@ -28,16 +28,18 @@ function neuron_static(req,res){
 			return false;
 		}
 
+
 		var concat = concats.filter(function(data){
 			return data.output === basename;
 		})[0];
+
 
 		if(!concat){
 			return false;
 		}
 
 		var toconcat = concat.path.map(function(subpath){
-			return mod_path.join(config.origin,libpath,concat.folder,subpath);
+			return mod_path.join(config.origin,libbase,concat.folder,subpath);
 		});
 
 		filedata = util.concatFiles(toconcat);
@@ -58,7 +60,7 @@ function neuron_static(req,res){
 			return false;
 		}
 
-		if(!pathname.match(libpath)){
+		if(!pathname.match(libbase)){
 			return false;
 		}
 
@@ -71,7 +73,7 @@ function neuron_static(req,res){
 
 		filedata = "NR.define.on();\n";
 		filedata += util.concatFiles(toconcat,function(file,p){
-			var moduleBase = p.split(config.libpath)[0], // /Users/spud/Neuron/branch/neuron/
+			var moduleBase = p.split(config.libbase)[0], // /Users/spud/Neuron/branch/neuron/
 				moduleName = p.split(moduleBase)[1]; // /lib/1.0/switch/core.js
 				
 			return file.replace(/(KM|NR)\.define\(/,"NR.define('" + moduleName + "',") + "\n";

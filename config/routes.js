@@ -1,9 +1,8 @@
-
-
 var routes = [
 	{name:"icon",test:/^\/favicon.ico$/},
 	{name:"index",test:/^\/$/},
-	{name:"ut",test:/^\/test\/unit/},
+	{name:"doc",test:/^\/docs\/.*\.html$/},
+	{name:"ut",test:/^\/test\/unit.*\.html$/},
 	{name:"utcases",test:/^\/testcases.json$/}
 ];
 

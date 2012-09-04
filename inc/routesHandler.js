@@ -8,7 +8,6 @@ function handle(req){
 	route = route || routes["default"];
 	return function(req,res){
 		var router = require("../routes/"+route.name);
-		console.log("handle request with router %s",route.name);
 		req.router_name = route.name;
 		router(req,res);
 	}

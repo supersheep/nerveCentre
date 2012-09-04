@@ -1,8 +1,4 @@
-var util = require('../inc/util'),
-	mod_path = require('path'),
- 	fs = require('fs'),
- 	view = require('../inc/view'),
-	tpl = require('../inc/tpl');
+var view = require('../inc/view');
 
 function index(req,res){
 	view.render(req,res);
