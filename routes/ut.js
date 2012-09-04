@@ -1,120 +1,73 @@
-var fs = require('fs'),
+var view = require('../inc/view'),
+	
+	fs = require('fs'),
 	dirTree = require('../inc/dirtree'),
-	exec = require('child_process').exec,
-	url = require('url'),
-	linkTree = require('../inc/linktree'),
-	util = require('../inc/util'),	
-	funcs = require('../inc/funcs');
 
-function compileTestCase(origin,req){
-	var config = req.config,
-		debug = req.debug,
-		tpl = jasmine,
-		args = {
-			libbase:debug?config.libbase:config.utlibbase,
-			server:config.server ? config.server : req.headers.host,
-			env:req.env,
-			title:"Unit Test " + req.pathname
-		},
-		pieces = {
-			html:origin.toString().replace(/\$/g,"$$$$")
-		};
-	
-	util.mix(args,pieces);
-	
-	return new Buffer(util.substitute(tpl,args));
+	mod_path = require('path'),
+	fsutil = require('../inc/fs'),	
+
+
+	util = require('../inc/util');
+
+
+
+function wrap_code(data){
+	return '<script type="text/javascript">'+data+'</script>';
 }
 
+function filelist(obj,arr){
+	arr = arr || [];
+	var path = obj.path;
 
-function wrap_codes(path){
-	var ret,
-		data = readFileSync(path);
-		
-	if(path.indexOf(".js") > 0){
-		ret = util.substitute('<script type="text/javascript">{js}</script>',{
-			js:fs.readFileSync(jspos)
+	if(path.indexOf('.js') > 0 || path.indexOf(".html")>0){
+		arr.push(path);
+	}
+	
+	if(obj.children){
+		obj.children.forEach(function(child){
+			filelist(child,arr);	
 		});
 	}
-		
+	return arr;
 }
 
 function ut(req,res){
-	var dirpath = req.pathname.replace(/\.html$/,''),
-		htmlpath = dirpath + ".html",
-		jspath = dirpath + ".js",
-				
-		htmlpos = config.origin + htmlpath,
-		jspos = config.origin + jspath,
-		dirpos = config.origin  + (dirpath==="/test/unit/all" ? "/test/unit" : dirpath),
+	var htmlpos = req.position,
+		jspos = mod_path.join(req.filepath+".js"),
+		dirpos = req.filepath,
 		
-		htmlexists = util.isFile(htmlpos),
-		jsexists = util.isFile(jspos),
-		direxists = util.isDir(dirpos),
+		filesToConcat,
 
-		filesToConcat = null,
-		compiled = null,
-		code = null,
+		content;
 		
-		pos = htmlexists ? htmlpos : ( jsexists ? jspos : null),
-		args,content;
-//		exec("jscoverage --encoding=utf-8 lib/ jscoverage_lib/");
 		
-		if(pos && util.fileNotModified(req,res,pos) && !req.debug){
-			code = util.write304(req,res);
-		}else{
-			
-			if(pos){
-				// file exists
-				if(htmlexists){
-					content = fs.readFileSync(htmlpos);
-				}else{
-					content = util.substitute('<script type="text/javascript">{js}</script>',{
-						js:fs.readFileSync(jspos)
-					});
-				}
-				
-				compiled = compileTestCase(content,req);
-				
-				code = util.write200(req,res,compiled);
-			}else if(direxists){
-				
-				function getAllChildFilesToConcat(obj,arr){
-					arr = arr || [];
-					var _path = obj.path
-					if(_path.indexOf('.js') > 0 || _path.indexOf(".html")>0){
-						arr.push(_path);
-					}
-					
-					if(obj.children){
-						obj.children.forEach(function(child){
-							getAllChildFilesToConcat(child,arr);	
-						});
-					}
-					return arr;
-				}
-								
-				filesToConcat = getAllChildFilesToConcat(
-					dirTree(dirpos)
-				);
-			
-				content = util.concatFiles(filesToConcat,function(data,path){
-					if(path.indexOf(".js") > 0){
-						data = util.substitute('<script type="text/javascript">{js}</script>',{
-							js:data
-						});
-					}
-					return data;
-				},'utf8');
-				compiled = compileTestCase(content,req);
-				code = util.write200(req,res,compiled);
-				
-			}else{
-				code = util.write404(req,res);
-			}
+		if(fsutil.isFile(htmlpos)){
+			content = fs.readFileSync(htmlpos);
+			view.render(req,res,req.route_name,{content:content});
+			return;
 		}
-	
-		return code;
+
+		if(fsutil.isFile(jspos)){
+			content = wrap_code(fs.readFileSync(jspos));
+			view.render(req,res,req.route_name,{content:content});
+			return;
+		}
+
+		if(fsutil.isDir(dirpos)){
+
+			filesToConcat = filelist(dirTree(dirpos));
+
+			content = util.concatFiles(filesToConcat,function(data,path){
+				return fsutil.isJs(path) ? wrap_code(data) : data;
+			},'utf8');
+
+			view.render(req,res,req.route_name,{content:content});
+			return;
+		}
+		
+		util.write404(req,res);
 }
 
 
 module.exports = ut;
+
