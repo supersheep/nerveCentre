@@ -5,8 +5,6 @@ var util = require('../inc/util'),
 	tpl = require('../inc/tpl');
 
 function index(req,res){
-	
-    res.setHeader('Content-Type','text/html');
 	view.render(req,res);
 }
 

@@ -1,7 +1,9 @@
 var mod_path = require('path'),
-	tpl = require("./tpl"),
 	util = require("./util"),
-	fs = require('fs');
+	fs = require('fs'),
+	http = require("http"),
+	mu = require("mu2"),
+	mod_util = require("util");
 
 exports.render = function(req,res,name){
 
@@ -14,8 +16,7 @@ exports.render = function(req,res,name){
 
 
 	var filename = tplname + ".html",
-		content,
-		context;
+		dir;
 
 
 	var tpl_file_project = mod_path.join(tpl_dir_project,filename),
@@ -23,19 +24,19 @@ exports.render = function(req,res,name){
 
 
 	if(fs.existsSync(tpl_dir_project)){
-		content = fs.readFileSync(tpl_file_project);
-		context = tpl_dir_project;
+		dir = tpl_dir_project;
 	}else{
-		content = fs.readFileSync(tpl_file_server);
-		context = tpl_dir_server;
+		dir = tpl_dir_server;
 	};
 
-	var tplrender = tpl.parse(content.toString());
+	mu.root = dir;
 
 	var page = {};
 	var site = req.config;
 
-	var result = tplrender(page,site);
+	var stream = mu.compileAndRender(filename,{page:page,site:site});
 
-	util.write200(req,res,result);
+	mu.clearCache();
+	
+    mod_util.pump(stream,res);
 }

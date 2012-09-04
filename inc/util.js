@@ -45,7 +45,7 @@ var write304 = exports.write304 = function (req,res){
 
 var write404 = exports.write404 = function (req,res){
     var body= 'can\'t found "' + req.url + '"';
-    res.setHeader('Content-Type','text/plain');
+    res.setHeader('Content-Type','text/html');
     addHeaders(req,res,body);
     res.writeHead(404,"Not Found");
     res.write(body,"binary");

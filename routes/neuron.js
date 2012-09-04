@@ -36,12 +36,10 @@ function neuron_static(req,res){
 			return false;
 		}
 
-		console.log(libpath);
 		var toconcat = concat.path.map(function(subpath){
 			return mod_path.join(config.origin,libpath,concat.folder,subpath);
 		});
 
-		console.log(toconcat);
 		filedata = util.concatFiles(toconcat);
 		filedata = util.filterData(req,filedata);
 

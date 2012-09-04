@@ -19,7 +19,8 @@ function createServer(cfg){
 		var pathname,
 			position;
 		
-
+		cfg.server = req.headers.host;
+		
 		// url重写
 		rewrite.handle(req,reweite_rules);	
 	
