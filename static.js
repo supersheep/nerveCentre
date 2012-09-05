@@ -3,6 +3,8 @@ var http = require('http'),
 	mod_url = require('url'),
 	mod_path = require('path'),
 
+
+	fsutil = require("./inc/fs"),
 	util = require("./inc/util"),
 
 	filters = require('./inc/filters').filters,
@@ -13,21 +15,54 @@ var http = require('http'),
 	routesHandler = require('./inc/routesHandler'),
 	routes = require('./config/routes');
 
+
+function listfilter(origin,root,exclude){
+	return origin.filter(function(item){
+		return !exclude.some(function(regexp){
+			return regexp.test(item.name) || regexp.test(item.path);
+		});
+	}).map(function(item){
+		var dir = mod_path.dirname(item.path),
+			ext = mod_path.extname(item.path),
+			basename = mod_path.basename(item.path,ext);
+
+		item.path = mod_path.join("/",root,dir,basename+".html");
+		return item;
+	});
+}
+
+function all_docs(req){
+	var dir = mod_path.join(req.config.origin,"docs");
+	var docs = fsutil.list(dir);
+	var docs = listfilter(docs,"docs",[/\.DS_Store/,/^$/]);
+	
+	return docs;
+}
+
+function all_tests(req){
+	var dir = mod_path.join(req.config.origin,"test");
+	var tests = fsutil.list(dir);
+	var tests = listfilter(tests,"test",[/\.DS_Store/,/txt$/,/^$/]);
+	return tests;
+}
+
 function createServer(cfg){
 	// 检测是否有新增branch，刷新配置变量
 	
 	var server = http.createServer(function(req,res){	
 		try{	
-		var pathname,
-			position;
-		
+
+		// for sending config to routers
+		req.config = cfg;
+
 		cfg.server = req.headers.host;
-		
+		cfg.docs = all_docs(req);
+		cfg.tests = all_tests(req);
+
+
 		// url重写
 		rewrite.handle(req,reweite_rules);	
 	
-		// for sending config to routers
-		req.config = cfg;
 
 		// debug with query debug
 		req.debug = mod_url.parse(req.url,true).query.debug !== undefined;
