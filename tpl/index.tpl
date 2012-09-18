@@ -41,14 +41,14 @@
 			var main = $('#main article');
 			var modules = $('.apidocs .module');
 			var pre = null;
-			var current_module = $.one('.apidocs .module');
+			var current_module = $.findOne('.apidocs .module');
 			
 			var Actions = {
 				"toggle":function(){
 					var el = $(this);
 					
 					
-					el.parent().one('.on').removeClass('on');
+					el.parent().findOne('.on').removeClass('on');
 					if(el.data("open")){
 						el.data("open",false);
 						el.removeClass("on");
@@ -99,7 +99,7 @@
 			
 			// 展开/收起	
 			$('.channel .module,.channel .item').on('click', function(e){
-				e.prevent();
+				e.preventDefault();
 				//Actions.toggle.call(this)
 			});
 			
@@ -120,14 +120,14 @@
 			
 			// 载入文档
 			$('.apidocs .item,.apidocs .module .title').on('click',function(e){
-				e.prevent();
+				e.preventDefault();
 				Actions.paint.call(this);
 				Actions.load.call(this);
 			});
 			
 			// 载入ut
 			$('.unittests .item,.unittests .module .title').on('click',function(e){
-				e.prevent();
+				e.preventDefault();
 				Actions.paint.call(this);
 				Actions.frame.call(this);
 			});
