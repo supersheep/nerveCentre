@@ -34,7 +34,6 @@ exports.render = function(req,res,name,page_data){
 	var page = page_data;
 	var site = req.config;
 
-
 	var stream = mu.compileAndRender(filename,{page:page,site:site});
 
 	mu.clearCache();

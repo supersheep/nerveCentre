@@ -4,6 +4,7 @@ var view = require('../inc/view'),
 	dirTree = require('../inc/dirtree'),
 
 	mod_path = require('path'),
+	mod_url = require('url'),
 	fsutil = require('../inc/fs'),	
 
 
@@ -33,14 +34,17 @@ function filelist(obj,arr){
 
 function ut(req,res){
 	var htmlpos = req.position,
+		jscoverage = false,
 		jspos = mod_path.join(req.filepath+".js"),
 		dirpos = req.filepath,
 		
 		filesToConcat,
 
 		content;
-		
-		
+		if(req.headers.referer && mod_url.parse(req.headers.referer).pathname.indexOf("jscoverage.html") >= 0 ){
+			jscoverage = true;
+		}
+
 		if(fsutil.isFile(htmlpos)){
 			content = fs.readFileSync(htmlpos);
 			view.render(req,res,req.route_name,{content:content});
@@ -61,7 +65,7 @@ function ut(req,res){
 				return fsutil.isJs(path) ? wrap_code(data) : data;
 			},'utf8');
 
-			view.render(req,res,req.route_name,{content:content});
+			view.render(req,res,req.route_name,{content:content,jscoverage:jscoverage});
 			return;
 		}
 		
