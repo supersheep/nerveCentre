@@ -15,7 +15,6 @@ var isJs = exports.isJs = function(pos){
 }
 
 var list = exports.list = function(pos,ret,base){
-	ret = ret || [];
 	base = base || pos;
     var stats,info;
     
@@ -26,14 +25,15 @@ var list = exports.list = function(pos,ret,base){
     stats = fs.lstatSync(pos),
     info = {
         path: pos.split(base)[1],
-        name: path.basename(pos,path.extname(pos))
+        name: path.basename(pos),
+        basename: path.basename(pos,path.extname(pos))
     };
 
     if (stats.isDirectory()) {
         info.type = "folder";
-
+        info.children = [];
         fs.readdirSync(pos).forEach(function(child) {
-            list(pos + '/' + child,ret,base);
+            info.children.push(list(pos + '/' + child,null,base));
         });
     } else {
         // Assuming it's a file. In real life it could be a symlink or
@@ -41,7 +41,6 @@ var list = exports.list = function(pos,ret,base){
         info.type = "file";
     }
 
-    ret.push(info);
 
-	return ret;
+	return info;
 }
