@@ -22,7 +22,6 @@ function listfilter(origin,root,exclude){
 			ext = mod_path.extname(item.path),
 			basename = mod_path.basename(item.basename,ext);
 		item.path = mod_path.join("/",root,dir,basename+".html");
-		console.log("deal item",item.path);
 		return item;
 	}
 	if(origin.children){
