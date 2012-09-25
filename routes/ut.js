@@ -46,6 +46,8 @@ function ut(req,res){
 			jscoverage = true;
 		}
 
+		console.log(jscoverage);
+
 		if(fsutil.isFile(htmlpos)){
 			content = fs.readFileSync(htmlpos);
 			view.render(req,res,req.route_name,{content:content});
