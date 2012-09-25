@@ -41,6 +41,7 @@ function ut(req,res){
 		filesToConcat,
 
 		content;
+
 		if(req.headers.referer && mod_url.parse(req.headers.referer).pathname.indexOf("jscoverage.html") >= 0 ){
 			jscoverage = true;
 		}
