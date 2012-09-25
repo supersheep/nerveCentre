@@ -36,13 +36,20 @@ function ut(req,res){
 	var htmlpos = req.position,
 		jscoverage = false,
 		jspos = mod_path.join(req.filepath+".js"),
+		need_coverage = ["jscoverage.html","jstest.dianpingoa.com"],
 		dirpos = req.filepath,
 		
 		filesToConcat,
 
 		content;
 
-		if(req.headers.referer && mod_url.parse(req.headers.referer).pathname.indexOf("jscoverage.html") >= 0 ){
+		function needCoverage(){
+			return req.headers.referer && need_coverage.some(function(str){
+				return req.headers.referer.indexOf(str) >= 0;
+			});
+		}
+
+		if(needCoverage()){
 			jscoverage = true;
 		}
 
