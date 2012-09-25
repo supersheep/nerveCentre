@@ -49,13 +49,13 @@ function ut(req,res){
 
 		if(fsutil.isFile(htmlpos)){
 			content = fs.readFileSync(htmlpos);
-			view.render(req,res,req.route_name,{content:content});
+			view.render(req,res,req.route_name,{content:content,jscoverage:jscoverage});
 			return;
 		}
 
 		if(fsutil.isFile(jspos)){
 			content = wrap_code(fs.readFileSync(jspos));
-			view.render(req,res,req.route_name,{content:content});
+			view.render(req,res,req.route_name,{content:content,jscoverage:jscoverage});
 			return;
 		}
 
