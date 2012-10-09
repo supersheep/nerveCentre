@@ -95,12 +95,12 @@ function neuron_static(req,res){
 			util.write404(req,res);
 			return;
 		}
-
+/*
 		if(util.fileNotModified(req,res,position)){
 			util.write304(req,res);
 			return;
 		}
-
+ */
 		var filedata = fs.readFileSync(position,'binary');
 
 		if(fsutil.isJs(position)){
