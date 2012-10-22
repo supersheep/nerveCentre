@@ -36,7 +36,7 @@ function parseId(uri,req){
 		slash_pos = sub_app_uri.indexOf("/");
 		app = sub_app_uri.slice(0,slash_pos);
 		mod = sub_app_uri.slice(slash_pos+1,-3);
-		
+
 		return apps.indexOf(app) >= 0 ? (app + "::" + mod) : uri;
 	}else if(uri.indexOf(libbase) == 1){
 		return uri.split(libbase)[1].slice(1).split(".js")[0];
@@ -56,6 +56,29 @@ module.exports = function(origin,uri,req){
 
 	var reqs = parseRequires(origin).map(function(req){return "\"" + req + "\"";});
 	var id = parseId(uri,req);
+	var includes = ["lib","s/j/app"];
+	var excludes = ["neuron","jasmine"];
 
-	return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(D,require){\n"+origin+"})";
+	function inPath(uri,str){
+		return uri.indexOf(str) !== -1;
+	}
+
+	function shouldWrap(uri){
+		var inIncludes = includes.some(function(str){
+			return inPath(uri,str);
+		});
+
+		var notInExcludes = excludes.every(function(str){
+			return !inPath(uri,str);
+		});
+
+		return inIncludes && notInExcludes;
+	}
+
+
+	if(shouldWrap(uri)){
+		return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(D,require){\n"+origin+"})";
+	}else{
+		return origin;
+	}
 }
