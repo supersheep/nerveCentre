@@ -2,7 +2,7 @@ var apps = require("../../config/apps"),
 	uglify_js = require('uglify-js'),
 	jsp = uglify_js.parser,
 	pro = uglify_js.uglify,
-	globalNameSpace = "DP";
+	globalNameSpace = "NR";
 
 var REGEX_EXECUTOR_REQUIRE = /[^.]\brequire\((["'])([a-zA-Z0-9-\/.~]+)\1\)/g;
 
@@ -77,7 +77,7 @@ module.exports = function(origin,uri,req){
 
 
 	if(shouldWrap(uri)){
-		return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(D,require){\n"+origin+"})";
+		return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(NR,require, exports, module){\n"+origin+"})";
 	}else{
 		return origin;
 	}
