@@ -1,7 +1,12 @@
 var uglifyjs = require('uglify-js');
 var url = require('url');
+var wrapdefine = require('./filters/wrapdefine');
+
 
 var filters = {
+
+	wrapdefine:wrapdefine,
+
 	// use uglify to compress .min files
 	uglify:function(origin,url){			
 	
@@ -24,7 +29,7 @@ var filters = {
 			return origin;
 		}
 	},
-	
+
 	proxycomment:function(origin,uri){
 		var parsed = url.parse(uri,true),
 			from = parsed.query.from,

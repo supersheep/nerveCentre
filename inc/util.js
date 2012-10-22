@@ -89,7 +89,7 @@ exports.filterData = function (req,data){
 
 	filter_arr.forEach(function(filter){
 		if(filters[filter]){
-			data = filters[filter](data,url);
+			data = filters[filter](data,url,req);
 		}
 	});
 	
