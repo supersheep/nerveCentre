@@ -36,7 +36,8 @@ function parseId(uri,req){
 		slash_pos = sub_app_uri.indexOf("/");
 		app = sub_app_uri.slice(0,slash_pos);
 		mod = sub_app_uri.slice(slash_pos+1,-3);
-		return apps.indexOf(app) >= 0 ? (app[0].toUpperCase() + app.slice(1) + "::" + mod) : uri;
+		
+		return apps.indexOf(app) >= 0 ? (app + "::" + mod) : uri;
 	}else if(uri.indexOf(libbase) == 1){
 		return uri.split(libbase)[1].slice(1).split(".js")[0];
 	}
