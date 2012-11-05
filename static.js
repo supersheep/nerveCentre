@@ -43,8 +43,12 @@ function listfilter(origin,root,exclude){
 function filelist(req,dirname){
 	var dir = mod_path.join(req.config.origin,dirname);
 	var list = fsutil.list(dir);
-	list = listfilter(list,dirname,[/\.DS_Store/]);
-	
+
+	if(list){
+		list = listfilter(list,dirname,[/\.DS_Store/]);
+	}else{
+		list = [];
+	}
 	return list;
 }
 
