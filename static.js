@@ -67,9 +67,9 @@ function createServer(cfg){
 		req.config = cfg;
 
 		cfg.server = req.headers.host;
-		cfg.docs = filelist(req,"docs");
+		cfg.docs = filelist(req,cfg.doc||"doc");
 		cfg.docsjson = JSON.stringify(cfg.docs);
-		cfg.tests = filelist(req,"test");
+		cfg.tests = filelist(req,cfg.test||"test");
 		cfg.testsjson = JSON.stringify(cfg.tests);
 
 		// url重写
