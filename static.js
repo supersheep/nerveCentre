@@ -43,8 +43,12 @@ function listfilter(origin,root,exclude){
 function filelist(req,dirname){
 	var dir = mod_path.join(req.config.origin,dirname);
 	var list = fsutil.list(dir);
-	list = listfilter(list,dirname,[/\.DS_Store/]);
-	
+
+	if(list){
+		list = listfilter(list,dirname,[/\.DS_Store/]);
+	}else{
+		list = [];
+	}
 	return list;
 }
 
@@ -67,9 +71,9 @@ function createServer(cfg){
 		req.config = cfg;
 
 		cfg.server = req.headers.host;
-		cfg.docs = filelist(req,"docs");
+		cfg.docs = filelist(req,cfg.doc || "doc");
 		cfg.docsjson = JSON.stringify(cfg.docs);
-		cfg.tests = filelist(req,"test");
+		cfg.tests = filelist(req,cfg.test || "test");
 		cfg.testsjson = JSON.stringify(cfg.tests);
 
 		// url重写
