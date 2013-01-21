@@ -80,7 +80,7 @@ module.exports = function(origin,uri,req){
 
     if(shouldWrap(uri) && code.indexOf(globalNameSpace + ".define") === -1){
     
-        return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(NR,require, exports, module){\n"+origin+"})";
+        return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(require, exports, module){\n"+origin+"})";
     }else{
         return origin;
     }
