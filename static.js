@@ -72,9 +72,9 @@ function createServer(cfg){
 
 		cfg.server = req.headers.host;
 		cfg.docs = filelist(req,cfg.doc||"doc");
-		cfg.docsjson = JSON.stringify(cfg.docs);
+		cfg.docsjson = JSON.stringify(cfg.docs, null, 4);
 		cfg.tests = filelist(req,cfg.test||"test");
-		cfg.testsjson = JSON.stringify(cfg.tests);
+		cfg.testsjson = JSON.stringify(cfg.tests, null, 4);
 
 		// url重写
 		rewrite.handle(req,reweite_rules);	

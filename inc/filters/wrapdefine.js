@@ -26,7 +26,7 @@ function parseRequires(code){
 };    
 
 
-function parseId(uri,req){
+function parseId(uri, req){
     var config = req.config;
     var sub_app_uri,app,mod;
     var appbase = config.appbase;
@@ -39,6 +39,7 @@ function parseId(uri,req){
         mod = sub_app_uri.slice(slash_pos+1,-3);
 
         return apps.indexOf(app) >= 0 ? (app + "::" + mod) : uri;
+
     }else if(uri.indexOf(libbase) == 1){
         return uri.split(libbase)[1].slice(1).split(".js")[0];
     }
@@ -58,7 +59,10 @@ module.exports = function(origin,uri,req){
     var code = standardize(origin),
         reqs = parseRequires(code).map(function(req){return "\"" + req + "\"";});
     var id = parseId(uri,req);
-    var includes = ["lib","s/j/app"];
+
+    var config = req.config;
+
+    var includes = [config.appbase, config.libbase];
     var excludes = ["neuron","jasmine"];
 
     function inPath(uri,str){
