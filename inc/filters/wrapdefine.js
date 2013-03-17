@@ -1,8 +1,10 @@
-var apps = require("../../config/apps"),
-    uglify_js = require('uglify-js'),
-    jsp = uglify_js.parser,
-    pro = uglify_js.uglify,
-    globalNameSpace = "NR";
+var 
+
+// apps = require("../../config/apps"),
+uglify_js = require('uglify-js'),
+jsp = uglify_js.parser,
+pro = uglify_js.uglify,
+globalNameSpace = "NR";
 
 var REGEX_EXECUTOR_REQUIRE = /[^.]\brequire\((["'])([a-zA-Z0-9-\/.~]+)\1\)/g;
 
@@ -28,19 +30,17 @@ function parseRequires(code){
 
 function parseId(uri, req){
     var config = req.config;
-    var sub_app_uri,app,mod;
     var appbase = config.appbase;
     var libbase = config.libbase;
 
-    if(uri.indexOf(appbase) == 1){
-        sub_app_uri = uri.split(appbase)[1].slice(1);
-        slash_pos = sub_app_uri.indexOf("/");
-        app = sub_app_uri.slice(0,slash_pos);
-        mod = sub_app_uri.slice(slash_pos+1,-3);
+    // uri: /src/app/nc/index.js
+    if(uri.indexOf(appbase) === 1){
 
-        return apps.indexOf(app) >= 0 ? (app + "::" + mod) : uri;
+        //  / + src/app + /
+        return uri.slice(appbase.length + 2).replace('/', '::').split('.js')[0];
 
     }else if(uri.indexOf(libbase) == 1){
+
         return uri.split(libbase)[1].slice(1).split(".js")[0];
     }
 }
@@ -81,10 +81,9 @@ module.exports = function(origin,uri,req){
         return inIncludes && notInExcludes;
     }
 
-
     if(shouldWrap(uri) && code.indexOf(globalNameSpace + ".define") === -1){
     
-        return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(require, exports, module){\n"+origin+"})";
+        return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(require, exports, module){var $ = NR.DOM;\n"+origin+"})";
     }else{
         return origin;
     }
