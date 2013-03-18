@@ -5,12 +5,13 @@ var fsutil = require('../inc/fs'),
 	fs = require('fs'),
 	md = require('node-markdown').Markdown;
 
-module.exports = function(req,res){
-	var pos = req.position.replace(".html",".md");
+module.exports = function(req, res){
+	var data = req.dataGetter();
 
-	if(fsutil.isFile(pos)){
-		view.render(req,res,"doc",{
-			content:md(fs.readFileSync(pos,'utf8'))
+	console.log(req.dataGetter.toString());
+	if(fsutil.isFile(data.doc)){
+		view.render(req, res, req.router_name, {
+			content:md( fs.readFileSync(data.doc, 'utf8') )
 		});
 	}else{
 		util.write404(req,res);
