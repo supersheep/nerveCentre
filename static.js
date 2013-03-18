@@ -70,11 +70,15 @@ function createServer(cfg){
 		// for sending config to routers
 		req.config = cfg;
 
+		// TODO:
+		// move these slices of code into configurations
 		cfg.server = req.headers.host;
 		cfg.docs = filelist(req,cfg.doc||"doc");
 		cfg.docsjson = JSON.stringify(cfg.docs, null, 4);
 		cfg.tests = filelist(req,cfg.test||"test");
 		cfg.testsjson = JSON.stringify(cfg.tests, null, 4);
+		cfg.demos = filelist(req, cfg.demo || "demo");
+		cfg.demosjson = JSON.stringify(cfg.demos, null, 4);
 
 		// url重写
 		rewrite.handle(req,reweite_rules);	
