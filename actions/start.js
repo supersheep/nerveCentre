@@ -13,32 +13,31 @@ Start.prototype.run = function() {
 	
 	var env = opts.env || "develop";
 
-	var pjconfig = getProjectConfig();
-	var cliconfig = getCliConfig(mods);
+	var cliconfig = getCliConfig(opts, mods);
+	var pjconfig = getProjectConfig(cliconfig);
 
-	var final_config = merge(config,merge(pjconfig,cliconfig,true),true);
+	var final_config = merge(config, merge(pjconfig, cliconfig, true), true);
 	
 	staticServer.start(final_config);
 
 };
 
-function getCliConfig(mods){
+function getCliConfig(config, mods){
 	var pwd = process.cwd(),
 		dir = mods[0],
-		port = mods[1],
 		ret = {};
 
-	dir && ( ret.origin = mod_path.join(pwd,dir));
-	port && ( ret.port = port);
+	ret.origin = mod_path.join(pwd, dir || '.');
+	ret.port = config.port || 1337
 
 	return ret;
 }
 
 
-function getProjectConfig (){
-	var pwd = process.cwd();
+function getProjectConfig (cfg){
 	var pjconfig = {};
-	var config_path = mod_path.join(pwd,"config.json");
+	var config_path = mod_path.join(cfg.origin, ".nc", "config.json");
+	
 	if(fs.existsSync(config_path)){
 	  try{
 			 pjconfig = JSON.parse(fs.readFileSync(config_path));
@@ -46,20 +45,27 @@ function getProjectConfig (){
 			console.log("error parsing",config_path);
 		}
 	}
+
 	return pjconfig;
 }
 
 
 Start.AVAILIABLE_OPTIONS = {
-	env:{
+	env: {
 		alias:["-e","--env"],
 		description:"指定默认配置环境",
-		length:1
+		length: 1
+	},
+
+	port: {
+		alias: [ "-p", "--port" ],
+		description: "端口",
+		length: 1
 	}
 };
 
 Start.MESSAGE = {
-	USAGE:"usage: neuron start [dir] [port] [-e develop|product]",
+	USAGE:"usage: neuron start [dir] [options]",
 	DESCRIBE:"在指定的dir与端口启动服务"
 }
 

@@ -8,7 +8,6 @@ var fsutil = require('../inc/fs'),
 module.exports = function(req, res){
 	var data = req.dataGetter();
 
-	console.log(req.dataGetter.toString());
 	if(fsutil.isFile(data.doc)){
 		view.render(req, res, req.router_name, {
 			content:md( fs.readFileSync(data.doc, 'utf8') )

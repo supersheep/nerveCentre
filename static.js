@@ -98,7 +98,7 @@ function createServer(cfg){
 
 		// handler routes with routes handler
 
-		routesHandler.handle(req)(req,res);
+		routesHandler.handle(req, cfg)(req,res);
 
 	});
 
