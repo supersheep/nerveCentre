@@ -12,8 +12,7 @@ var http = require('http'),
 	rewrite = require('./inc/rewrite'),
 	reweite_rules = require('./config/rewrite_rules'),
 
-	routesHandler = require('./inc/routesHandler'),
-	routes = require('./config/routes');
+	routesHandler = require('./inc/routesHandler');
 
 
 function listfilter(origin,root,exclude){
