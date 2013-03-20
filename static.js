@@ -20,7 +20,7 @@ function listfilter(origin,root,exclude){
 		var dir = mod_path.dirname(item.path),
 			ext = mod_path.extname(item.path),
 			basename = mod_path.basename(item.basename,ext);
-		item.path = mod_path.join("/",root,dir,basename+".html");
+		item.path = mod_path.join("/",root,dir,basename+".html").replace(/\\/, "/");
 		return item;
 	}
 	if(origin.children){
