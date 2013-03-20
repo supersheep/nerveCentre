@@ -1,7 +1,7 @@
 var mod_path = require("path"),
 	fs = require("fs"),
-	config = require("../config/config"),
-	ActionFactory = require("../actions/action_factory"),
+	default_config = require("../builtin/config"),
+	ActionFactory = require("../lib/action-factory"),
 	merge = require("../inc/funcs").merge,
 	staticServer = require("../static");
 
@@ -16,7 +16,7 @@ Start.prototype.run = function() {
 	var cliconfig = getCliConfig(opts, mods);
 	var pjconfig = getProjectConfig(cliconfig);
 
-	var final_config = merge(config, merge(pjconfig, cliconfig, true), true);
+	var final_config = merge(default_config, merge(pjconfig, cliconfig, true), true);
 	
 	staticServer.start(final_config);
 

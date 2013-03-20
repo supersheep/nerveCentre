@@ -1,5 +1,5 @@
 var Actions = require("../actions.json");
-var ActionFactory = require("./action_factory");
+var ActionFactory = require("../lib/action-factory");
 var util = require("util");
 
 Help = ActionFactory.create("Help");
