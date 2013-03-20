@@ -2,7 +2,7 @@ var path = require('path'),
 	fs = require('fs'),
 	url = require('url'),
 	moment = require('moment'),
-	mime = require('./mime').mime,
+	mime = require('./mime'),
 	util = require('util'),
 	filters = require('./filters');
  
