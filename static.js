@@ -109,5 +109,6 @@ function createServer(cfg){
 exports.start = function(cfg){
 	createServer(cfg).listen(cfg.port);
 	console.log("nervecentre static server started at %d",cfg.port);
-}
+};
+
 exports.createServer = createServer;
