@@ -74,11 +74,11 @@ exports.write404 = function (req,res){
     res.end();
 }
 
-exports.write500 = function(req,res,error){
+exports.write500 = function(req, res, error){
 	log(req,res,500);
-	var error_body = error?error.stack:"";
+
 	res.writeHead(500,"Server Side Error");
-	res.write(error_body,"binary");
+	res.write(error,"binary");
 	res.end();
 }
 

@@ -11,6 +11,6 @@ exports.TYPES = {
 };
 
 exports.getMimeType = function(ext){	
-	return mime.TYPES[ext.toLowerCase()] || 'text/plain';
+	return exports.TYPES[ext.toLowerCase()] || 'text/plain';
 	
 };
