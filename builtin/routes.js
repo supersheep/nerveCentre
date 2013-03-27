@@ -1,5 +1,8 @@
-module.exports = [{
-    test: /model/    
+module.exports = [
+
+{
+    test: /\/model/,
+    action: 'model'  
 }
 
 ];
