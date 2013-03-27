@@ -62,7 +62,7 @@ function neuron_static(req, res){
             basename  = mod_path.basename(position,extname), // c
             path_with_same_name = mod_path.join(dirpath,basename); // /home/spud/a/b/c
         
-        if(!fs_more.isDir(path_with_same_name)){
+        if(!fs_more.isDirectory(path_with_same_name)){
             return false;
         }
 
