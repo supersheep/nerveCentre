@@ -34,10 +34,11 @@ function createServer(cfg){
 
 		// url重写
 		rewriter.handle(req, require_engine.rewriteRules(cfg));
-	
+
+		req.queryObj = mod_url.parse(req.url, true).query;
 
 		// debug with query debug
-		req.debug = mod_url.parse(req.url,true).query.debug !== undefined;
+		req.debug = req.queryObj.debug !== undefined;
 		
 		// assign pathname and position
 		req.pathname = decodeURI(mod_url.parse(req.url).pathname);
