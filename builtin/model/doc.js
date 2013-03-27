@@ -1,14 +1,24 @@
-var dir_walker = require('../../lib/dir-walker');
-var path = require('path');
+var fs_more = require('fs-more'),
+    util = require('../../inc/util'),
+    fs = require('fs'),
+    md = require('node-markdown').Markdown;
 
 exports.getData = function(req, res) {
-    var config = req.config;
-    var dirname = config.doc;
-    var dir = path.join(config.origin, dirname);
-    var list = dir_walker.walk(dir, dirname);
+    var doc = req.position.replace(/\.html/, '.md');
+    var markdown;
 
-    return {
-        list: list,
-        json: JSON.stringify(list, null, 4)
-    };
+    console.log()
+
+    if( fs_more.isFile( doc ) ){
+        var markdown = fs.readFileSync(doc, 'utf8');
+
+        return {
+            md: markdown,
+            html: md( markdown )
+        };
+
+    }else{
+        util.write404(req,res);
+    }
+    
 };
