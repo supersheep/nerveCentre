@@ -1,12 +1,7 @@
-var 
 
-http = require('http'),
-mod_url = require('url'),
-mod_path = require('path'),
-require_engine = require('./lib/require-engine'),
-rewriter = require('./lib/rewriter'),
-controller = require('./lib/controller');
-
+var http = require('http');
+var Controller = require('./lib/controller');
+var http_util = require('./inc/util');
 
 function createServer(cfg){
 	// 检测是否有新增branch，刷新配置变量
@@ -25,32 +20,18 @@ function createServer(cfg){
 
 		process.on("uncaughtException",onUncaughtException);
 
-		// for sending config to routers
-		req.config = cfg;
-
-		// TODO:
-		// move these slices of code into configurations
 		cfg.server = req.headers.host;
 
-		// url重写
-		rewriter.handle(req, require_engine.rewriteRules(cfg));
+		var controller = new Controller(
+			// { url: req.url}, 
+			req,
+			cfg 
+		);
 
-		req.queryObj = mod_url.parse(req.url, true).query;
+		req.config = cfg;
 
-		// debug with query debug
-		req.debug = req.queryObj.debug !== undefined;
-		
-		// assign pathname and position
-		req.pathname = decodeURI(mod_url.parse(req.url).pathname);
-		
-		req.position = mod_path.join(cfg.origin,req.pathname); // 文件路径
-		req.extname = mod_path.extname(req.pathname); // 扩展名
-		req.filename = mod_path.basename(req.position,req.extname); // 文件名 不包含扩展名
-		req.dirpath = mod_path.dirname(req.position); // 文件夹路径
-		req.filepath = mod_path.join(req.dirpath,req.filename); //文件路径 不包含扩展名
+		http_util.write( req, res, controller.get_response() );
 
-		// handler routes with routes handler
-		controller.handle(req, res);
 	});
 
 	return server;
