@@ -7,8 +7,6 @@ exports.getData = function(req, config) {
     var doc = req.position.replace(/\.html/, '.md');
     var markdown;
 
-    console.log()
-
     if( fs_more.isFile( doc ) ){
         var markdown = fs.readFileSync(doc, 'utf8');
 
