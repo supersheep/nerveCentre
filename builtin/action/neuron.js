@@ -2,14 +2,46 @@ var fs = require('fs');
 var url = require('url');
 var mod_path = require('path');
 var fs_more = require('fs-more');
-var util = require('../../inc/util');
+var filters = require('./neuron/filters');
 
 var REGEX_IS_JS = /\.js$/;
 
 
-function neuron_static(req, res){
-    var config = req.config,
-        pathname = req.pathname, // /a/b/c.js
+// filter data with custom filters
+function filterData(req, data){   
+    var filter_arr = req.config.filters || [],
+        url = req.originurl;
+
+    filter_arr.forEach(function(filter){
+        if(filters[filter]){
+            data = filters[filter](data, url, req);
+        }
+    });
+    
+    return data;    
+
+}
+
+// 合并文件
+function concatFiles(arr,fn,encode){
+    var sum = '';
+    var dataTemp;
+    arr.forEach(function(path){
+        try{
+        dataTemp = fs.readFileSync(path,encode||'binary');
+        if(fn){
+            dataTemp = fn(dataTemp,path);
+        }
+        sum += dataTemp + '\n';
+        }catch(e){
+        }
+    });
+    return sum;
+}
+
+
+function neuron_static(req, config){
+    var pathname = req.pathname, // /a/b/c.js
         position = req.position, // /home/spud/a/b/c.js
         libbase = config.libbase, // support multi libbase later
         dirpath = mod_path.dirname(position), // /home/spud/a/b
@@ -48,11 +80,13 @@ function neuron_static(req, res){
             return mod_path.join(config.origin,libbase,concat.folder,subpath);
         });
 
-        filedata = util.concatFiles(toconcat);
-        filedata = util.filterData(req,filedata);
+        filedata = concatFiles(toconcat);
+        filedata = filterData(req,filedata);
 
-        util.write200(req,res,filedata);
-        return true;
+        return {
+            status: 200,
+            data: filedata
+        };
     }
 
     function try_from_dir(){
@@ -78,44 +112,43 @@ function neuron_static(req, res){
 
 
         filedata = "NR.define.on();\n";
-        filedata += util.concatFiles(toconcat,function(file,p){
+        filedata += concatFiles(toconcat,function(file,p){
             var moduleBase = p.split(config.libbase)[0], // /Users/spud/Neuron/branch/neuron/
                 moduleName = p.split(moduleBase)[1]; // /lib/1.0/switch/core.js
                 
             return file.replace(/(KM|NR)\.define\(/,"NR.define('" + moduleName + "',") + "\n";
         });
         filedata += "NR.define.off();";
-
-        util.write200(req,res,filedata);
-        return true;
+        
+        return {
+            status: 200,
+            data: filedata
+        }
     }
 
     function try_from_static(){
 
         if(!fs_more.isFile(position)){
-            util.write404(req,res);
-            return;
+            return {
+                status: 404
+            }
         }
-/*
-        if(util.fileNotModified(req,res,position)){
-            util.write304(req,res);
-            return;
-        }
- */
+
         var filedata = fs.readFileSync(position,'binary');
 
         if(fs_more.isFile(position) && REGEX_IS_JS.test(position) ){
-            filedata = util.filterData(req,filedata);
+            filedata = filterData(req,filedata);
         }
-        
-        util.write200(req,res,filedata);
+
+        return {
+            status: 200,
+            data: filedata
+        }
     }
 
-    if(try_from_build())return;
-
-    if(try_from_dir())return;
-
-    try_from_static();
+    return try_from_build() || try_from_dir() || try_from_static();
 }
 
-exports.go = neuron_static;
+exports.render = function(info) {
+    return neuron_static(info.data.req, info.data.config);
+};

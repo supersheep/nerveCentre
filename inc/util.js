@@ -3,8 +3,7 @@ var path = require('path'),
 	url = require('url'),
 	moment = require('moment'),
 	mime = require('./mime'),
-	util = require('util'),
-	filters = require('./filters');
+	util = require('util');
  
 function log(req,res,code){
 	console.log("%s GET %s - %s router:%s",moment().format(),req.pathname,code,req.router_name);
@@ -18,7 +17,7 @@ exports.fileNotModified = function (req,res,position){
 	return modifiedSince && lastModified == modifiedSince;
 }
 
-var addHeaders = exports.addHeaders = function (req,res,body){
+var addHeaders = exports.addHeaders = function (req, res,body){
 	var expires,
 		contentLength,
 		config = req.config,
@@ -41,75 +40,57 @@ var addHeaders = exports.addHeaders = function (req,res,body){
 	res.setHeader("Server","NodeJs("+process.version+")");
 }
 
+var
 
-exports.write200 = function (req,res,body){
-	log(req,res,200);
+WRITER = {
+	"200": function(req, res, body) {
+	    if(body.constructor.name === "MuStream"){
+			util.pump(body,res);
 
-	if(body.constructor.name === "MuStream"){
-		util.pump(body,res);
-	}else{
-		addHeaders(req,res,body);
-		res.writeHead(200,"OK");
-		res.write(body,"binary");
+		}else{
+			addHeaders(req,res,body);
+			res.writeHead(200,"OK");
+			res.write(body,"binary");
+			res.end();
+		}
+	},
+
+	"304": function (req,res){
+		log(req,res,304);
+		addHeaders(req,res);
+	    res.writeHead(304,"Not Modified");
+	    res.end();
+	},
+
+	"404": function (req,res){
+		log(req,res,404);
+	    var body= 'can\'t found "' + req.url + '"';
+	    res.setHeader('Content-Type','text/html');
+	    addHeaders(req,res,body);
+	    res.writeHead(404,"Not Found");
+	    res.write(body,"binary");
+	    res.end();
+	},
+
+	"500": function(req, res, error){
+		log(req,res,500);
+
+		res.writeHead(500,"Server Side Error");
+		res.write(error,"binary");
 		res.end();
 	}
-}
-
-
-exports.write304 = function (req,res){
-	log(req,res,304);
-	addHeaders(req,res);
-    res.writeHead(304,"Not Modified");
-    res.end();
-}
-
-
-exports.write404 = function (req,res){
-	log(req,res,404);
-    var body= 'can\'t found "' + req.url + '"';
-    res.setHeader('Content-Type','text/html');
-    addHeaders(req,res,body);
-    res.writeHead(404,"Not Found");
-    res.write(body,"binary");
-    res.end();
-}
-
-exports.write500 = function(req, res, error){
-	log(req,res,500);
-
-	res.writeHead(500,"Server Side Error");
-	res.write(error,"binary");
-	res.end();
-}
-
-// filter data with custom filters
-exports.filterData = function (req,data){	
-	var filter_arr = req.config.filters || [],
-		url = req.originurl;
-
-	filter_arr.forEach(function(filter){
-		if(filters[filter]){
-			data = filters[filter](data,url,req);
-		}
-	});
-	
-	return data;	
 
 }
 
-// 合并文件
-exports.concatFiles = function(arr,fn,encode){
-	var sum = '';
-	var dataTemp;
-	arr.forEach(function(path){
-		try{
-		dataTemp = fs.readFileSync(path,encode||'binary');
-		if(fn){
-			dataTemp = fn(dataTemp,path);
-		}
-		sum += dataTemp + '\n';
-		}catch(e){
-		}
-	});
-	return sum;
-}
+
+exports.write = function(req, res, data) {
+    var status = data.status;
+
+    var writer = WRITER[status];
+
+    if(writer){
+    	writer(req, res, data.data);
+    }else{
+    	res.end();
+    }
+};

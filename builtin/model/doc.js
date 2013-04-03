@@ -3,7 +3,7 @@ var fs_more = require('fs-more'),
     fs = require('fs'),
     md = require('node-markdown').Markdown;
 
-exports.getData = function(req, res) {
+exports.getData = function(req, config) {
     var doc = req.position.replace(/\.html/, '.md');
     var markdown;
 
@@ -18,7 +18,7 @@ exports.getData = function(req, res) {
         };
 
     }else{
-        util.write404(req,res);
+        return {}
     }
     
 };
