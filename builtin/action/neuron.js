@@ -8,13 +8,13 @@ var REGEX_IS_JS = /\.js$/;
 
 
 // filter data with custom filters
-function filterData(req, data){   
-    var filter_arr = req.config.filters || [],
-        url = req.originurl;
+function filterData(url, data, config){
+    var filter_arr = config.filters || [];
+    // var url = req.originurl;
 
     filter_arr.forEach(function(filter){
         if(filters[filter]){
-            data = filters[filter](data, url, req);
+            data = filters[filter](data, url, config);
         }
     });
     
@@ -45,12 +45,12 @@ function neuron_static(req, config){
         position = req.position, // /home/spud/a/b/c.js
         libbase = config.libbase, // support multi libbase later
         dirpath = mod_path.dirname(position), // /home/spud/a/b
-        coverage_libbase = config.jscoverage_libbase,
+        // coverage_libbase = config.jscoverage_libbase,
         extname  = mod_path.extname(position); // .js
 
-    if(coverage_libbase && new RegExp(coverage_libbase).test(pathname)){
-        libbase = coverage_libbase;
-    }
+    // if(coverage_libbase && new RegExp(coverage_libbase).test(pathname)){
+    //    libbase = coverage_libbase;
+    // }
     
     function try_from_build(){
         var build_file_path = mod_path.join(dirpath,"build.json"),
@@ -81,7 +81,7 @@ function neuron_static(req, config){
         });
 
         filedata = concatFiles(toconcat);
-        filedata = filterData(req,filedata);
+        filedata = filterData(req.originurl, filedata, config);
 
         return {
             status: 200,
@@ -91,7 +91,7 @@ function neuron_static(req, config){
 
     function try_from_dir(){
         var toconcat,
-            filedata,
+            filedata = '',
 
             basename  = mod_path.basename(position,extname), // c
             path_with_same_name = mod_path.join(dirpath,basename); // /home/spud/a/b/c
@@ -106,19 +106,23 @@ function neuron_static(req, config){
 
         toconcat = fs.readdirSync(path_with_same_name).filter(function(e){
             return mod_path.extname(e) === extname;
+
         }).map(function(e){
             return mod_path.join(dirpath,basename,e);
         });
 
 
-        filedata = "NR.define.on();\n";
-        filedata += concatFiles(toconcat,function(file,p){
+        // filedata = "NR.define.on();\n";
+        filedata += concatFiles(toconcat, function(file, p){ console.log(p);
             var moduleBase = p.split(config.libbase)[0], // /Users/spud/Neuron/branch/neuron/
                 moduleName = p.split(moduleBase)[1]; // /lib/1.0/switch/core.js
                 
-            return file.replace(/(KM|NR)\.define\(/,"NR.define('" + moduleName + "',") + "\n";
+            // return file.replace(/(KM|NR)\.define\(/,"NR.define('" + moduleName + "',") + "\n";
+
+            return filterData(p, file, config);
+
         });
-        filedata += "NR.define.off();";
+        // filedata += "NR.define.off();";
         
         return {
             status: 200,
@@ -137,7 +141,7 @@ function neuron_static(req, config){
         var filedata = fs.readFileSync(position,'binary');
 
         if(fs_more.isFile(position) && REGEX_IS_JS.test(position) ){
-            filedata = filterData(req,filedata);
+            filedata = filterData(req.originurl, filedata, config);
         }
 
         return {
