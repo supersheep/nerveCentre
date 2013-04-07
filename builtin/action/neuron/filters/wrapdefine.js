@@ -27,28 +27,29 @@ function parseRequires(code){
 };
 
 
-function parseId(uri, req){
-    var config = req.config;
+function parseId(uri, config){
+    // var config = req.config;
     var appbase = config.appbase;
     var libbase = config.libbase;
+    var index;
 
     // uri: /src/app/nc/index.js
-    if(uri.indexOf(appbase) === 1){
+    if( ( index = uri.indexOf(appbase) ) !== -1){
 
         //  / + src/app + /
-        return uri.slice(appbase.length + 2).replace('/', '::').split('.js')[0];
+        return uri.slice(appbase.length + index + 1).replace('/', '::').split('.js')[0];
 
-    }else if(uri.indexOf(libbase) == 1){
+    }else if( ( index = uri.indexOf(libbase) ) !== -1){
 
-        return uri.split(libbase)[1].slice(1).split(".js")[0];
+        return uri.slice(libbase.length + index + 1).split(".js")[0];
     }
 }
 
 // libbase -> lib
 // appbase -> app
 // 
-// 
-module.exports = function(origin,uri,req){
+// @param {string} origin original code
+module.exports = function(origin, uri, config){ 
     // uri: "/lib/util/cookie.js"
     // id: "util/cookie"
     // 
@@ -57,12 +58,12 @@ module.exports = function(origin,uri,req){
 
     var code = standardize(origin),
         reqs = parseRequires(code).map(function(req){return "\"" + req + "\"";});
-    var id = parseId(uri,req);
+    var id = parseId(uri, config);
 
-    var config = req.config;
+    // var config = req.config;
 
     var includes = [config.appbase, config.libbase];
-    var excludes = ["neuron","jasmine"];
+    var excludes = ["neuron.js","jasmine"];
 
     function inPath(uri,str){
         return uri.indexOf(str) !== -1;
@@ -80,9 +81,10 @@ module.exports = function(origin,uri,req){
         return inIncludes && notInExcludes;
     }
 
-    if(shouldWrap(uri) && code.indexOf(globalNameSpace + ".define") === -1){
+    if(shouldWrap(uri)){
     
         return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(require, exports, module){var $ = NR.DOM;\n"+origin+"})";
+
     }else{
         return origin;
     }

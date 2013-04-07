@@ -113,7 +113,7 @@ function neuron_static(req, config){
 
 
         // filedata = "NR.define.on();\n";
-        filedata += concatFiles(toconcat, function(file, p){ console.log(p);
+        filedata += concatFiles(toconcat, function(file, p){
             var moduleBase = p.split(config.libbase)[0], // /Users/spud/Neuron/branch/neuron/
                 moduleName = p.split(moduleBase)[1]; // /lib/1.0/switch/core.js
                 
