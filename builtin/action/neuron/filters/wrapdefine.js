@@ -24,8 +24,7 @@ function parseRequires(code){
         }
     }
     return deps;
-
-};    
+};
 
 
 function parseId(uri, req){

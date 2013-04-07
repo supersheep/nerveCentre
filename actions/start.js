@@ -1,25 +1,31 @@
 var mod_path = require("path"),
 	fs = require("fs"),
-	config = require("../config/config"),
-	ActionFactory = require("../actions/action_factory"),
+	default_config = require("../builtin/config"),
+	ActionFactory = require("../lib/action-factory"),
 	merge = require("../inc/funcs").merge,
 	staticServer = require("../static");
 
 var Start = ActionFactory.create("Start");
 
+var DEFAULT_CONFIG = {
+	doc: 'doc',
+	test: 'test',
+	demo: 'demo',
+	lib: 'lib'
+};
+
 Start.prototype.run = function() {
-	var opts = this.options,
+	var options = this.options,
 		mods = this.modules;
 	
-	var env = opts.env || "develop";
+	// var env = options.env || "develop";
 
-	var cliconfig = getCliConfig(opts, mods);
+	var cliconfig = getCliConfig(options, mods);
 	var pjconfig = getProjectConfig(cliconfig);
 
-	var final_config = merge(config, merge(pjconfig, cliconfig, true), true);
+	var final_config = merge(default_config, merge(pjconfig, cliconfig, true), true);
 	
-	staticServer.start(final_config);
-
+	staticServer.start( merge(final_config, DEFAULT_CONFIG, false) );
 };
 
 function getCliConfig(config, mods){
@@ -51,11 +57,11 @@ function getProjectConfig (cfg){
 
 
 Start.AVAILIABLE_OPTIONS = {
-	env: {
-		alias:["-e","--env"],
-		description:"指定默认配置环境",
-		length: 1
-	},
+//	env: {
+//		alias:["-e","--env"],
+//		description:"指定默认配置环境",
+//		length: 1
+//	},
 
 	port: {
 		alias: [ "-p", "--port" ],

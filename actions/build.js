@@ -1,4 +1,4 @@
-var ActionFactory = require("./action_factory");
+var ActionFactory = require("../lib/action-factory");
 
 var Build = ActionFactory.create("Build");
 

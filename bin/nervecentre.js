@@ -4,7 +4,7 @@ var mod_path = require("path");
 
 var base = global.BASE = mod_path.join(__dirname,"..");
 
-var ActionFactory = require("../actions/action_factory");
+var ActionFactory = require("../lib/action-factory");
 
 var cli = {};
 /**

@@ -1,25 +1,29 @@
 {
-	"name":"nervecentre",
-	"description":"the proxy and static server for neuron framwork on alpha",
-	"version":"0.1.3",
-	"keywords":["neuron"],
-	"maintainers":["kael", "spud"],
-	"contributors":[],
-	"bugs":"jiayi.xu@dianping.com",
-	"bin":{
-		"neuron":"bin/nervecentre.js"
-	},
-	"dependencies":{
-		"uglify-js":"0.x.x",
-		"chai":"0.x.x",
-		"node-markdown":"0.x.x",
-		"stylus":"0.x.x",
-		"mu2":"0.5.16",
-		"moment":"1.7"
-	},
-	"licenses":[{
-    	"type": "GPLv2",	
-    	"url": "http://www.example.com/licenses/gpl.html"
-	}],
-	"main":"main.js"
+    "name": "nervecentre",
+
+    "description": "the proxy and static server for neuron framwork on alpha",
+    "version": "0.2.0",
+    "keywords": ["neuron"],
+    "author": "kael, spud",
+    "maintainers": ["kael", "spud"],
+    "contributors": [],
+    "bugs": "jiayi.xu@dianping.com",
+    "bin": {
+        "nc": "bin/nervecentre.js"
+    },
+    "dependencies": {
+        "uglify-js": "0.x.x",
+        "chai": "0.x.x",
+        "node-markdown": "0.x.x",
+        "stylus": "0.x.x",
+        "mu2": "0.5.16",
+        "moment": "1.7",
+        "fs-more": "0.x.x"
+    },
+    "licenses": [{
+            "type": "GPLv2",
+            "url": "http://www.example.com/licenses/gpl.html"
+        }
+    ],
+    "main": "main.js"
 }
