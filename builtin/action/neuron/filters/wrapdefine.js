@@ -83,7 +83,7 @@ module.exports = function(origin, uri, config){
 
     if(shouldWrap(uri)){
     
-        return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(require, exports, module){var $ = NR.DOM;\n"+origin+"})";
+        return globalNameSpace+".define(\"" + id + "\",["+reqs.join(",")+"],function(require, exports, module){var $ = NR.DOM;\n" + origin + "\n})";
 
     }else{
         return origin;
