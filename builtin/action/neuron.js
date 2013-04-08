@@ -6,6 +6,8 @@ var filters = require('./neuron/filters');
 
 var REGEX_IS_JS = /\.js$/;
 
+var USE_STRICT = '"use strict";\n';
+
 
 // filter data with custom filters
 function filterData(url, data, config){
@@ -85,7 +87,7 @@ function neuron_static(req, config){
 
         return {
             status: 200,
-            data: filedata
+            data: USE_STRICT + filedata
         };
     }
 
@@ -126,7 +128,7 @@ function neuron_static(req, config){
         
         return {
             status: 200,
-            data: filedata
+            data: USE_STRICT + filedata
         }
     }
 
@@ -146,7 +148,7 @@ function neuron_static(req, config){
 
         return {
             status: 200,
-            data: filedata
+            data: USE_STRICT + filedata
         }
     }
 

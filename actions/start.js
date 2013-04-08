@@ -71,7 +71,7 @@ Start.AVAILIABLE_OPTIONS = {
 };
 
 Start.MESSAGE = {
-	USAGE:"usage: neuron start [dir] [options]",
+	USAGE:"usage: nc start [dir] [options]",
 	DESCRIBE:"在指定的dir与端口启动服务"
 }
 
