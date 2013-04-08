@@ -143,12 +143,12 @@ function neuron_static(req, config){
         var filedata = fs.readFileSync(position,'binary');
 
         if(fs_more.isFile(position) && REGEX_IS_JS.test(position) ){
-            filedata = filterData(req.originurl, filedata, config);
+            filedata = USE_STRICT + filterData(req.originurl, filedata, config);
         }
 
         return {
             status: 200,
-            data: USE_STRICT + filedata
+            data: filedata
         }
     }
 
