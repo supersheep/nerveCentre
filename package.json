@@ -2,7 +2,7 @@
     "name": "nervecentre",
 
     "description": "the proxy and static server for neuron framwork on alpha",
-    "version": "0.2.0",
+    "version": "1.0.1",
     "keywords": ["neuron"],
     "author": "kael, spud",
     "maintainers": ["kael", "spud"],
