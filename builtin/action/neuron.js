@@ -6,7 +6,8 @@ var filters = require('./neuron/filters');
 
 var REGEX_IS_JS = /\.js$/;
 
-var USE_STRICT = '"use strict";\n';
+// var USE_STRICT = '"use strict";\n';
+var USE_STRICT = '';
 
 
 // filter data with custom filters
