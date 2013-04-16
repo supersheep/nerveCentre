@@ -50,10 +50,6 @@ function neuron_static(req, config){
         dirpath = mod_path.dirname(position), // /home/spud/a/b
         // coverage_libbase = config.jscoverage_libbase,
         extname  = mod_path.extname(position); // .js
-
-    // if(coverage_libbase && new RegExp(coverage_libbase).test(pathname)){
-    //    libbase = coverage_libbase;
-    // }
     
     function try_from_build(){
         var build_file_path = mod_path.join(dirpath,"build.json"),
@@ -80,7 +76,7 @@ function neuron_static(req, config){
         }
 
         var toconcat = concat.path.map(function(subpath){
-            return mod_path.join(config.origin,libbase,concat.folder,subpath);
+            return mod_path.join(config.origin, libbase, subpath);
         });
 
         filedata = concatFiles(toconcat);
