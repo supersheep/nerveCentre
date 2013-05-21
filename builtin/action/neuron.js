@@ -76,7 +76,9 @@ function neuron_static(req, config){
         }
 
         var toconcat = concat.path.map(function(subpath){
-            return mod_path.join(config.origin, libbase, subpath);
+            return concat.folder ? 
+                mod_path.join(config.origin, libbase, concat.folder, subpath)
+                : mod_path.join(config.origin, libbase, subpath);
         });
 
         filedata = concatFiles(toconcat);
